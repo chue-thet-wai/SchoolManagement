@@ -13,6 +13,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Admin
+Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middleware'=>['adminpermission']],function(){
+    //for Category
+    Route::resource('academic_year','Category\AcademicYearController');  
+    Route::resource('branch','Category\BranchController'); 
+    Route::resource('room','Category\RoomController'); 
+    Route::resource('grade','Category\GradeController');  
+    Route::resource('section','Category\SectionController'); 
+    Route::resource('grade_level_fee','Category\GradeLevelFeeController'); 
+    Route::resource('additional_fee','Category\AdditionalFeeController'); 
+    Route::resource('subject','Category\SubjectController'); 
+
+    //for Create Information
+    Route::resource('teacher_info','CreateInformation\TeacherInfoController');  
+
+    //for user 
+    Route::get('/userlist','UserController@show_userlist');   
+    Route::get('/profile','UserController@show_profile'); 
+    Route::get('/logout','UserController@logout');
+    Route::get('userlist/edit/{id}','UserController@edit_user'); 
+    Route::post('userlist/update/{id}','UserController@update_user'); 
+    Route::post('userlist/delete/{id}','UserController@destroy_user');  
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -20,3 +44,4 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+

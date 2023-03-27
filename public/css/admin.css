@@ -1,0 +1,47 @@
+/* number type not show dropdown*/
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* image upload preview */
+.image-preview-container {
+  width: 30%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 3rem;
+  border-radius: 20px;
+}
+
+.image-preview-container img {
+  width: 100%;
+  height: 200px;
+  display: none;
+  margin-bottom: 30px;
+}
+.image-preview-container input {
+  display: none;
+}
+
+.image-preview-container label {
+  display: block;
+  width: 100%;
+  height: 45px;
+  text-align: center;
+  background: #8338ec;
+  color: #fff;
+  font-size: 15px;
+  text-transform: Uppercase;
+  font-weight: 400;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

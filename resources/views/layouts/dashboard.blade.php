@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ config('app.name', 'School Management') }}</title>
+
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/admin.js') }}" defer></script>
+
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+    <!-- Styles -->
+    <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
+
+</head>
+
+<body>
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="" alt="">
+        <span class="d-none d-sm-block">School Management</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item dropdown pe-3">
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="{{ asset('assets/images/profile-img.jpg')}}" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->name }}</span>
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>{{ Auth::user()->name }}</h6>
+              <span>{{ Auth::user()->role }}</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{{ url('admin/profile') }}">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{{ url('admin/logout') }}">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ url('/home') }}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ url('admin/userlist') }}">
+        <i class="bi bi-menu-button-wide"></i>
+        <span>User Management</span>
+        </a>
+      </li><!-- End User Management Nav -->
+
+      <!-- Category Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#category-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>Category</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="category-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{{route('academic_year.index')}}">
+              <span>Academic Year</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{route('branch.index')}}">
+              <span>Branch</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{route('room.index')}}">
+              <span>Room</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{route('grade.index')}}">
+              <span>Grade</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{route('section.index')}}">
+              <span>Section</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{route('grade_level_fee.index')}}">
+              <span>Grade Level Fee</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{route('additional_fee.index')}}">
+              <span>Additional Fee</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{route('subject.index')}}">
+              <span>Subject</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Category Nav -->
+
+      <!-- Create Information Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#createinfo-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Create Information</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="createinfo-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{{route('teacher_info.index')}}">
+              <span>Teacher Information</span>
+            </a>
+          </li>
+          <li>
+            <a href="tables-data.html">
+              <span>Student Information</span>
+            </a>
+          </li>
+          <li>
+            <a href="tables-data.html">
+              <span>Parent Information</span>
+            </a>
+          </li>
+          <li>
+            <a href="tables-data.html">
+              <span>Driver Information</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Create Information Nav -->
+
+      <!-- Registration Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#registration-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Registration</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="registration-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="tables-general.html">
+              <span>Student Registration</span>
+            </a>
+          </li>
+          <li>
+            <a href="tables-data.html">
+              <span>Waiting Registration</span>
+            </a>
+          </li>
+          <li>
+            <a href="tables-data.html">
+              <span>Cancel Registration</span>
+            </a>
+          </li>
+          <li>
+            <a href="tables-data.html">
+              <span>Payment</span>
+            </a>
+          </li>
+          <li>
+            <a href="tables-data.html">
+              <span>School Bus Track</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Registration Nav -->
+
+      <!-- Report Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#report-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Reporting</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="report-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="tables-general.html">
+              <i class="bi bi-circle"></i><span>Student Registration Report</span>
+            </a>
+          </li>
+          <li>
+            <a href="tables-data.html">
+              <i class="bi bi-circle"></i><span>Monthly Payment Report</span>
+            </a>
+          </li>
+          <li>
+            <a href="tables-data.html">
+              <i class="bi bi-circle"></i><span>Cancel Report</span>
+            </a>
+          </li>
+          <li>
+            <a href="tables-data.html">
+              <i class="bi bi-circle"></i><span>Ferry Report</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Report Nav -->
+
+      <!--<li class="nav-heading">Pages</li>-->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ url('admin/logout') }}">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Logout</span>
+        </a>
+      </li><!-- End Logout Nav -->
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main">
+
+      @yield('content')
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <!--<footer id="footer" class="footer">
+    <div class="copyright">
+      <strong><span>School Management System</span></strong>
+    </div>
+    <div class="credits">
+      Designed by <a href="https://schoolmanagementsystem.com/">Bootstrap</a>
+    </div>
+  </footer>--><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Template Main JS File -->
+  <script src="{{ asset('js/dashboard.js')}}"></script>
+</body>
+
+</html>
