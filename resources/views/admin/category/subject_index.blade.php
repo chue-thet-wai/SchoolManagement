@@ -15,7 +15,6 @@
 
 <section class="card">
     @php
-	use App\Interfaces\OrderRepositoryInterface;
         $gradeList = [];
     @endphp
 	<div class="card-body">

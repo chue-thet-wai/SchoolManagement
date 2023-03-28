@@ -26,6 +26,7 @@ return new class extends Migration
             $table->text('remark')->nullable();
             $table->tinyInteger('resign_status')->default(1)->comment('0 :resign , 1:active');
             $table->timestamp('resign_date')->nullable();
+            $table->string('profile_image')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->softDeletes();

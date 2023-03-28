@@ -49,7 +49,7 @@
                         <td>{{ $res->phone }}</td>
                         <td>{{ $res->joined_date }}</td>
                         <td class="center">
-                            <form method="post" action="{{route('grade_level_fee.destroy',$res->id)}}" style="display: inline;">
+                            <form method="post" action="{{route('teacher_info.destroy',$res->user_id)}}" style="display: inline;">
                                 @csrf
                                 {{ method_field('DELETE') }}
                                 <button type="submit" value="delete" class="btn m-0 p-0 border-0">

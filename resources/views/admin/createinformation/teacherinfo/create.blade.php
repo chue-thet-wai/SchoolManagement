@@ -14,6 +14,9 @@
 </div><!-- End Page Title -->
 
 <section class="card">
+    @php
+        $gradeList = [];
+    @endphp
     <div class="card-body">
         <br />
         
@@ -41,26 +44,26 @@
                     </div>
                 </div>
                 <div class="form-group col-md-5">
+                    <label for="login_name"><b>Login Name<span style="color:brown">*</span></b></label>
+                    <div class="col-sm-10">
+                        <input type="text" name="login_name" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <br />
+            <div class="row g-4">
+                <div class="col-md-1"></div>
+                <div class="form-group col-md-5">
                     <label for="email"><b>Email<span style="color:brown">*</span></b></label>
                     <div class="col-sm-10">
                         <input type="text" name="email" class="form-control" required>
                     </div>
                 </div>
-                <div class="col-md-1"></div>
-            </div>
-            <br />
-            <div class="row g-4">
-                <div class="col-md-1"></div>
                 <div class="form-group col-md-5">
-                    <label for="phone"><b>Phone</b></label>
+                    <label for="password"><b>Password<span style="color:brown">*</span></b></label>
                     <div class="col-sm-10">
-                        <input type="text" name="phone" class="form-control" required>
-                    </div>
-                </div>
-                <div class="form-group col-md-5">
-                    <label for="nrc"><b>NRC</b></label>
-                    <div class="col-sm-10">
-                        <input type="text" name="nrc" class="form-control" required>
+                        <input type="password" name="password" class="form-control" required>
                     </div>
                 </div>
                 <div class="col-md-1"></div>
@@ -69,15 +72,32 @@
             <div class="row g-4">
                 <div class="col-md-1"></div>
                 <div class="form-group col-md-5">
-                    <label for="date_of_birth"><b>Date of Birth<span style="color:brown">*</span></b></label>
+                    <label for="contact_no"><b>Contact No</b></label>
                     <div class="col-sm-10">
-                        <input type="date" name="date_of_birth" class="form-control" required>
+                        <input type="text" name="contact_no" class="form-control" required>
                     </div>
                 </div>
                 <div class="form-group col-md-5">
-                    <label for="joined_date"><b>Joined Date<span style="color:brown">*</span></b></label>
+                    <label for=""><b>Grade</b></label>
                     <div class="col-sm-10">
-                        <input type="date" name="joined_date" class="form-control" required>
+                        <select class="form-select" id="grade_id" name="grade_id" >
+                            <option value="99">select grade</option>
+                            @foreach($grade_list as $g)
+                                <option value="{{$g->id}}">{{$g->name}}</option>
+                                @php  $gradeList[$g->id] = $g->name; @endphp
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <br />
+            <div class="row g-4">
+                <div class="col-md-1"></div>
+                <div class="form-group col-md-5">
+                    <label for="startworking_date"><b>Start Working Date<span style="color:brown">*</span></b></label>
+                    <div class="col-sm-10">
+                        <input type="date" name="startworking_date" class="form-control" required>
                     </div>
                 </div>
                 <div class="col-md-1"></div>
@@ -97,9 +117,19 @@
             <div class="row g-4">
                 <div class="col-md-1"></div>
                 <div class="form-group col-md-10">
+                    <label for="remark"><b>Remark</b></label>
+                    <div class="col-sm-10">
+                        <textarea name="remark" class="form-control" required></textarea>
+                    </div>
+                </div>               
+                <div class="col-md-1"></div>
+            </div>
+            <br />
+            <div class="row g-4">
+                <div class="col-md-1"></div>
+                <div class="form-group col-md-10">
                     <label for="status"><b>Status</b></label>
                     <div class="col-sm-10">
-                        <br />
                         <input type="radio" id="inactive" name="status" value="0" checked><b> Inactive</b>
                         <input type="radio" id="active" name="status" value="1"><b> Active</b>
                     </div>

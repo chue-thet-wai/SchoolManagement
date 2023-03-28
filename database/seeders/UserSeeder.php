@@ -21,7 +21,6 @@ class UserSeeder extends Seeder
             'email'       =>'admin@email.com',
             'password'    =>bcrypt('admin123'),
             'role'        =>1,
-            'phone'       =>'0987654321',
             'created_by'  =>'10001',
             'updated_by'  =>'10001'
         );

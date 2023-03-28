@@ -32,6 +32,7 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::get('/userlist','UserController@show_userlist');   
     Route::get('/profile','UserController@show_profile'); 
     Route::get('/logout','UserController@logout');
+    Route::post('userlist/edit/{id}','UserController@edit_user'); 
     Route::get('userlist/edit/{id}','UserController@edit_user'); 
     Route::post('userlist/update/{id}','UserController@update_user'); 
     Route::post('userlist/delete/{id}','UserController@destroy_user');  
