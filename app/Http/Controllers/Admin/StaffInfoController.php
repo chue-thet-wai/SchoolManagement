@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Admin\CreateInformation;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use App\Models\TeacherInfo;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Interfaces\CategoryRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Models\StaffInfo;
 
-class TeacherInfoController extends Controller
+class StaffInfoController extends Controller
 {
     private CategoryRepositoryInterface $categoryRepository;
     private UserRepositoryInterface $userRepository;
@@ -29,11 +29,11 @@ class TeacherInfoController extends Controller
      */
     public function index()
     {
-        $res = TeacherInfo::leftJoin("users", "users.user_id", "=", "teacher_info.user_id")
-                ->select('teacher_info.*')
+        $res = StaffInfo::leftJoin("users", "users.user_id", "=", "staff_info.user_id")
+                ->select('staff_info.*')
                 ->paginate(10);
-        $grade_list    = $this->categoryRepository->getGrade();
-        return view('admin.createinformation.teacherinfo.index',['grade_list'=>$grade_list,'list_result' => $res]);
+        $department_list    = $this->userRepository->getDepartment();
+        return view('admin.user.index',['department_list'=>$department_list,'list_result' => $res]);
     }
 
     /**
@@ -43,8 +43,8 @@ class TeacherInfoController extends Controller
      */
     public function create()
     {
-        $grade_list    = $this->categoryRepository->getGrade();
-        return view('admin.createinformation.teacherinfo.create',['grade_list'=>$grade_list]);
+        $department_list    = $this->userRepository->getDepartment();
+        return view('admin.user.create',['department_list'=>$department_list]);
     }
 
     /**
@@ -61,10 +61,10 @@ class TeacherInfoController extends Controller
         $request->validate([
             'name'            =>'required|min:3',
             'email'           =>'required|min:3',
-            'teacher_profile' =>'required | mimes:jpeg,jpg,png | max:1000',
+            'user_profile' =>'required | mimes:jpeg,jpg,png | max:1000',
         ]); 
-        if ($request->grade_id == '99') {
-            return redirect()->back()->with('danger','Please select grade !');
+        if ($request->department_id == '99') {
+            return redirect()->back()->with('danger','Please select department !');
         }  
         $chkEmail = $this->userRepository->checkEmail($request->email); 
         if ($chkEmail == false) {
@@ -73,8 +73,8 @@ class TeacherInfoController extends Controller
 
         $userID = $this->userRepository->generateUserID();
 
-        if($request->hasFile('teacher_profile')){
-            $image=$request->file('teacher_profile');
+        if($request->hasFile('user_profile')){
+            $image=$request->file('user_profile');
             $extension = $image->extension();
             $image_name = $userID. "_" . time() . "." . $extension;
         }else{
@@ -86,7 +86,7 @@ class TeacherInfoController extends Controller
             'name'        =>$request->name,
             'email'       =>$request->email,
             'password'    =>bcrypt($request->password),
-            'role'        =>3,
+            'role'        =>$request->department_id,
             'created_by'  =>$login_id,
             'updated_by'  =>$login_id
         );
@@ -95,7 +95,7 @@ class TeacherInfoController extends Controller
         if ($userRes) {
             $insertData = array(
                 'user_id'           =>$userID,
-                'grade_id'          =>$request->grade_id,
+                'department_id'     =>$request->department_id,
                 'name'              =>$request->name,
                 'login_name'        =>$request->login_name,
                 'startworking_date' =>$request->startworking_date,
@@ -112,16 +112,16 @@ class TeacherInfoController extends Controller
                 $insertData['resign_date'] = $nowDate;
             }
     
-            $result=TeacherInfo::insert($insertData);
+            $result=StaffInfo::insert($insertData);
                       
             if($result){
-                $image->move(public_path('assets/teacher_images'),$image_name);   
-                return redirect(route('teacher_info.index'))->with('success','Teacher Information Created Successfully!');
+                $image->move(public_path('assets/user_images'),$image_name);   
+                return redirect(route('user.index'))->with('success','User Information Created Successfully!');
             }else{
-                return redirect()->back()->with('danger','Teacher Information Created Fail !');
+                return redirect()->back()->with('danger','User Information Created Fail !');
             }
         }else{
-            return redirect()->back()->with('danger','Teacher Information Created Fail !');
+            return redirect()->back()->with('danger','User Information Created Fail !');
         }      
         
     }
@@ -145,13 +145,13 @@ class TeacherInfoController extends Controller
      */
     public function edit($id)
     {
-        $res = TeacherInfo::leftjoin('users', 'users.user_id', '=', 'teacher_info.user_id')
-                ->where('teacher_info.user_id',$id)
-                ->select('teacher_info.*')
+        $res = StaffInfo::leftjoin('users', 'users.user_id', '=', 'staff_info.user_id')
+                ->where('staff_info.user_id',$id)
+                ->select('staff_info.*')
                 ->get();
 
-        $grade_list    = $this->categoryRepository->getGrade();
-        return view('admin.createinformation.teacherinfo.update',['grade_list'=>$grade_list,'result'=>$res]);
+        $department_list    = $this->userRepository->getDepartment();
+        return view('admin.user.update',['department_list'=>$department_list,'result'=>$res]);
     }
 
     /**
@@ -169,22 +169,22 @@ class TeacherInfoController extends Controller
         $request->validate([
             'name'            =>'required|min:3',
             'email'           =>'required|min:3',
-            'teacher_profile' =>'mimes:jpeg,jpg,png | max:1000',
+            'user_profile' =>'mimes:jpeg,jpg,png | max:1000',
         ]); 
-        if ($request->grade_id == '99') {
-            return redirect()->back()->with('danger','Please select grade !');
+        if ($request->department_id == '99') {
+            return redirect()->back()->with('danger','Please select Department !');
         }  
         $chkEmail = $this->userRepository->checkEmail($request->email,$id); 
         if ($chkEmail == false) {
             return redirect()->back()->with('danger','Email already exist !');
         }
 
-        if($request->hasFile('teacher_profile')){
+        if($request->hasFile('user_profile')){
 
             $previous_img=$request->previous_image;
-            @unlink(public_path('/assets/teacher_images/'. $previous_img));
+            @unlink(public_path('/assets/user_images/'. $previous_img));
 
-            $image=$request->file('teacher_profile');
+            $image=$request->file('user_profile');
             $extension = $image->extension();
             $image_name = $id. "_" . time() . "." . $extension;
         }else{
@@ -195,7 +195,7 @@ class TeacherInfoController extends Controller
             'user_id'     =>$id,
             'name'        =>$request->name,
             'email'       =>$request->email,
-            'role'        =>3,
+            'role'        =>$request->department_id,
             'updated_by'  =>$login_id
         );
         if ($request->password == '') {
@@ -206,7 +206,7 @@ class TeacherInfoController extends Controller
         if ($userRes) {
             $infoData = array(
                 'user_id'           =>$id,
-                'grade_id'          =>$request->grade_id,
+                'department_id'     =>$request->department_id,
                 'name'              =>$request->name,
                 'login_name'        =>$request->login_name,
                 'startworking_date' =>$request->startworking_date,
@@ -225,18 +225,18 @@ class TeacherInfoController extends Controller
                 $infoData['profile_image'] = $image_name;
             }
     
-            $result=TeacherInfo::where('user_id',$id)->update($infoData);
+            $result=StaffInfo::where('user_id',$id)->update($infoData);
                       
             if($result){
                 if ($image_name != "") {
-                    $image->move(public_path('assets/teacher_images'),$image_name);  
+                    $image->move(public_path('assets/user_images'),$image_name);  
                 }                 
-                return redirect(route('teacher_info.index'))->with('success','Teacher Information Updated Successfully!');
+                return redirect(route('user.index'))->with('success','User Information Updated Successfully!');
             }else{
-                return redirect()->back()->with('danger','Teacher Information Updated Fail !');
+                return redirect()->back()->with('danger','User Information Updated Fail !');
             }
         }else{
-            return redirect()->back()->with('danger','Teacher Information Created Fail !');
+            return redirect()->back()->with('danger','User Information Created Fail !');
         }      
     }
 
@@ -250,30 +250,30 @@ class TeacherInfoController extends Controller
     {
         DB::beginTransaction();
         try{
-            $checkData = TeacherInfo::where('user_id',$id)->first();
+            $checkData = StaffInfo::where('user_id',$id)->first();
 
             if (!empty($checkData)) {
                 
-                $res = TeacherInfo::where('user_id',$id)->delete();
+                $res = StaffInfo::where('user_id',$id)->delete();
                 if($res){
                     //To delet user
                     $userdel = User::where('user_id',$id)->delete();
 
                     //To delete image
                     $image=$checkData['profile_image'];
-                    @unlink(public_path('/assets/teacher_images/'. $image));
+                    @unlink(public_path('/assets/user_images/'. $image));
                 }
             }else{
-                return redirect()->back()->with('error','There is no result with this teacher information.');
+                return redirect()->back()->with('error','There is no result with this user information.');
             }
             DB::commit();
             //To return list
-            return redirect(route('teacher_info.index'))->with('success','Teacher Information Deleted Successfully!');
+            return redirect(route('user.index'))->with('success','User Information Deleted Successfully!');
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Teacher Information Deleted Failed!');
+            return redirect()->back()->with('error','User Information Deleted Failed!');
         }
         
     }

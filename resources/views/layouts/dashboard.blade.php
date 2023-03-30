@@ -90,7 +90,7 @@
       </li><!-- End Dashboard Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ url('admin/userlist') }}">
+        <a class="nav-link collapsed" href="{{route('user.index')}}"">
         <i class="bi bi-menu-button-wide"></i>
         <span>User Management</span>
         </a>

@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="pagetitle">
-	<h1>Teacher Information</h1>
+	<h1>User Management</h1>
 	<nav>
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
 			<li class="breadcrumb-item active">Category</li>
-			<li class="breadcrumb-item active">Teacher Information</li>
+			<li class="breadcrumb-item active">User Management</li>
 		</ol>
 	</nav>
 	@include('layouts.error')
@@ -19,10 +19,10 @@
         
         <div class="row g-4">
             <div class="col-md-11" style='color:#012970;'>
-                <h4><b>Teacher List</b></h4>
+                <h4><b>User List</b></h4>
             </div>
             <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{route('teacher_info.create')}}" id="form-header-btn"> Create</a>
+                <a class="btn btn-sm btn-primary" href="{{route('user.create')}}" id="form-header-btn"> Create</a>
             </div>
         </div>
         <br />
@@ -58,12 +58,12 @@
                                 @endif
                             </td>
                             <td class="center">
-                                <a href="{{route('teacher_info.edit',$res->user_id)}}">
+                                <a href="{{route('user.edit',$res->user_id)}}">
                                     <button type="submit" value="delete" class="btn m-1 p-0 border-0">
                                         <span id="boot-icon" class="bi bi-pencil-square" style="font-size: 20px; color:rgb(58 69 207);"></span>
                                     </button>                            
                                 </a>
-                                <form method="post" action="{{route('teacher_info.destroy',$res->user_id)}}" style="display: inline;">
+                                <form method="post" action="{{route('user.destroy',$res->user_id)}}" style="display: inline;">
                                     @csrf
                                     {{ method_field('DELETE') }}
                                     <button type="submit" value="delete" class="btn m-1 p-0 border-0">

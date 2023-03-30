@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class UserRepository implements UserRepositoryInterface 
 {
@@ -14,16 +15,33 @@ class UserRepository implements UserRepositoryInterface
         return $newUserId;
     }
 
-    public function checkEmail($email){
+    public function checkEmail($email,$user_id=null){
         $userEmail = User::where('email',$email)
-                    ->select('email')
-                    ->get()->toArray();
+                    ->select('email','user_id')
+                    ->first();
+       
         if (!empty($userEmail)) {
+            if ($userEmail['user_id'] == $user_id){
+                return true;
+            }
             return false;
         } else {
             return true;
         }
         
+    }
+
+    public function getDepartment()
+    {
+        $deptArr = array('Head Office','Branch');
+        $dept = [];
+        for ($i=0;$i< count($deptArr);$i++) {
+            $deptOne['id'] = $i+1;
+            $deptOne['name']= $deptArr[$i];
+            $dept[] = $deptOne;
+        }
+        
+       return $dept;
     }
    
 }

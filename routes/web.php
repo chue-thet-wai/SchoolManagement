@@ -29,13 +29,9 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::resource('teacher_info','CreateInformation\TeacherInfoController');  
 
     //for user 
-    Route::get('/userlist','UserController@show_userlist');   
+    Route::resource('user','StaffInfoController');   
     Route::get('/profile','UserController@show_profile'); 
     Route::get('/logout','UserController@logout');
-    Route::post('userlist/edit/{id}','UserController@edit_user'); 
-    Route::get('userlist/edit/{id}','UserController@edit_user'); 
-    Route::post('userlist/update/{id}','UserController@update_user'); 
-    Route::post('userlist/delete/{id}','UserController@destroy_user');  
 });
 
 Route::get('/', function () {
