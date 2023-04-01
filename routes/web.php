@@ -26,7 +26,8 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::resource('subject','Category\SubjectController'); 
 
     //for Create Information
-    Route::resource('teacher_info','CreateInformation\TeacherInfoController');  
+    Route::resource('teacher_info','CreateInformation\TeacherInfoController'); 
+    Route::resource('driver_info','CreateInformation\DriverInfoController');  
 
     //for user 
     Route::resource('user','StaffInfoController');   

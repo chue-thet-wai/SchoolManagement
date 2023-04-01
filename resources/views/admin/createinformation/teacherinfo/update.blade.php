@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
-            <li class="breadcrumb-item active">Category</li>
+            <li class="breadcrumb-item active">Create Information</li>
             <li class="breadcrumb-item active">Teacher Information</li>
         </ol>
     </nav>
@@ -23,7 +23,7 @@
         <div class="row g-4">
             <div class="col-md-1"></div>
             <div class="col-md-9" style='color:#012970;'>
-                <h4><b>Create Teacher Information</b></h4>
+                <h4><b>Update Teacher Information</b></h4>
             </div>
             <div class="col-md-1">
                 <a class="btn btn-sm btn-primary" href="{{route('teacher_info.index')}}" id="form-header-btn"> Back</a>
@@ -170,7 +170,7 @@
                 <div class="col-md-1"></div>
                 <div class="form-group col-md-2">
                     <div class="d-grid mt-4">
-                        <input type="submit" value="Add" class="btn btn-primary">
+                        <input type="submit" value="Update" class="btn btn-primary">
                     </div>
                 </div>
                 <div class="col-md-1"></div>

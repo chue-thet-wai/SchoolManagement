@@ -167,7 +167,7 @@
             </a>
           </li>
           <li>
-            <a href="tables-data.html">
+            <a href="{{route('driver_info.index')}}">
               <span>Driver Information</span>
             </a>
           </li>

@@ -4,13 +4,14 @@ namespace App\Repositories;
 
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UserRepository implements UserRepositoryInterface 
 {
     public function generateUserID() 
     {
-        $maxUserID = User::select('user_id')->max('user_id');
+        $maxUserID = DB::table('users')->select('user_id')->max('user_id');
         $newUserId = $maxUserID + 1;
         return $newUserId;
     }
