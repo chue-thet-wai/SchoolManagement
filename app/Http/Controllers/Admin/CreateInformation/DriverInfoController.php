@@ -89,7 +89,6 @@ class DriverInfoController extends Controller
                 'updated_by'        =>$login_id
             );
             $result=DriverInfo::insert($insertData);
-            DB::commit();
                         
             if($result){
                 if ($image_name != "") {
@@ -98,7 +97,7 @@ class DriverInfoController extends Controller
                 if ($licence_name != "") {
                     $licence->move(public_path('assets/driver_licences'),$licence_name);   
                 }               
-                 
+                DB::commit();
                 return redirect(route('driver_info.index'))->with('success','Driver Information Created Successfully!');
             }else{
                 return redirect()->back()->with('danger','Driver Information Created Fail !');
@@ -197,7 +196,6 @@ class DriverInfoController extends Controller
                 $infoData['type_of_licence'] = $licence_name;
             }
             $result=DriverInfo::where('driver_id',$id)->update($infoData);
-            DB::commit();
                       
             if($result){
                 if ($image_name != "") {
@@ -205,7 +203,8 @@ class DriverInfoController extends Controller
                 } 
                 if ($licence_name != "") {
                     $licence->move(public_path('assets/driver_licences'),$licence_name);  
-                }                 
+                }  
+                DB::commit();               
                 return redirect(route('driver_info.index'))->with('success','Driver Information Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Driver Information Updated Fail !');

@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('room', function (Blueprint $table) {
+        Schema::create('student_registration', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('capacity')->default(0);
-            $table->integer('branch_id')->comment('id for branch table');
+            $table->string('student_id')->comment('student id from student_info table');
+            $table->string('old_class_id')->nullable()->comment('id from class_setup table');
+            $table->string('new_class_id')->nullable()->comment('id from class_setup table');
+            $table->timestamp('registration_date')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->softDeletes();
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('room');
+        Schema::dropIfExists('student_registration');
     }
 };

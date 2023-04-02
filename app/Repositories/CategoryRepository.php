@@ -6,6 +6,8 @@ use App\Interfaces\CategoryRepositoryInterface;
 use App\Models\AcademicYear;
 use App\Models\Branch;
 use App\Models\Grade;
+use App\Models\Room;
+use App\Models\Section;
 
 class CategoryRepository implements CategoryRepositoryInterface 
 {
@@ -22,6 +24,13 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         return Branch::all();
     }
-
+    public function getRoom() 
+    {
+        return Room::all();
+    }
+    public function getSection() 
+    {
+        return Section::all();
+    }
    
 }

@@ -85,9 +85,9 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="file-upload"><b>Type of Licence</b></label>
+                        <label for="driver_licence"><b>Type of Licence</b></label>
                         <div class="col-sm-10">
-                            <input type="file" class="form-control" id="file-upload" name='driver_licence' />  
+                            <input type="file" class="form-control" id="driver_licence" name='driver_licence' />  
                         </div>
                     </div> 
                     <br />

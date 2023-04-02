@@ -9,6 +9,8 @@ use App\Interfaces\UserRepositoryInterface;
 use App\Repositories\UserRepository;
 use App\Interfaces\CreateInfoRepositoryInterface;
 use App\Repositories\CreateInfoRepository;
+use App\Interfaces\RegistrationRepositoryInterface;
+use App\Repositories\RegistrationRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(CreateInfoRepositoryInterface::class, CreateInfoRepository::class);
+        $this->app->bind(RegistrationRepositoryInterface::class, RegistrationRepository::class);
     }
 
     /**

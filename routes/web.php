@@ -28,6 +28,14 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     //for Create Information
     Route::resource('teacher_info','CreateInformation\TeacherInfoController'); 
     Route::resource('driver_info','CreateInformation\DriverInfoController');  
+    Route::resource('class_setup','CreateInformation\ClassSetupController'); 
+    Route::get('/student_info/list','CreateInformation\StudentInfoController@studentInfoList'); 
+
+    //for Registration
+    Route::resource('student_reg','Registration\StudentRegistrationController'); 
+    Route::post('/student_registration/guardian_search','Registration\StudentRegSearchController@guardianSearch');
+    Route::post('/student_registration/class_search','Registration\StudentRegSearchController@classSearch');
+    Route::post('/student_registration/student_search','Registration\StudentRegSearchController@studentSearch');
 
     //for user 
     Route::resource('user','StaffInfoController');   

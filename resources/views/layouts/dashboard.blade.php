@@ -157,13 +157,13 @@
             </a>
           </li>
           <li>
-            <a href="tables-data.html">
+            <a href="{{ url('admin/student_info/list') }}">
               <span>Student Information</span>
             </a>
           </li>
           <li>
-            <a href="tables-data.html">
-              <span>Parent Information</span>
+            <a href="{{route('class_setup.index')}}">
+              <span>Class Setup</span>
             </a>
           </li>
           <li>
@@ -181,7 +181,7 @@
         </a>
         <ul id="registration-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="tables-general.html">
+            <a href="{{route('student_reg.index')}}">
               <span>Student Registration</span>
             </a>
           </li>

@@ -44,5 +44,23 @@ class UserRepository implements UserRepositoryInterface
         
        return $dept;
     }
+
+    public function getGender()
+    {
+        $gender = [
+            "1" => 'Male',
+            "2" => 'Female'
+        ];        
+       return $gender;
+    }
+    public function getTownship()
+    {
+        $township = [
+            "101" => 'Towhship 1',
+            "102" => 'Towhship 2',
+            "103" => 'Towhship 3'
+        ];        
+       return $township;
+    }
    
 }
