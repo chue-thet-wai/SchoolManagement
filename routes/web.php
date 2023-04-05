@@ -33,9 +33,14 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
 
     //for Registration
     Route::resource('student_reg','Registration\StudentRegistrationController'); 
-    Route::post('/student_registration/guardian_search','Registration\StudentRegSearchController@guardianSearch');
-    Route::post('/student_registration/class_search','Registration\StudentRegSearchController@classSearch');
-    Route::post('/student_registration/student_search','Registration\StudentRegSearchController@studentSearch');
+    Route::post('/student_registration/guardian_search','Registration\RegistrationSearchController@guardianSearch');
+    Route::post('/student_registration/class_search','Registration\RegistrationSearchController@classSearch');
+    Route::post('/student_registration/student_search','Registration\RegistrationSearchController@studentSearch');
+    
+    Route::resource('waitinglist_reg','Registration\WaitingListRegController'); 
+    Route::resource('cancel_reg','Registration\CancelListRegController'); 
+    Route::resource('school_bus_track','Registration\SchoolBusTrackRegController'); 
+    Route::post('/school_bus_track/driver_search','Registration\RegistrationSearchController@driverSearch');
 
     //for user 
     Route::resource('user','StaffInfoController');   
@@ -44,7 +49,8 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
 });
 
 Route::get('/', function () {
-    return view('welcome');
+    //return view('welcome');
+    return redirect(route('login'));
 });
 
 Auth::routes();

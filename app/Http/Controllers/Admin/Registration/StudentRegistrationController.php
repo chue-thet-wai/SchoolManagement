@@ -11,16 +11,20 @@ use App\Interfaces\RegistrationRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\StudentInfo;
 use App\Models\StudentRegistration;
+use App\Models\TeacherInfo;
+use App\Interfaces\CategoryRepositoryInterface;
 
 class StudentRegistrationController extends Controller
 {
     private RegistrationRepositoryInterface $regRepository;
     private UserRepositoryInterface $userRepository;
+    private CategoryRepositoryInterface $categoryRepository;
 
-    public function __construct(RegistrationRepositoryInterface $regRepository,UserRepositoryInterface $userRepository) 
+    public function __construct(RegistrationRepositoryInterface $regRepository,UserRepositoryInterface $userRepository,CategoryRepositoryInterface $categoryRepository) 
     {
         $this->regRepository     = $regRepository;
         $this->userRepository    = $userRepository;
+        $this->categoryRepository = $categoryRepository;
     }
     /**
      * Display a listing of the resource.
@@ -66,6 +70,7 @@ class StudentRegistrationController extends Controller
     public function store(Request $request)
     {
         $login_id = Auth::user()->user_id;
+        $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
             'registration_type' =>'required',
@@ -102,7 +107,9 @@ class StudentRegistrationController extends Controller
                         'phone'             =>$request->guardian_phone,
                         'address'           =>$request->guardian_address,
                         'created_by'        =>$login_id,
-                        'updated_by'        =>$login_id
+                        'updated_by'        =>$login_id,
+                        'created_at'        =>$nowDate,
+                        'updated_at'        =>$nowDate
                     );
                     $guardianId = DB::table('student_guardian')->insertGetId($guardianData);
                 }                
@@ -132,7 +139,9 @@ class StudentRegistrationController extends Controller
                     'student_profile'   =>$image_name,
                     'student_biography' =>$biography_name,
                     'created_by'        =>$login_id,
-                    'updated_by'        =>$login_id
+                    'updated_by'        =>$login_id,
+                    'created_at'        =>$nowDate,
+                    'updated_at'        =>$nowDate
                 );
                 $studentInfoRes=StudentInfo::insert($studentInfoData);
                 log::info($studentInfoRes);
@@ -143,7 +152,9 @@ class StudentRegistrationController extends Controller
                     'new_class_id'      =>$request->new_class,
                     'registration_date' =>$request->registration_date,
                     'created_by'        =>$login_id,
-                    'updated_by'        =>$login_id
+                    'updated_by'        =>$login_id,
+                    'created_at'        =>$nowDate,
+                    'updated_at'        =>$nowDate
                 );
                 log::info($studentRegData);
 
@@ -178,7 +189,9 @@ class StudentRegistrationController extends Controller
                     'new_class_id'      =>$request->new_class,
                     'registration_date' =>$request->registration_date,
                     'created_by'        =>$login_id,
-                    'updated_by'        =>$login_id
+                    'updated_by'        =>$login_id,
+                    'created_at'        =>$nowDate,
+                    'updated_at'        =>$nowDate
                 );
                 $studentRegRes=StudentRegistration::insert($studentRegData);
                             
@@ -270,7 +283,8 @@ class StudentRegistrationController extends Controller
             'name'        =>$request->name,
             'email'       =>$request->email,
             'role'        =>3,
-            'updated_by'  =>$login_id
+            'updated_by'  =>$login_id,
+            'updated_at'     =>$nowDate
         );
         if ($request->password == '') {
             $userData ['password'] = bcrypt($request->password);
@@ -290,7 +304,8 @@ class StudentRegistrationController extends Controller
                 'remark'            =>$request->remark,
                 'resign_status'     =>$request->status,
                 'created_by'        =>$login_id,
-                'updated_by'        =>$login_id
+                'updated_by'        =>$login_id,
+                'updated_at'        =>$nowDate
             );
             if ($request->status == 0) {
                 $infoData['resign_date'] = $nowDate;

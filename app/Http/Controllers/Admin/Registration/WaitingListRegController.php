@@ -1,24 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Admin\CreateInformation;
+namespace App\Http\Controllers\Admin\Registration;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Interfaces\CreateInfoRepositoryInterface;
-use App\Models\ClassSetup;
 use App\Interfaces\CategoryRepositoryInterface;
+use App\Models\WaitingList;
+use App\Models\WaitingRegistration;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class ClassSetupController extends Controller
+class WaitingListRegController extends Controller
 {
-    private CreateInfoRepositoryInterface $createInfoRepository;
     private CategoryRepositoryInterface $categoryRepository;
 
-    public function __construct(CreateInfoRepositoryInterface $createInfoRepository,CategoryRepositoryInterface $categoryRepository) 
+    public function __construct(CategoryRepositoryInterface $categoryRepository) 
     {
-        $this->createInfoRepository = $createInfoRepository;
         $this->categoryRepository = $categoryRepository;
     }
     /**
@@ -28,8 +26,8 @@ class ClassSetupController extends Controller
      */
     public function index()
     {
-        $res = ClassSetup::paginate(10);
-        
+        $res = WaitingRegistration::paginate(10);
+
         $academic_list = $this->categoryRepository->getAcademicYear();
         $academic=[];
         foreach($academic_list as $a) {
@@ -40,23 +38,11 @@ class ClassSetupController extends Controller
         foreach($grade_list as $a) {
             $grade[$a->id] = $a->name;
         }
-        $section_list    = $this->categoryRepository->getSection();
-        $section=[];
-        foreach($section_list as $a) {
-            $section[$a->id] = $a->name;
-        }
-        $room_list    = $this->categoryRepository->getRoom();
-        $room=[];
-        foreach($room_list as $a) {
-            $room[$a->id] = $a->name;
-        }
 
-        return view('admin.createinformation.classsetup.index',[
-            'room_list'=>$room,
+        return view('admin.registration.waitingreg.index',[
             'academic_list'=>$academic,
             'grade_list'   =>$grade,
-            'section_list' =>$section,
-            'list_result'  => $res]);
+            'list_result' => $res]);
     }
 
     /**
@@ -68,14 +54,11 @@ class ClassSetupController extends Controller
     {
         $academic_list = $this->categoryRepository->getAcademicYear();
         $grade_list    = $this->categoryRepository->getGrade();
-        $section_list    = $this->categoryRepository->getSection();
-        $room_list    = $this->categoryRepository->getRoom();
-
-        return view('admin.createinformation.classsetup.create',[
-            'room_list'   =>$room_list,
+        $waiting_number= WaitingRegistration::count();
+        return view('admin.registration.waitingreg.create',[
             'academic_list'=>$academic_list,
             'grade_list'   =>$grade_list,
-            'section_list' =>$section_list,
+            'waiting_number'=>($waiting_number+1),
         ]);
     }
 
@@ -93,17 +76,10 @@ class ClassSetupController extends Controller
         $request->validate([
             'name'            =>'required|min:3',
         ]); 
-       
         $errmsg =array();
-        if ($request->room_id == '99') {
-            array_push($errmsg,'Room');
-         } 
         if ($request->grade_id == '99') {
             array_push($errmsg,'Grade');
         }  
-        if ($request->section_id == '99') {
-            array_push($errmsg,'Section');
-        }
         if ($request->academic_year_id == '99') {
             array_push($errmsg,'Academic Year');
          } 
@@ -111,34 +87,36 @@ class ClassSetupController extends Controller
             $errmsg = implode(',',$errmsg);
             return redirect()->back()->with('danger','Please select '.$errmsg.'!');
         }
-                
+             
         DB::beginTransaction();
         try{
             $insertData = array(
                 'name'              =>$request->name,
-                'room_id'           =>$request->room_id,
+                'phone'             =>$request->phone,
+                'email'             =>$request->email,
                 'grade_id'          =>$request->grade_id,
-                'section_id'        =>$request->section_id,
                 'academic_year_id'  =>$request->academic_year_id,
+                'enquiry_date'      =>$request->enquiry_date,
                 'created_by'        =>$login_id,
                 'updated_by'        =>$login_id,
                 'created_at'        =>$nowDate,
                 'updated_at'        =>$nowDate
             );
-            $result=ClassSetup::insert($insertData);
+            $result=WaitingRegistration::insert($insertData);
                         
-            if($result){      
+            if($result){            
                 DB::commit();
-                return redirect(route('class_setup.index'))->with('success','Class Setup Created Successfully!');
+                return redirect(route('waitinglist_reg.index'))->with('success','Waiting List Registration Created Successfully!');
             }else{
-                return redirect()->back()->with('danger','Class Setup Created Fail !');
+                return redirect()->back()->with('danger','Waiting List Registration Created Fail !');
             }
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Class Setup Created Fail !');
-        }    
+            return redirect()->back()->with('error','Waiting List Registration Created Fail !');
+        }       
+             
     }
 
     /**
@@ -160,18 +138,17 @@ class ClassSetupController extends Controller
      */
     public function edit($id)
     {
-        $academic_list = $this->categoryRepository->getAcademicYear();
+        $res = WaitingRegistration::where('id',$id)->get();
         $grade_list    = $this->categoryRepository->getGrade();
-        $section_list    = $this->categoryRepository->getSection();
-        $room_list    = $this->categoryRepository->getRoom();
+        $academic_list = $this->categoryRepository->getAcademicYear();
 
-        $res = ClassSetup::where('id',$id)->get();
-        return view('admin.createinformation.classsetup.update',[
-            'room_list'   =>$room_list,
-            'academic_list'=>$academic_list,
-            'grade_list'   =>$grade_list,
-            'section_list' =>$section_list,
-            'result'=>$res]);
+        $waiting_number= WaitingRegistration::where('id','<=',$id)->count();
+        return view('admin.registration.waitingreg.update',[
+            'result'=>$res, 
+            'grade_list'     =>$grade_list,
+            'academic_list'  =>$academic_list,
+            'waiting_number' =>$waiting_number
+        ]);
     }
 
     /**
@@ -187,36 +164,36 @@ class ClassSetupController extends Controller
         $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
-            'name'            =>'required|min:3'
+            'name'            =>'required|min:3',
         ]); 
 
         DB::beginTransaction();
         try{
-            $classData = array(
+            $updateData = array(
                 'name'              =>$request->name,
-                'room_id'           =>$request->room_id,
+                'phone'             =>$request->phone,
+                'email'             =>$request->email,
                 'grade_id'          =>$request->grade_id,
-                'section_id'        =>$request->section_id,
                 'academic_year_id'  =>$request->academic_year_id,
+                'enquiry_date'       =>$request->enquiry_date,
                 'updated_by'        =>$login_id,
                 'updated_at'        =>$nowDate
-
             );
             
-            $result=ClassSetup::where('id',$id)->update($classData);
+            $result=WaitingRegistration::where('id',$id)->update($updateData);
                       
             if($result){
                 DB::commit();               
-                return redirect(route('class_setup.index'))->with('success','Class Setup Updated Successfully!');
+                return redirect(route('waitinglist_reg.index'))->with('success','Waiting List Registration Updated Successfully!');
             }else{
-                return redirect()->back()->with('danger','Class Setup Updated Fail !');
+                return redirect()->back()->with('danger','Waiting List Registration Updated Fail !');
             }
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Class Setup Updared Fail !');
-        }  
+            return redirect()->back()->with('error','Waiting List Registration Updared Fail !');
+        }          
     }
 
     /**
@@ -229,25 +206,22 @@ class ClassSetupController extends Controller
     {
         DB::beginTransaction();
         try{
-            $checkData = ClassSetup::where('id',$id)->first();
+            $checkData = WaitingRegistration::where('id',$id)->first();
 
             if (!empty($checkData)) {
                 
-                $res = ClassSetup::where('id',$id)->delete();
-                if($res){
-                    DB::commit();
-                    //To return list
-                    return redirect(route('class_setup.index'))->with('success','Class Deleted Successfully!');
-                }
+                $res = WaitingRegistration::where('id',$id)->delete();
             }else{
-                return redirect()->back()->with('error','There is no result with this class.');
+                return redirect()->back()->with('error','There is no result with this waiting list registraion.');
             }
-           
+            DB::commit();
+            //To return list
+            return redirect(route('waitinglist_reg.index'))->with('success','Waiting List Registration Deleted Successfully!');
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Class Deleted Failed!');
+            return redirect()->back()->with('error','Waiting List Registration Deleted Failed!');
         }
     }
 }

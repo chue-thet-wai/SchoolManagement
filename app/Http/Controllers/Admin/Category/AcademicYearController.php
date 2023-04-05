@@ -41,6 +41,7 @@ class AcademicYearController extends Controller
     public function store(Request $request)
     {
         $login_id = Auth::user()->user_id;
+        $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
             'name'      =>'required|min:3',
@@ -50,7 +51,9 @@ class AcademicYearController extends Controller
             'start_date'     =>$request->start_date,
             'end_date'       =>$request->end_date,
             'created_by'     =>$login_id,
-            'updated_by'     =>$login_id
+            'updated_by'     =>$login_id,
+            'created_at'     =>$nowDate,
+            'updated_at'     =>$nowDate
         );
 
         $result=DB::table('academic_year')->insert($insertData);

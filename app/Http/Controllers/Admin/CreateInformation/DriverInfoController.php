@@ -48,6 +48,7 @@ class DriverInfoController extends Controller
     public function store(Request $request)
     {
         $login_id = Auth::user()->user_id;
+        $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
             'name'            =>'required|min:3',
@@ -86,7 +87,9 @@ class DriverInfoController extends Controller
                 'start_date'        =>$request->start_date,
                 'resign_date'       =>$request->resign_date,
                 'created_by'        =>$login_id,
-                'updated_by'        =>$login_id
+                'updated_by'        =>$login_id,
+                'created_at'        =>$nowDate,
+                'updated_at'        =>$nowDate
             );
             $result=DriverInfo::insert($insertData);
                         
@@ -186,7 +189,8 @@ class DriverInfoController extends Controller
                 'year_of_experience'=>$request->year_of_experience,
                 'start_date'        =>$request->start_date,
                 'resign_date'       =>$request->resign_date,
-                'updated_by'        =>$login_id
+                'updated_by'        =>$login_id,
+                'updated_at'        =>$nowDate
             );
             
             if ($image_name != "") {

@@ -47,6 +47,7 @@ class AdditionalFeeController extends Controller
     public function store(Request $request)
     {
         $login_id = Auth::user()->user_id;
+        $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
             'name'      =>'required|min:3',
@@ -55,7 +56,9 @@ class AdditionalFeeController extends Controller
             'name'               =>$request->name,
             'additional_amount'  =>$request->amount,
             'created_by'         =>$login_id,
-            'updated_by'         =>$login_id
+            'updated_by'         =>$login_id,
+            'created_at'         =>$nowDate,
+            'updated_at'         =>$nowDate
         );
         if ($request->grade_id !='99') {
             $insertData['grade_id'] = $request->grade_id;

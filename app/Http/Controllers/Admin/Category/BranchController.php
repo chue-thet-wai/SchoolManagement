@@ -39,6 +39,7 @@ class BranchController extends Controller
     public function store(Request $request)
     {
         $login_id = Auth::user()->user_id;
+        $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
             'name'      =>'required|min:3',
@@ -48,7 +49,9 @@ class BranchController extends Controller
             'phone'          =>$request->phone,
             'address'        =>$request->address,
             'created_by'     =>$login_id,
-            'updated_by'     =>$login_id
+            'updated_by'     =>$login_id,
+            'created_at'     =>$nowDate,
+            'updated_at'     =>$nowDate
         );
 
         $result=Branch::insert($insertData);

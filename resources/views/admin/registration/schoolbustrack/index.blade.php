@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="pagetitle">
-	<h1>Driver Information</h1>
+	<h1>School Bus Track</h1>
 	<nav>
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
-			<li class="breadcrumb-item active">Create Information</li>
-			<li class="breadcrumb-item active">Driver Information</li>
+			<li class="breadcrumb-item active">Registration</li>
+			<li class="breadcrumb-item active">School Bus Track</li>
 		</ol>
 	</nav>
 	@include('layouts.error')
@@ -19,10 +19,10 @@
         
         <div class="row g-4">
             <div class="col-md-11" style='color:#012970;'>
-                <h4><b>Driver List</b></h4>
+                <h4><b>School Bus Track List</b></h4>
             </div>
             <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{route('driver_info.create')}}" id="form-header-btn"> Create</a>
+                <a class="btn btn-sm btn-primary" href="{{route('school_bus_track.create')}}" id="form-header-btn"> Create</a>
             </div>
         </div>
         <br />
@@ -31,10 +31,11 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Track Number</th>
                         <th>Driver ID</th>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Date of Birth</th>
+                        <th>Car Type</th>
+                        <th>Car Number</th>
+                        <th>Arrive Student Number</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -44,17 +45,18 @@
                         @foreach($list_result as $res)
                         <tr>
                             <td>@php echo $i;$i++; @endphp</td>
-                            <td>{{ $res->driver_id }}</td>
-                            <td>{{ $res->name }}</td>
-                            <td>{{ $res->phone }}</td>
-                            <td>{{ $res->date_of_birth }}</td>
+                            <td>{{ $res->track_no }}</td>
+                            <td>{{ $res->driver_id  }}</td>
+                            <td>{{ $res->car_type  }}</td>
+                            <td>{{ $res->car_no  }}</td>
+                            <td>{{ $res->arrive_student_no  }}</td>
                             <td class="center">
-                                <a href="{{route('driver_info.edit',$res->driver_id)}}">
+                                <a href="{{route('school_bus_track.edit',$res->id)}}">
                                     <button type="submit" value="delete" class="btn m-1 p-0 border-0">
                                         <span id="boot-icon" class="bi bi-pencil-square" style="font-size: 20px; color:rgb(58 69 207);"></span>
                                     </button>                            
                                 </a>
-                                <form method="post" action="{{route('driver_info.destroy',$res->driver_id)}}" style="display: inline;">
+                                <form method="post" action="{{route('school_bus_track.destroy',$res->id)}}" style="display: inline;">
                                     @csrf
                                     {{ method_field('DELETE') }}
                                     <button type="submit" value="delete" class="btn m-1 p-0 border-0">

@@ -78,7 +78,7 @@
                     </div>
                 </div>
                 <div class="form-group col-md-5">
-                    <label for=""><b>Department</b></label>
+                    <label for=""><b>Role</b></label>
                     <div class="col-sm-10">
                         <select class="form-select" id="department_id" name="department_id" >
                             <option value="99">select Department</option>

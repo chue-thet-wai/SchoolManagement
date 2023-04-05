@@ -39,16 +39,32 @@
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
 
+        @php
+            $profileImg = App\Http\Controllers\Admin\UserController::getProfileImage();
+            if ($profileImg != '') {
+              $profileImgUrl = $profileImg;
+            } else {
+              $profileImgUrl = 'assets/images/profile.jpg';
+            }   
+            $role = Auth::user()->role;
+            if ($role == 2) {
+              $roleName = 'Branch Admin';
+            } else if ($role== 3){
+              $roleName = 'Teacher';
+            }  else {
+              $roleName = 'Super Admin';
+            }    
+        @endphp
         <li class="nav-item dropdown pe-3">
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="{{ asset('assets/images/profile-img.jpg')}}" alt="Profile" class="rounded-circle">
+            <img src="{{ asset($profileImgUrl)}}" alt="Profile" class="rounded-circle">
             <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->name }}</span>
           </a>
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
               <h6>{{ Auth::user()->name }}</h6>
-              <span>{{ Auth::user()->role }}</span>
+              <span>{{ $roleName }}</span>
             </li>
             <li>
               <hr class="dropdown-divider">
@@ -186,12 +202,12 @@
             </a>
           </li>
           <li>
-            <a href="tables-data.html">
+            <a href="{{route('waitinglist_reg.index')}}">
               <span>Waiting Registration</span>
             </a>
           </li>
           <li>
-            <a href="tables-data.html">
+            <a href="{{route('cancel_reg.index')}}">
               <span>Cancel Registration</span>
             </a>
           </li>
@@ -201,7 +217,7 @@
             </a>
           </li>
           <li>
-            <a href="tables-data.html">
+            <a href="{{route('school_bus_track.index')}}">
               <span>School Bus Track</span>
             </a>
           </li>

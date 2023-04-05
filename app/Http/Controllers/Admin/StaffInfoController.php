@@ -88,7 +88,9 @@ class StaffInfoController extends Controller
             'password'    =>bcrypt($request->password),
             'role'        =>$request->department_id,
             'created_by'  =>$login_id,
-            'updated_by'  =>$login_id
+            'updated_by'  =>$login_id,
+            'created_at'     =>$nowDate,
+            'updated_at'     =>$nowDate
         );
         
         $userRes=User::insert($userData);
@@ -106,7 +108,9 @@ class StaffInfoController extends Controller
                 'resign_status'     =>$request->status,
                 'profile_image'     =>$image_name,
                 'created_by'        =>$login_id,
-                'updated_by'        =>$login_id
+                'updated_by'        =>$login_id,
+                'created_at'      =>$nowDate,
+                'updated_at'     =>$nowDate
             );
             if ($request->status == 0) {
                 $insertData['resign_date'] = $nowDate;
@@ -196,7 +200,8 @@ class StaffInfoController extends Controller
             'name'        =>$request->name,
             'email'       =>$request->email,
             'role'        =>$request->department_id,
-            'updated_by'  =>$login_id
+            'updated_by'  =>$login_id,
+            'updated_at'     =>$nowDate
         );
         if ($request->password == '') {
             $userData ['password'] = bcrypt($request->password);
@@ -216,7 +221,8 @@ class StaffInfoController extends Controller
                 'remark'            =>$request->remark,
                 'resign_status'     =>$request->status,
                 'created_by'        =>$login_id,
-                'updated_by'        =>$login_id
+                'updated_by'        =>$login_id,
+                'updated_at'        =>$nowDate
             );
             if ($request->status == 0) {
                 $infoData['resign_date'] = $nowDate;

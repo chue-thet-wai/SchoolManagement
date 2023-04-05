@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Admin\Registration;
 
 use App\Http\Controllers\Controller;
 use App\Models\ClassSetup;
+use App\Models\DriverInfo;
 use App\Models\StudentGuardian;
 use App\Models\StudentInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class StudentRegSearchController extends Controller
+class RegistrationSearchController extends Controller
 {
     public function guardianSearch(Request $request)
     {
@@ -64,6 +65,23 @@ class StudentRegSearchController extends Controller
                 'date_of_birth'   => $studentSearch->date_of_birth,
                 'father_name'      => $studentSearch->father_name,
                 'mother_name'     => $studentSearch->mother_name
+            ), 200);
+        } else {
+            return response()->json(array(
+                'msg'             => 'notfound',
+            ), 200);
+        }
+    }
+
+    public function driverSearch(Request $request)
+    {
+        
+        $driverSearch = DriverInfo::where('driver_id',$request->driver_id)->first();
+        if (!empty($driverSearch)) {
+            return response()->json(array(
+                'msg'             => 'found',
+                'name'            => $driverSearch->name,
+                'phone'           => $driverSearch->phone,
             ), 200);
         } else {
             return response()->json(array(

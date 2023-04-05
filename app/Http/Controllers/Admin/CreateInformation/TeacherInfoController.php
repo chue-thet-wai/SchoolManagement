@@ -98,7 +98,9 @@ class TeacherInfoController extends Controller
                 'password'    =>bcrypt($request->password),
                 'role'        =>3,
                 'created_by'  =>$login_id,
-                'updated_by'  =>$login_id
+                'updated_by'  =>$login_id,
+                'created_at'  =>$nowDate,
+                'updated_at'  =>$nowDate
             );
             
             $userRes=User::insert($userData);
@@ -130,7 +132,9 @@ class TeacherInfoController extends Controller
                     'university'        =>$request->university,
                     'education_year'    =>$request->education_year,
                     'created_by'        =>$login_id,
-                    'updated_by'        =>$login_id
+                    'updated_by'        =>$login_id,
+                    'created_at'  =>$nowDate,
+                    'updated_at'  =>$nowDate
                 );
                 if ($request->status == 0) {
                     $insertData['resign_date'] = $nowDate;
@@ -246,7 +250,8 @@ class TeacherInfoController extends Controller
                 'name'        =>$request->name,
                 'email'       =>$request->email,
                 'role'        =>3,
-                'updated_by'  =>$login_id
+                'updated_by'  =>$login_id,
+                'updated_at'  =>$nowDate
             );
             if ($request->password == '') {
                 $userData ['password'] = bcrypt($request->password);
@@ -279,7 +284,8 @@ class TeacherInfoController extends Controller
                     'university'        =>$request->university,
                     'education_year'    =>$request->education_year,
                     'created_by'        =>$login_id,
-                    'updated_by'        =>$login_id
+                    'updated_by'        =>$login_id,
+                    'updated_at'        =>$nowDate
                 );
                 if ($request->status == 0) {
                     $infoData['resign_date'] = $nowDate;

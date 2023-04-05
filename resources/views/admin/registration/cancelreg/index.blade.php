@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="pagetitle">
-	<h1>Driver Information</h1>
+	<h1>Cancel Registration</h1>
 	<nav>
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
-			<li class="breadcrumb-item active">Create Information</li>
-			<li class="breadcrumb-item active">Driver Information</li>
+			<li class="breadcrumb-item active">Registration</li>
+			<li class="breadcrumb-item active">Cancel Registration</li>
 		</ol>
 	</nav>
 	@include('layouts.error')
@@ -19,10 +19,10 @@
         
         <div class="row g-4">
             <div class="col-md-11" style='color:#012970;'>
-                <h4><b>Driver List</b></h4>
+                <h4><b>Cancel Registration List</b></h4>
             </div>
             <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{route('driver_info.create')}}" id="form-header-btn"> Create</a>
+                <a class="btn btn-sm btn-primary" href="{{route('cancel_reg.create')}}" id="form-header-btn"> Create</a>
             </div>
         </div>
         <br />
@@ -31,10 +31,10 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Driver ID</th>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Date of Birth</th>
+                        <th>Registration Number</th>
+                        <th>Student ID</th>
+                        <th>Cancel Date</th>
+                        <th>Refund Amount</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -44,17 +44,17 @@
                         @foreach($list_result as $res)
                         <tr>
                             <td>@php echo $i;$i++; @endphp</td>
-                            <td>{{ $res->driver_id }}</td>
-                            <td>{{ $res->name }}</td>
-                            <td>{{ $res->phone }}</td>
-                            <td>{{ $res->date_of_birth }}</td>
+                            <td>{{ $res->registration_no }}</td>
+                            <td>{{ $res->student_id }}</td>
+                            <td>{{ $res->cancel_date }}</td>
+                            <td>{{ $res->refund_amount }}</td>
                             <td class="center">
-                                <a href="{{route('driver_info.edit',$res->driver_id)}}">
+                                <a href="{{route('cancel_reg.edit',$res->id)}}">
                                     <button type="submit" value="delete" class="btn m-1 p-0 border-0">
                                         <span id="boot-icon" class="bi bi-pencil-square" style="font-size: 20px; color:rgb(58 69 207);"></span>
                                     </button>                            
                                 </a>
-                                <form method="post" action="{{route('driver_info.destroy',$res->driver_id)}}" style="display: inline;">
+                                <form method="post" action="{{route('cancel_reg.destroy',$res->id)}}" style="display: inline;">
                                     @csrf
                                     {{ method_field('DELETE') }}
                                     <button type="submit" value="delete" class="btn m-1 p-0 border-0">

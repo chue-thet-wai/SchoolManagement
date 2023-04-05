@@ -39,6 +39,7 @@ class GradeController extends Controller
     public function store(Request $request)
     {
         $login_id = Auth::user()->user_id;
+        $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
             'name'      =>'required|min:3',
@@ -46,7 +47,9 @@ class GradeController extends Controller
         $insertData = array(
             'name'           =>$request->name,
             'created_by'     =>$login_id,
-            'updated_by'     =>$login_id
+            'updated_by'     =>$login_id,
+            'created_at'     =>$nowDate,
+            'updated_at'     =>$nowDate
         );
 
         $result=Grade::insert($insertData);

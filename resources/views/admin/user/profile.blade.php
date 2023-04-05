@@ -10,7 +10,7 @@
                     <div class="well well-sm">
                         <div class="row">
                             <div class="col-sm-6 col-md-4">
-                                <img src="{{asset('images/user_logo.png')}}" alt="" class="img-rounded img-responsive" 
+                                <img src="{{asset($profile_image)}}" alt="" class="img-rounded img-responsive" 
                                 style="width:70px;height:70px;"/>
                             </div>
                             <div class="col-sm-6 col-md-8">
@@ -19,10 +19,20 @@
                                 <b>Email : </b>{{$user_res[0]->email}}
                                 <br />
                                 <br />
-                                <b>Role : </b>Admin
+                                @php  
+                                    $role = Auth::user()->role;
+                                    if ($role == 2) {
+                                    $roleName = 'Branch Admin';
+                                    } else if ($role== 3){
+                                    $roleName = 'Teacher';
+                                    }  else {
+                                    $roleName = 'Super Admin';
+                                    }    
+                                @endphp
+                                <b>Role : </b>{{$roleName}}
                                 <br />
                                 <br />
-                                <b>Join Date : </b>{{date("d-m-Y", strtotime($user_res[0]->created_at))}}
+                                <b>Join Date : </b>{{date("Y-m-d", strtotime($user_res[0]->created_at))}}
                                 <br />
                                 <br />
                                 <a href="{{ url('admin/logout') }}" class="btn btn-sm btn-primary">Logout</a>
