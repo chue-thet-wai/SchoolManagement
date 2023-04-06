@@ -212,7 +212,7 @@
                     <div class="form-group ">
                         <div class="row col-md-10">
                             <div class='col-sm-4'>
-                                <label for="township"><b>Two Way Amount</b></label>
+                                <label for="township"><b>Township</b></label>
                             </div>
                             <div class='col-sm-8'>
                                 <select class="form-select" id="township" name="township">
