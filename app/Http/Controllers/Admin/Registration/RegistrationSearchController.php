@@ -7,6 +7,7 @@ use App\Models\ClassSetup;
 use App\Models\DriverInfo;
 use App\Models\StudentGuardian;
 use App\Models\StudentInfo;
+use App\Models\StudentRegistration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -82,6 +83,30 @@ class RegistrationSearchController extends Controller
                 'msg'             => 'found',
                 'name'            => $driverSearch->name,
                 'phone'           => $driverSearch->phone,
+            ), 200);
+        } else {
+            return response()->json(array(
+                'msg'             => 'notfound',
+            ), 200);
+        }
+    }
+
+    public function studentRegistrationSearch(Request $request)
+    {
+        
+        $studentRegSearch = StudentRegistration::join('student_info','student_info.student_id','=','student_registration.student_id')
+                        ->where('student_registration.registration_no',$request->registration_no)
+                        ->select('student_registration.*','student_info.name as student_name')->first();
+
+        if (!empty($studentRegSearch)) {
+            $grade = ClassSetup::join('grade','grade.id','=','class_setup.grade_id')
+                        ->where('class_setup.id',$studentRegSearch->new_class_id)
+                        ->select('grade.name as grade_name')->first();
+            return response()->json(array(
+                'msg'             => 'found',
+                'student_id'      => $studentRegSearch->student_id,
+                'student_name'    => $studentRegSearch->student_name,
+                'grade'           => $grade->grade_name
             ), 200);
         } else {
             return response()->json(array(

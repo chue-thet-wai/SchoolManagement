@@ -39,6 +39,7 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     
     Route::resource('waitinglist_reg','Registration\WaitingListRegController'); 
     Route::resource('cancel_reg','Registration\CancelListRegController'); 
+    Route::post('/cancel_reg/registration_search','Registration\RegistrationSearchController@studentRegistrationSearch');
     Route::resource('school_bus_track','Registration\SchoolBusTrackRegController'); 
     Route::post('/school_bus_track/driver_search','Registration\RegistrationSearchController@driverSearch');
 

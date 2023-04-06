@@ -27,4 +27,16 @@ class RegistrationRepository implements RegistrationRepositoryInterface
         return $classRes;
 
     }
+
+    public function generateRegistrationNo() 
+    {
+        $maxRegNo = DB::table('student_registration')->select('registration_no')->orderBy('registration_no', 'desc')->first();
+        if (!empty($maxRegNo)) {
+            $lastNum  = substr($maxRegNo->registration_no,1);
+            $currentDriverID = 'R'.($lastNum+1);
+            return $currentDriverID;
+        }
+        return 'R10001';
+
+    }
 }

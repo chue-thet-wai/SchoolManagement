@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin\Registration;
 use App\Http\Controllers\Controller;
 use App\Interfaces\CategoryRepositoryInterface;
 use App\Models\CancelRegistration;
+use App\Models\ClassSetup;
+use App\Models\StudentRegistration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -63,22 +65,27 @@ class CancelListRegController extends Controller
         $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
-            'name'            =>'required|min:3',
+            'registration_no'            =>'required',
         ]); 
-        $errmsg =array();
+        $studentRegSearch = StudentRegistration::where('registration_no',$request->registration_no)->first();
+        if (empty($studentRegSearch)) {
+            return redirect()->back()->with('danger','Registration ID Date not found!');
+        }
+
+        /*$errmsg =array();
         if ($request->grade_id == '99') {
             array_push($errmsg,'Grade');
         }  
         if (!empty($errmsg)) {
             $errmsg = implode(',',$errmsg);
             return redirect()->back()->with('danger','Please select '.$errmsg.'!');
-        }
+        }*/
              
         DB::beginTransaction();
         try{
             $insertData = array(
                 'registration_no'   =>$request->registration_no,
-                'student_id'        =>$request->phone,
+                'student_id'        =>$request->student_id,
                 'cancel_date'       =>$request->cancel_date,
                 'refund_amount'     =>$request->refund_amount,
                 'remark'            =>$request->remark,
@@ -123,8 +130,27 @@ class CancelListRegController extends Controller
      */
     public function edit($id)
     {
-        $res = CancelRegistration::where('id',$id)->get();
-        return view('admin.registration.cancelreg.update',['result'=>$res]);
+        $grade_name ='';
+        $res = CancelRegistration::join('student_registration','student_registration.registration_no','=','cancel_registration.registration_no')
+                ->join('student_info','student_info.student_id','=','student_registration.student_id')
+                ->where('cancel_registration.id',$id)
+                ->select('cancel_registration.*','student_info.name as student_name',
+                'student_registration.new_class_id')
+                ->get();
+        if (count($res) > 0) {
+            log::info($res[0]->new_class_id);
+            $grade = ClassSetup::join('grade','grade.id','=','class_setup.grade_id')
+                ->where('class_setup.id',$res[0]->new_class_id)
+                ->select('grade.name as grade_name')->first();
+            if (!empty($grade)) {
+                $grade_name = $grade->grade_name;
+            }
+            
+        }
+        log::info('aaa');
+        log::info($grade_name);
+        
+        return view('admin.registration.cancelreg.update',['result'=>$res,'grade_name'=>$grade_name]);
     }
 
     /**
@@ -140,14 +166,18 @@ class CancelListRegController extends Controller
         $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
-            'name'            =>'required|min:3',
+            'registration_no'            =>'required',
         ]); 
+        $studentRegSearch = StudentRegistration::where('registration_no',$request->registration_no)->first();
+        if (empty($studentRegSearch)) {
+            return redirect()->back()->with('danger','Registration ID Date not found!');
+        }
 
         DB::beginTransaction();
         try{
             $updateData = array(
                 'registration_no'   =>$request->registration_no,
-                'student_id'        =>$request->phone,
+                'student_id'        =>$request->student_id,
                 'cancel_date'       =>$request->cancel_date,
                 'refund_amount'     =>$request->refund_amount,
                 'remark'            =>$request->remark,

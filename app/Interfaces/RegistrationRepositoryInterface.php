@@ -6,4 +6,5 @@ interface RegistrationRepositoryInterface
 {
     public function generateStudentID();
     public function getClass();
+    public function generateRegistrationNo();
 }

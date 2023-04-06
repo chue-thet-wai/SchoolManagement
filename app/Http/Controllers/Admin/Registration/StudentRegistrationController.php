@@ -144,11 +144,12 @@ class StudentRegistrationController extends Controller
                     'updated_at'        =>$nowDate
                 );
                 $studentInfoRes=StudentInfo::insert($studentInfoData);
-                log::info($studentInfoRes);
-
+               
+                $registration_no = $this->regRepository->generateRegistrationNo();
                 //student registration save
                 $studentRegData = array(
                     'student_id'        =>$studentID,
+                    'registration_no'   =>$registration_no,
                     'new_class_id'      =>$request->new_class,
                     'registration_date' =>$request->registration_date,
                     'created_by'        =>$login_id,
@@ -156,7 +157,6 @@ class StudentRegistrationController extends Controller
                     'created_at'        =>$nowDate,
                     'updated_at'        =>$nowDate
                 );
-                log::info($studentRegData);
 
                 $studentRegRes=StudentRegistration::insert($studentRegData);
                 
@@ -182,9 +182,11 @@ class StudentRegistrationController extends Controller
         } else {
             DB::beginTransaction();
             try{
+                $registration_no = $this->regRepository->generateRegistrationNo();
                 //student registration save
                 $studentRegData = array(
                     'student_id'        =>$request->student_id,
+                    'registration_no'   =>$registration_no,
                     'old_class_id'      =>$request->old_class,
                     'new_class_id'      =>$request->new_class,
                     'registration_date' =>$request->registration_date,
@@ -207,9 +209,7 @@ class StudentRegistrationController extends Controller
                 Log::info($e->getMessage());
                 return redirect()->back()->with('error','Student Registration Created Fail !');
             }  
-        }
-       
-             
+        }       
         
     }
 

@@ -1,6 +1,34 @@
 @extends('layouts.dashboard')
 
 @section('content')
+<script>
+    function getRegistrationData(){
+        var regNo = $("#registration_no").val();
+        $.ajax({
+           type:'POST',
+           url:'/admin/cancel_reg/registration_search',
+           data:{
+                _token :'<?php echo csrf_token() ?>',
+                registration_no  : regNo
+            },
+           
+           success:function(data){
+                if (data.msg == 'found') {
+                    $("#registration_msg").html('Registration data found!.');
+                    $("#student_id").val(data.student_id);
+                    $("#student_id_hidden").val(data.student_id);
+                    $("#student_name").val(data.student_name);
+                    $("#grade").val(data.grade);
+                } else {
+                    $("#registration_msg").html('Registration data not found!.');
+                    $("#student_id").val('');
+                    $("#student_name").val('');
+                    $("#grade").val('');
+                }             
+            }
+        });
+    }
+</script>
 <div class="pagetitle">
     <h1>Cancel Registration</h1>
     <nav>
@@ -36,9 +64,17 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label for="registration_no"><b>Registration Number<span style="color:brown">*</span></b></label>
-                        <div class="col-sm-10">
-                            <input type="text" name="registration_no" class="form-control" required>
+                        <div class='row'>
+                            <label for="registration_no"><b>Registration Number<span style="color:brown">*</span></b></label>
+                            <div class="col-sm-10">
+                                <input type="text" id="registration_no" name="registration_no" class="form-control" required>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" name="registration_search" id="registration_search" class="btn btn-sm btn-primary mt-1" onclick="getRegistrationData()">Search</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <span name="registration_msg" id="registration_msg"></span>
                         </div>
                     </div>
                 </div>
@@ -50,7 +86,8 @@
                     <div class="form-group">
                         <label for="student_id"><b>Student ID<span style="color:brown">*</span></b></label>
                         <div class="col-sm-10">
-                            <input type="text" id="student_id" name="student_id" class="form-control" disable>
+                            <input type="hidden" id="student_id_hidden" name="student_id" class="form-control">
+                            <input type="text" id="student_id" class="form-control" disabled>
                         </div>
                     </div>
                 </div>
@@ -62,7 +99,7 @@
                     <div class="form-group">
                         <label for="student_name"><b>Student Name<span style="color:brown">*</span></b></label>
                         <div class="col-sm-10">
-                            <input type="text" id="student_name" name="student_name" class="form-control" disable>
+                            <input type="text" id="student_name" name="student_name" class="form-control" disabled>
                         </div>
                     </div>
                 </div>
@@ -74,7 +111,7 @@
                     <div class="form-group">
                         <label for="grade"><b>Grade Level<span style="color:brown">*</span></b></label>
                         <div class="col-sm-10">
-                            <input type="text" id="grade" name="grade" class="form-control" disable>
+                            <input type="text" id="grade" name="grade" class="form-control" disabled>
                         </div>
                     </div>
                 </div>
@@ -86,7 +123,7 @@
                     <div class="form-group">
                         <label for="cancel_date"><b>Cancel Date</b></label>
                         <div class="col-sm-10">
-                            <input type="date" id="cancel_date" name="cancel_date" class="form-control">
+                            <input type="date" id="cancel_date" name="cancel_date" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -98,7 +135,7 @@
                     <div class="form-group">
                         <label for="refund_amount"><b>Refund Amount<span style="color:brown">*</span></b></label>
                         <div class="col-sm-10">
-                            <input type="amount" id="refund_amount" name="refund_amount" class="form-control">
+                            <input type="amount" id="refund_amount" name="refund_amount" class="form-control" required>
                         </div>
                     </div>
                 </div>
