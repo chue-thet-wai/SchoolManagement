@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\CategoryRepositoryInterface;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SubjectController extends Controller
 {
@@ -26,7 +28,11 @@ class SubjectController extends Controller
     {
         $res = Subject::paginate(10);
         $grade_list = $this->categoryRepository->getGrade();
-        return view('admin.category.subject_index',['grade_list'=>$grade_list,'list_result' => $res]);
+        return view('admin.category.subject_index',[
+            'grade_list'  =>$grade_list,
+            'list_result' => $res,
+            'action'      => 'Add'
+        ]);
     }
 
     /**
@@ -97,7 +103,15 @@ class SubjectController extends Controller
      */
     public function edit($id)
     {
-        //
+        $res = Subject::paginate(10);
+        $grade_list = $this->categoryRepository->getGrade();
+        $update_res = Subject::where('id',$id)->get();
+        return view('admin.category.subject_index',[
+            'grade_list'  =>$grade_list,
+            'list_result' => $res,
+            'result'      => $update_res,
+            'action'      => 'Update'
+        ]);
     }
 
     /**
@@ -109,7 +123,40 @@ class SubjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $login_id = Auth::user()->user_id;
+        $nowDate  = date('Y-m-d H:i:s', time());
+
+        $request->validate([
+            'name'      =>'required|min:3',
+        ]);
+
+        if ($request->grade_id == '99') {
+            return redirect()->back()->with('danger','Please select grade !');
+        }
+
+        DB::beginTransaction();
+        try{
+            $updateData = array(
+                'name'           =>$request->name,
+                'grade_id'       =>$request->grade_id,
+                'updated_by'     =>$login_id,
+                'updated_at'     =>$nowDate
+            );
+            
+            $result=Subject::where('id',$id)->update($updateData);
+                      
+            if($result){
+                DB::commit();               
+                return redirect(route('subject.index'))->with('success','Subject Updated Successfully!');
+            }else{
+                return redirect()->back()->with('danger','Subject Updated Fail !');
+            }
+
+        }catch(\Exception $e){
+            DB::rollback();
+            Log::info($e->getMessage());
+            return redirect()->back()->with('error','Subject Updared Fail !');
+        }  
     }
 
     /**

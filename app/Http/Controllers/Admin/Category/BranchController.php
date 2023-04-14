@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BranchController extends Controller
 {
@@ -17,7 +19,7 @@ class BranchController extends Controller
     public function index()
     {
         $res = Branch::paginate(10);
-        return view('admin.category.branch_index',['list_result' => $res]);
+        return view('admin.category.branch_index',['list_result' => $res,'action'=>'Add']);
     }
 
     /**
@@ -84,7 +86,13 @@ class BranchController extends Controller
      */
     public function edit($id)
     {
-        //
+        $res = Branch::paginate(10);
+        $update_res = Branch::where('id',$id)->get();
+        return view('admin.category.branch_index',[
+            'list_result' => $res,
+            'result'      => $update_res,
+            'action'      => 'Update'
+        ]);
     }
 
     /**
@@ -96,7 +104,37 @@ class BranchController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $login_id = Auth::user()->user_id;
+        $nowDate  = date('Y-m-d H:i:s', time());
+
+        $request->validate([
+            'name'            =>'required|min:3'
+        ]); 
+
+        DB::beginTransaction();
+        try{
+            $updateData = array(
+                'name'           =>$request->name,
+                'phone'          =>$request->phone,
+                'address'        =>$request->address,
+                'updated_by'     =>$login_id,
+                'updated_at'     =>$nowDate
+            );
+            
+            $result=Branch::where('id',$id)->update($updateData);
+                      
+            if($result){
+                DB::commit();               
+                return redirect(route('branch.index'))->with('success','Branch Updated Successfully!');
+            }else{
+                return redirect()->back()->with('danger','Branch Updated Fail !');
+            }
+
+        }catch(\Exception $e){
+            DB::rollback();
+            Log::info($e->getMessage());
+            return redirect()->back()->with('error','Branch Updared Fail !');
+        }  
     }
 
     /**

@@ -19,38 +19,78 @@
     @endphp
 
 	<div class="card-body">
-		<form class="row g-4" method="POST" action="{{route('room.store')}}" enctype="multipart/form-data">
-			@csrf
-			<div class="form-group col-md-3">
-				<label for="name"><b>Name<span style="color:brown">*</span></b></label>
-				<div class="col-sm-10">
-					<input type="text" name="name" class="form-control" required>
+		@if ($action == 'Add')
+			<form class="row g-4" method="POST" action="{{route('room.store')}}" enctype="multipart/form-data">
+				@csrf
+				<div class="form-group col-md-3">
+					<label for="name"><b>Name<span style="color:brown">*</span></b></label>
+					<div class="col-sm-10">
+						<input type="text" name="name" class="form-control" required>
+					</div>
 				</div>
-			</div>
-			<div class="form-group col-md-3">
-				<label for="name"><b>Capacity<span style="color:brown">*</span></b></label>
-				<div class="col-sm-10">
-					<input type="number" name="capacity" class="form-control" required>
+				<div class="form-group col-md-3">
+					<label for="name"><b>Capacity<span style="color:brown">*</span></b></label>
+					<div class="col-sm-10">
+						<input type="number" name="capacity" class="form-control" required>
+					</div>
 				</div>
-			</div>
-			<div class="form-group col-md-3">
-                    <label for="">Branch</label>
-                    <div class="col-sm-10">
-                        <select class="form-select" id="branch_id" name="branch_id" >
-                            <option  value="99">select branch</option>
-                            @foreach($branch_list as $b)
-                                <option  value="{{$b->id}}">{{$b->name}}</option>
-                                @php  $branchList[$b->id] = $b->name; @endphp
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-			<div class="form-group col-md-2">
-				<div class="d-grid mt-4">
-					<input type="submit" value="Add" class="btn btn-primary">
+				<div class="form-group col-md-3">
+						<label for=""><b>Branch</b></label>
+						<div class="col-sm-10">
+							<select class="form-select" id="branch_id" name="branch_id" >
+								<option  value="99">select branch</option>
+								@foreach($branch_list as $b)
+									<option  value="{{$b->id}}">{{$b->name}}</option>
+									@php  $branchList[$b->id] = $b->name; @endphp
+								@endforeach
+							</select>
+						</div>
+					</div>
+				<div class="form-group col-md-2">
+					<div class="d-grid mt-4">
+						<input type="submit" value="Add" class="btn btn-primary">
+					</div>
 				</div>
-			</div>
-		</form>
+			</form>
+		@else
+			<form class="row g-4" method="POST" action="{{route('room.update',$result[0]->id)}}" enctype="multipart/form-data">
+				@csrf
+				{{method_field('PUT')}}
+				<div class="form-group col-md-3">
+					<label for="name"><b>Name<span style="color:brown">*</span></b></label>
+					<div class="col-sm-10">
+						<input type="text" name="name" value="{{$result[0]->name}}" class="form-control" required>
+					</div>
+				</div>
+				<div class="form-group col-md-3">
+					<label for="name"><b>Capacity<span style="color:brown">*</span></b></label>
+					<div class="col-sm-10">
+						<input type="number" name="capacity" value="{{$result[0]->capacity}}" class="form-control" required>
+					</div>
+				</div>
+				<div class="form-group col-md-3">
+						<label for=""><b>Branch</b></label>
+						<div class="col-sm-10">
+							<select class="form-select" id="branch_id" name="branch_id" >
+								<option  value="99">select branch</option>
+								@foreach($branch_list as $b)
+									<option  value="{{$b->id}}" 
+									@if ($result[0]->branch_id == $b->id) 
+										selected
+									@endif
+									>{{$b->name}}</option>
+									@php  $branchList[$b->id] = $b->name; @endphp
+								@endforeach
+							</select>
+						</div>
+					</div>
+				<div class="form-group col-md-2">
+					<div class="d-grid mt-4">
+						<input type="submit" value="Update" class="btn btn-primary">
+					</div>
+				</div>
+			</form>
+		@endif
 		<br />
 		<br />
 		<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
@@ -73,6 +113,11 @@
 						<td>{{$res->capacity}}</td>
 						<td>{{$branchList[$res->branch_id]}}</td>
 						<td class="center">
+							<a href="{{route('room.edit',$res->id)}}">
+								<button type="submit" value="edit" class="btn m-1 p-0 border-0">
+									<span id="boot-icon" class="bi bi-pencil-square" style="font-size: 20px; color:rgb(58 69 207);"></span>
+								</button>                            
+							</a>
 							<form method="post" action="{{route('room.destroy',$res->id)}}" style="display: inline;">
 								@csrf
 								{{ method_field('DELETE') }}

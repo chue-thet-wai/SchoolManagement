@@ -193,7 +193,7 @@
       <!-- Registration Nav -->
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#registration-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Registration</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-card-list"></i><span>Registration</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="registration-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
@@ -227,27 +227,27 @@
       <!-- Report Nav -->
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#report-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Reporting</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-view-list"></i><span>Reporting</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="report-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="tables-general.html">
-              <i class="bi bi-circle"></i><span>Student Registration Report</span>
+            <a href="{{ url('admin/reporting/studentregistration_report') }}">
+              <span>Student Registration Report</span>
             </a>
           </li>
           <li>
             <a href="tables-data.html">
-              <i class="bi bi-circle"></i><span>Monthly Payment Report</span>
+              <span>Monthly Payment Report</span>
             </a>
           </li>
           <li>
-            <a href="tables-data.html">
-              <i class="bi bi-circle"></i><span>Cancel Report</span>
+            <a href="{{ url('admin/reporting/cancel_report') }}">
+              <span>Cancel Report</span>
             </a>
           </li>
           <li>
-            <a href="tables-data.html">
-              <i class="bi bi-circle"></i><span>Ferry Report</span>
+            <a href="{{ url('admin/reporting/ferry_report') }}">
+              <span>Ferry Report</span>
             </a>
           </li>
         </ul>

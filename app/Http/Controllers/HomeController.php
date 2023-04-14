@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DriverInfo;
+use App\Models\StudentInfo;
+use App\Models\TeacherInfo;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +26,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $studentCount = StudentInfo::count();;
+        $teacherCount = TeacherInfo::count();
+        $driverCount  = DriverInfo::count();
+        return view('home',['student_count'=>$studentCount,'teacher_count' => $teacherCount,'driver_count' => $driverCount]);
     }
 }

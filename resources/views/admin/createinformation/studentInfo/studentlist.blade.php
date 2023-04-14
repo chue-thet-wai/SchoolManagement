@@ -54,7 +54,11 @@
                             <td>{{ $res->father_phone }}</td>
                             <td>{{ $res->mother_phone }}</td>
                             <td class="center">
-                                
+                                <a href="{{ url('admin/student_info/edit/'.$res->student_id) }}">
+                                    <button type="submit" value="edit" class="btn m-1 p-0 border-0">
+                                        <span id="boot-icon" class="bi bi-pencil-square" style="font-size: 20px; color:rgb(58 69 207);"></span>
+                                    </button>                            
+                                </a>
                             </td>
                         </tr>
                         @endforeach

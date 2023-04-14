@@ -18,38 +18,78 @@
         $gradeList      = [];
     @endphp
 	<div class="card-body">
-		<form class="row g-4" method="POST" action="{{route('additional_fee.store')}}" enctype="multipart/form-data">
-			@csrf
-			<div class="form-group col-md-3">
-				<label for="name"><b>Name</b></label>
-				<div class="col-sm-10">
-					<input type="text" name="name" class="form-control" required>
+		@if ($action == 'Add')
+			<form class="row g-4" method="POST" action="{{route('additional_fee.store')}}" enctype="multipart/form-data">
+				@csrf
+				<div class="form-group col-md-3">
+					<label for="name"><b>Name</b></label>
+					<div class="col-sm-10">
+						<input type="text" name="name" class="form-control" required>
+					</div>
 				</div>
-			</div>
-			<div class="form-group col-md-3">
-                <label for="">Amount</label>
-                <div class="col-sm-10">
-					<input type="text" name="amount" class="form-control" required>
+				<div class="form-group col-md-3">
+					<label for=""><b>Amount</b></label>
+					<div class="col-sm-10">
+						<input type="text" name="amount" class="form-control" required>
+					</div>
 				</div>
-            </div>
-			<div class="form-group col-md-3">
-				<label for="">Grade</label>
-				<div class="col-sm-10">
-					<select class="form-select" id="grade_id" name="grade_id" >
-						<option  value="99">select grade</option>
-						@foreach($grade_list as $g)
-							<option  value="{{$g->id}}">{{$g->name}}</option>
-							@php  $gradeList[$g->id] = $g->name; @endphp
-						@endforeach
-					</select>
+				<div class="form-group col-md-3">
+					<label for=""><b>Grade</b></label>
+					<div class="col-sm-10">
+						<select class="form-select" id="grade_id" name="grade_id" >
+							<option  value="99">select grade</option>
+							@foreach($grade_list as $g)
+								<option  value="{{$g->id}}">{{$g->name}}</option>
+								@php  $gradeList[$g->id] = $g->name; @endphp
+							@endforeach
+						</select>
+					</div>
 				</div>
-			</div>
-			<div class="form-group col-md-2">
-				<div class="d-grid mt-4">
-					<input type="submit" value="Add" class="btn btn-primary">
+				<div class="form-group col-md-2">
+					<div class="d-grid mt-4">
+						<input type="submit" value="Add" class="btn btn-primary">
+					</div>
 				</div>
-			</div>
-		</form>
+			</form>
+		@else
+			<form class="row g-4" method="POST" action="{{route('additional_fee.update',$result[0]->id)}}" enctype="multipart/form-data">
+				@csrf
+				{{method_field('PUT')}}
+				<div class="form-group col-md-3">
+					<label for="name"><b>Name</b></label>
+					<div class="col-sm-10">
+						<input type="text" name="name" value="{{$result[0]->name}}" class="form-control" required>
+					</div>
+				</div>
+				<div class="form-group col-md-3">
+					<label for=""><b>Amount</b></label>
+					<div class="col-sm-10">
+						<input type="text" name="amount" value="{{$result[0]->additional_amount}}" class="form-control" required>
+					</div>
+				</div>
+				<div class="form-group col-md-3">
+					<label for=""><b>Grade<</b>/label>
+					<div class="col-sm-10">
+						<select class="form-select" id="grade_id" name="grade_id" >
+							<option  value="99">select grade</option>
+							@foreach($grade_list as $g)
+								<option  value="{{$g->id}}" 
+								@if ($result[0]->grade_id == $g->id)
+									selected
+								@endif
+								>{{$g->name}}</option>
+								@php  $gradeList[$g->id] = $g->name; @endphp
+							@endforeach
+						</select>
+					</div>
+				</div>
+				<div class="form-group col-md-2">
+					<div class="d-grid mt-4">
+						<input type="submit" value="Update" class="btn btn-primary">
+					</div>
+				</div>
+			</form>
+		@endif
 		<br />
 		<br />
 		<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
@@ -77,6 +117,11 @@
 						@endif
 						
 						<td class="center">
+							<a href="{{route('additional_fee.edit',$res->id)}}">
+								<button type="submit" value="edit" class="btn m-1 p-0 border-0">
+									<span id="boot-icon" class="bi bi-pencil-square" style="font-size: 20px; color:rgb(58 69 207);"></span>
+								</button>                            
+							</a>
 							<form method="post" action="{{route('additional_fee.destroy',$res->id)}}" style="display: inline;">
 								@csrf
 								{{ method_field('DELETE') }}

@@ -19,7 +19,7 @@ class AcademicYearController extends Controller
     public function index()
     {
         $res = AcademicYear::paginate(10);
-        return view('admin.category.academicyr_index',['list_result' => $res]);
+        return view('admin.category.academicyr_index',['list_result' => $res,'action'=>'Add']);
     }
 
     /**
@@ -86,7 +86,13 @@ class AcademicYearController extends Controller
      */
     public function edit($id)
     {
-        //
+        $list_res = AcademicYear::paginate(10);
+        $res = AcademicYear::where('id',$id)->get();
+        return view('admin.category.academicyr_index',[
+            'list_result'=>$list_res,
+            'result'=>$res,
+            'action'=>'Update'
+        ]);
     }
 
     /**
@@ -98,7 +104,38 @@ class AcademicYearController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $login_id = Auth::user()->user_id;
+        $nowDate  = date('Y-m-d H:i:s', time());
+
+        $request->validate([
+            'name'            =>'required|min:3'
+        ]); 
+
+        DB::beginTransaction();
+        try{
+            $updateData = array(
+                'name'           =>$request->name,
+                'start_date'     =>$request->start_date,
+                'end_date'       =>$request->end_date,
+                'updated_by'     =>$login_id,
+                'updated_at'     =>$nowDate
+
+            );
+            
+            $result=AcademicYear::where('id',$id)->update($updateData);
+                      
+            if($result){
+                DB::commit();               
+                return redirect(route('academic_year.index'))->with('success','Academic Year Updated Successfully!');
+            }else{
+                return redirect()->back()->with('danger','Academic Year Updated Fail !');
+            }
+
+        }catch(\Exception $e){
+            DB::rollback();
+            Log::info($e->getMessage());
+            return redirect()->back()->with('error','Academic Year Updared Fail !');
+        }  
     }
 
     /**

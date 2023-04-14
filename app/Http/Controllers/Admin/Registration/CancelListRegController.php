@@ -138,7 +138,6 @@ class CancelListRegController extends Controller
                 'student_registration.new_class_id')
                 ->get();
         if (count($res) > 0) {
-            log::info($res[0]->new_class_id);
             $grade = ClassSetup::join('grade','grade.id','=','class_setup.grade_id')
                 ->where('class_setup.id',$res[0]->new_class_id)
                 ->select('grade.name as grade_name')->first();
@@ -146,10 +145,7 @@ class CancelListRegController extends Controller
                 $grade_name = $grade->grade_name;
             }
             
-        }
-        log::info('aaa');
-        log::info($grade_name);
-        
+        }        
         return view('admin.registration.cancelreg.update',['result'=>$res,'grade_name'=>$grade_name]);
     }
 

@@ -29,7 +29,9 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::resource('teacher_info','CreateInformation\TeacherInfoController'); 
     Route::resource('driver_info','CreateInformation\DriverInfoController');  
     Route::resource('class_setup','CreateInformation\ClassSetupController'); 
-    Route::get('/student_info/list','CreateInformation\StudentInfoController@studentInfoList'); 
+    Route::get('/student_info/list','CreateInformation\StudentInfoController@studentInfoList');
+    Route::get('/student_info/edit/{id}','CreateInformation\StudentInfoController@studentInfoEdit'); 
+    Route::post('/student_info/update/{id}','CreateInformation\StudentInfoController@studentInfoUpdate'); 
 
     //for Registration
     Route::resource('student_reg','Registration\StudentRegistrationController'); 
@@ -42,6 +44,17 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::post('/cancel_reg/registration_search','Registration\RegistrationSearchController@studentRegistrationSearch');
     Route::resource('school_bus_track','Registration\SchoolBusTrackRegController'); 
     Route::post('/school_bus_track/driver_search','Registration\RegistrationSearchController@driverSearch');
+
+    //for reporting
+    Route::get('/reporting/cancel_report','Report\CancelReportController@cancelReport'); 
+    Route::post('/reporting/cancel_report','Report\CancelReportController@cancelReport'); 
+
+    Route::get('/reporting/studentregistration_report','Report\StudentRegReportController@studentRegReport'); 
+    Route::post('/reporting/studentregistration_report','Report\StudentRegReportController@studentRegReport'); 
+
+    Route::get('/reporting/ferry_report','Report\FerryReportController@ferryReport'); 
+    Route::post('/reporting/ferry_report','Report\FerryReportController@ferryReport'); 
+   
 
     //for user 
     Route::resource('user','StaffInfoController');   

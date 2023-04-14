@@ -7,6 +7,8 @@ use App\Models\AdditionalFee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\CategoryRepositoryInterface;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AdditionalFeeController extends Controller
 {
@@ -25,7 +27,10 @@ class AdditionalFeeController extends Controller
     {
         $res = AdditionalFee::paginate(10);
         $grade_list    = $this->categoryRepository->getGrade();
-        return view('admin.category.additionalfee_index',['grade_list'=>$grade_list,'list_result' => $res]);
+        return view('admin.category.additionalfee_index',[
+            'grade_list'=>$grade_list,
+            'list_result' => $res,
+            'action'=>'Add']);
     }
 
     /**
@@ -94,7 +99,15 @@ class AdditionalFeeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $res = AdditionalFee::paginate(10);
+        $grade_list    = $this->categoryRepository->getGrade();
+        $update_res = AdditionalFee::where('id',$id)->get();
+        return view('admin.category.additionalfee_index',[
+            'grade_list'=>$grade_list,
+            'list_result' => $res,
+            'result'      => $update_res,
+            'action'      =>'Update'
+        ]);
     }
 
     /**
@@ -106,7 +119,36 @@ class AdditionalFeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $login_id = Auth::user()->user_id;
+        $nowDate  = date('Y-m-d H:i:s', time());
+
+        $request->validate([
+            'name'            =>'required|min:3'
+        ]); 
+
+        DB::beginTransaction();
+        try{
+            $updateData = array(
+                'name'               =>$request->name,
+                'additional_amount'  =>$request->amount,
+                'updated_by'         =>$login_id,
+                'updated_at'         =>$nowDate
+            );
+            
+            $result=AdditionalFee::where('id',$id)->update($updateData);
+                      
+            if($result){
+                DB::commit();               
+                return redirect(route('additional_fee.index'))->with('success','Additionnal Fee Updated Successfully!');
+            }else{
+                return redirect()->back()->with('danger','Additional Fee Updated Fail !');
+            }
+
+        }catch(\Exception $e){
+            DB::rollback();
+            Log::info($e->getMessage());
+            return redirect()->back()->with('error','Additional Fee Updared Fail !');
+        }  
     }
 
     /**

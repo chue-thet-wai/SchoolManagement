@@ -16,36 +16,70 @@
 <section class="card">
 
 	<div class="card-body">
-		<form method="POST" action="{{route('branch.store')}}" enctype="multipart/form-data">
-			@csrf
-            <div class="row g-4">
-                <div class="form-group col-md-3">
-                    <label for="name"><b>Name<span style="color:brown">*</span></b></label>
-                    <div class="col-sm-10">
-                        <input type="text" name="name" class="form-control" required>
-                    </div>
-                </div>
-                <div class="form-group col-md-3">
-                    <label for="name"><b>Phone</b></label>
-                    <div class="col-sm-10">
-                        <input type="text" name="phone" class="form-control">
-                    </div>
-                </div>
-            </div>
-            <div class="row g-4">
-                <div class="form-group col-md-6">
-                    <label for="">Address</label>
-                    <textarea name="address" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="row g-4">
-                <div class="form-group col-md-2">
-                    <div class="d-grid mt-4">
-                        <input type="submit" value="Add" class="btn btn-primary">
-                    </div>
-                </div>
-            </div>			
-		</form>
+		@if ($action == 'Add')
+			<form method="POST" action="{{route('branch.store')}}" enctype="multipart/form-data">
+				@csrf
+				<div class="row g-4">
+					<div class="form-group col-md-3">
+						<label for="name"><b>Name<span style="color:brown">*</span></b></label>
+						<div class="col-sm-10">
+							<input type="text" name="name" class="form-control" required>
+						</div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="name"><b>Phone</b></label>
+						<div class="col-sm-10">
+							<input type="text" name="phone" class="form-control">
+						</div>
+					</div>
+				</div>
+				<div class="row g-4">
+					<div class="form-group col-md-6">
+						<label for="">Address</label>
+						<textarea name="address" class="form-control"></textarea>
+					</div>
+				</div>
+				<div class="row g-4">
+					<div class="form-group col-md-2">
+						<div class="d-grid mt-4">
+							<input type="submit" value="Add" class="btn btn-primary">
+						</div>
+					</div>
+				</div>			
+			</form>
+		@else
+			<form method="POST" action="{{route('branch.update',$result[0]->id)}}" enctype="multipart/form-data">
+				@csrf
+				{{method_field('PUT')}}
+				<div class="row g-4">
+					<div class="form-group col-md-3">
+						<label for="name"><b>Name<span style="color:brown">*</span></b></label>
+						<div class="col-sm-10">
+							<input type="text" name="name" value="{{$result[0]->name}}" class="form-control" required>
+						</div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="name"><b>Phone</b></label>
+						<div class="col-sm-10">
+							<input type="text" name="phone" value="{{$result[0]->phone}}" class="form-control">
+						</div>
+					</div>
+				</div>
+				<div class="row g-4">
+					<div class="form-group col-md-6">
+						<label for="">Address</label>
+						<textarea name="address" class="form-control">{{$result[0]->address}}</textarea>
+					</div>
+				</div>
+				<div class="row g-4">
+					<div class="form-group col-md-2">
+						<div class="d-grid mt-4">
+							<input type="submit" value="Update" class="btn btn-primary">
+						</div>
+					</div>
+				</div>			
+			</form>
+		@endif
 		<br />
 		<br />
 		<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered" style="table-layout: fixed;">
@@ -68,6 +102,11 @@
 						<td>{{$res->phone}}</td>
 						<td style="word-wrap:break-word;">{{$res->address}}</td>
 						<td class="center">
+							<a href="{{route('branch.edit',$res->id)}}">
+								<button type="submit" value="edit" class="btn m-1 p-0 border-0">
+									<span id="boot-icon" class="bi bi-pencil-square" style="font-size: 20px; color:rgb(58 69 207);"></span>
+								</button>                            
+							</a>
 							<form method="post" action="{{route('branch.destroy',$res->id)}}" style="display: inline;">
 								@csrf
 								{{ method_field('DELETE') }}

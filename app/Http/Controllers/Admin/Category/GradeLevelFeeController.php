@@ -7,6 +7,8 @@ use App\Models\GradeLevelFee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\CategoryRepositoryInterface;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class GradeLevelFeeController extends Controller
 {
@@ -28,8 +30,13 @@ class GradeLevelFeeController extends Controller
         $academic_list = $this->categoryRepository->getAcademicYear();
         $grade_list    = $this->categoryRepository->getGrade();
         $branch_list   = $this->categoryRepository->getBranch();
-        return view('admin.category.gradelevelfee_index',['academic_list'=>$academic_list,
-        'grade_list'=>$grade_list,'branch_list'=>$branch_list,'list_result' => $res]);
+        return view('admin.category.gradelevelfee_index',[
+            'academic_list'=>$academic_list,
+            'grade_list'  =>$grade_list,
+            'branch_list' =>$branch_list,
+            'list_result' => $res,
+            'action'      => 'Add'
+        ]);
     }
 
     /**
@@ -111,7 +118,19 @@ class GradeLevelFeeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $res = GradeLevelFee::paginate(10);
+        $academic_list = $this->categoryRepository->getAcademicYear();
+        $grade_list    = $this->categoryRepository->getGrade();
+        $branch_list   = $this->categoryRepository->getBranch();
+        $update_res    = GradeLevelFee::where('id',$id)->get();
+        return view('admin.category.gradelevelfee_index',[
+            'academic_list'=>$academic_list,
+            'grade_list'  =>$grade_list,
+            'branch_list' =>$branch_list,
+            'list_result' => $res,
+            'result'      => $update_res,
+            'action'      => 'Update'
+        ]);
     }
 
     /**
@@ -123,7 +142,52 @@ class GradeLevelFeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $login_id = Auth::user()->user_id;
+        $nowDate  = date('Y-m-d H:i:s', time());
+
+        $request->validate([
+            'amount'      =>'required',
+        ]);
+        $errmsg =array();
+        if ($request->academicyr_id == '99') {
+           array_push($errmsg,'Academic Year');
+        } 
+        if ($request->grade_id == '99') {
+            array_push($errmsg,'Grade');
+        }  
+        if ($request->branch_id == '99') {
+            array_push($errmsg,'Branch');
+        }
+        if (!empty($errmsg)) {
+            $errmsg = implode(',',$errmsg);
+            return redirect()->back()->with('danger','Please select '.$errmsg.'!');
+        }
+
+        DB::beginTransaction();
+        try{
+            $updateData = array(
+                'academic_year_id'    =>$request->academicyr_id,
+                'grade_id'            =>$request->grade_id,
+                'branch_id'           =>$request->branch_id,
+                'grade_level_amount'  =>$request->amount,
+                'updated_by'          =>$login_id,
+                'updated_at'          =>$nowDate
+            );
+            
+            $result=GradeLevelFee::where('id',$id)->update($updateData);
+                      
+            if($result){
+                DB::commit();               
+                return redirect(route('grade_level_fee.index'))->with('success','Grade Level Fee Updated Successfully!');
+            }else{
+                return redirect()->back()->with('danger','Grade Level Fee Updated Fail !');
+            }
+
+        }catch(\Exception $e){
+            DB::rollback();
+            Log::info($e->getMessage());
+            return redirect()->back()->with('error','Grade Level Fee Updared Fail !');
+        }  
     }
 
     /**

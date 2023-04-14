@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Grade;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class GradeController extends Controller
 {
@@ -17,7 +19,7 @@ class GradeController extends Controller
     public function index()
     {
         $res = Grade::paginate(10);
-        return view('admin.category.grade_index',['list_result' => $res]);
+        return view('admin.category.grade_index',['list_result' => $res,'action'=>'Add']);
     }
 
     /**
@@ -82,7 +84,13 @@ class GradeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $res = Grade::paginate(10);
+        $update_res = Grade::where('id',$id)->get();
+        return view('admin.category.grade_index',[
+            'list_result' => $res,
+            'result'      => $update_res,
+            'action'      => 'Update'
+        ]);
     }
 
     /**
@@ -94,7 +102,35 @@ class GradeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $login_id = Auth::user()->user_id;
+        $nowDate  = date('Y-m-d H:i:s', time());
+
+        $request->validate([
+            'name'            =>'required|min:3'
+        ]); 
+
+        DB::beginTransaction();
+        try{
+            $updateData = array(
+                'name'               =>$request->name,
+                'updated_by'         =>$login_id,
+                'updated_at'         =>$nowDate
+            );
+            
+            $result=Grade::where('id',$id)->update($updateData);
+                      
+            if($result){
+                DB::commit();               
+                return redirect(route('grade.index'))->with('success','Grade Updated Successfully!');
+            }else{
+                return redirect()->back()->with('danger','Grade Updated Fail !');
+            }
+
+        }catch(\Exception $e){
+            DB::rollback();
+            Log::info($e->getMessage());
+            return redirect()->back()->with('error','Grade Updared Fail !');
+        }  
     }
 
     /**

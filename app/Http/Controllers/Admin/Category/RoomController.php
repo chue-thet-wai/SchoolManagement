@@ -7,6 +7,8 @@ use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\CategoryRepositoryInterface;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class RoomController extends Controller
 {
@@ -25,7 +27,11 @@ class RoomController extends Controller
     {
         $res = Room::paginate(10);
         $branch_list   = $this->categoryRepository->getBranch();
-        return view('admin.category.room_index',['list_result' => $res,'branch_list'=>$branch_list]);
+        return view('admin.category.room_index',[
+            'list_result' => $res,
+            'branch_list' =>$branch_list,
+            'action'      => 'Add'
+        ]);
     }
 
     /**
@@ -95,7 +101,15 @@ class RoomController extends Controller
      */
     public function edit($id)
     {
-        //
+        $res = Room::paginate(10);
+        $branch_list   = $this->categoryRepository->getBranch();
+        $update_res = Room::where('id',$id)->get();
+        return view('admin.category.room_index',[
+            'list_result'=> $res,
+            'branch_list'=> $branch_list,
+            'result'     => $update_res,
+            'action'     => 'Update'
+        ]);
     }
 
     /**
@@ -107,7 +121,40 @@ class RoomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $login_id = Auth::user()->user_id;
+        $nowDate  = date('Y-m-d H:i:s', time());
+
+        $request->validate([
+            'name'      =>'required|min:3',
+        ]);
+        if ($request->branch_id == '99') {
+            return redirect()->back()->with('danger','Please select Branch !');
+        }
+
+        DB::beginTransaction();
+        try{
+            $updateData = array(
+                'name'           =>$request->name,
+                'capacity'       =>$request->capacity,
+                'branch_id'      =>$request->branch_id,
+                'updated_by'     =>$login_id,
+                'updated_at'     =>$nowDate
+            );
+            
+            $result=Room::where('id',$id)->update($updateData);
+                      
+            if($result){
+                DB::commit();               
+                return redirect(route('room.index'))->with('success','Room Updated Successfully!');
+            }else{
+                return redirect()->back()->with('danger','Room Updated Fail !');
+            }
+
+        }catch(\Exception $e){
+            DB::rollback();
+            Log::info($e->getMessage());
+            return redirect()->back()->with('error','Room Updared Fail !');
+        }  
     }
 
     /**
