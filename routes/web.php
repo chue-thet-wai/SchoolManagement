@@ -25,6 +25,10 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::resource('additional_fee','Category\AdditionalFeeController'); 
     Route::resource('subject','Category\SubjectController'); 
 
+    //import township
+    Route::get('/township/list','Category\TownshipController@townshipList');
+    Route::post('/township/import','Category\TownshipController@importTownship');
+
     //for Create Information
     Route::resource('teacher_info','CreateInformation\TeacherInfoController'); 
     Route::resource('driver_info','CreateInformation\DriverInfoController');  
@@ -41,7 +45,10 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     
     Route::resource('waitinglist_reg','Registration\WaitingListRegController'); 
     Route::resource('cancel_reg','Registration\CancelListRegController'); 
+    Route::resource('payment','Registration\PaymentRegController'); 
+
     Route::post('/cancel_reg/registration_search','Registration\RegistrationSearchController@studentRegistrationSearch');
+    Route::post('/payment/paymentreg_search','Registration\RegistrationSearchController@paymentRegistrationSearch');
     Route::resource('school_bus_track','Registration\SchoolBusTrackRegController'); 
     Route::post('/school_bus_track/driver_search','Registration\RegistrationSearchController@driverSearch');
 
@@ -54,6 +61,9 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
 
     Route::get('/reporting/ferry_report','Report\FerryReportController@ferryReport'); 
     Route::post('/reporting/ferry_report','Report\FerryReportController@ferryReport'); 
+
+    Route::get('/reporting/payment_report','Report\PaymentReportController@paymentReport'); 
+    Route::post('/reporting/payment_report','Report\PaymentReportController@paymentReport'); 
    
 
     //for user 

@@ -39,4 +39,25 @@ class RegistrationRepository implements RegistrationRepositoryInterface
         return 'R10001';
 
     }
+
+    public function generatePaymentID() 
+    {
+        $found = true;  
+        $characters = '1234567890';
+        $length = 6;
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        while ($found) {
+            $result = DB::table('payment_registration')->select('payment_id')->where('payment_id',$randomString)->first();    
+            if ($result) {
+                $found=true;
+            }else{
+                $found=false;
+            }    
+        }
+        return $randomString;  
+    }
 }

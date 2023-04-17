@@ -114,4 +114,29 @@ class RegistrationSearchController extends Controller
             ), 200);
         }
     }
+
+    public function paymentRegistrationSearch(Request $request)
+    {
+        
+        $studentRegSearch = StudentRegistration::leftjoin('class_setup','class_setup.id','=','student_registration.new_class_id')
+                        ->leftjoin('grade_level_fee','grade_level_fee.grade_id','=','class_setup.grade_id')
+                        ->leftjoin('grade','grade.id','=','grade_level_fee.grade_id')
+                        ->where('student_registration.registration_no',$request->registration_no)
+                        ->select('student_registration.*',
+                        'grade_level_fee.grade_level_amount as grade_level_amount',
+                        'grade.name as grade_level'
+                        )->first();
+
+        if (!empty($studentRegSearch)) {
+            return response()->json(array(
+                'msg'             => 'found',
+                'grade_level'     => $studentRegSearch->grade_level,
+                'grade_level_fee' => $studentRegSearch->grade_level_amount
+            ), 200);
+        } else {
+            return response()->json(array(
+                'msg'             => 'notfound',
+            ), 200);
+        }
+    }
 }

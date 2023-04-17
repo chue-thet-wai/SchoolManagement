@@ -158,6 +158,11 @@
               <span>Subject</span>
             </a>
           </li>
+          <li>
+            <a href="{{ url('admin/township/list') }}">
+              <span>Township</span>
+            </a>
+          </li>
         </ul>
       </li><!-- End Category Nav -->
 
@@ -212,7 +217,7 @@
             </a>
           </li>
           <li>
-            <a href="tables-data.html">
+            <a href="{{route('payment.index')}}">
               <span>Payment</span>
             </a>
           </li>
@@ -236,7 +241,7 @@
             </a>
           </li>
           <li>
-            <a href="tables-data.html">
+            <a href="{{ url('admin/reporting/payment_report') }}">
               <span>Monthly Payment Report</span>
             </a>
           </li>

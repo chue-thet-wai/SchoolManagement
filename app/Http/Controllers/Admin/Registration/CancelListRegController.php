@@ -69,7 +69,7 @@ class CancelListRegController extends Controller
         ]); 
         $studentRegSearch = StudentRegistration::where('registration_no',$request->registration_no)->first();
         if (empty($studentRegSearch)) {
-            return redirect()->back()->with('danger','Registration ID Date not found!');
+            return redirect()->back()->with('danger','Registration ID not found!');
         }
 
         /*$errmsg =array();
@@ -166,7 +166,7 @@ class CancelListRegController extends Controller
         ]); 
         $studentRegSearch = StudentRegistration::where('registration_no',$request->registration_no)->first();
         if (empty($studentRegSearch)) {
-            return redirect()->back()->with('danger','Registration ID Date not found!');
+            return redirect()->back()->with('danger','Registration ID not found!');
         }
 
         DB::beginTransaction();

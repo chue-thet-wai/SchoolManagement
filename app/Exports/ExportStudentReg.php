@@ -2,7 +2,6 @@
 
 namespace App\Exports;
 
-use App\Models\CancelRegistration;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 

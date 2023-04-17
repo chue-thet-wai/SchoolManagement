@@ -5,7 +5,7 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class ExportFerry implements FromCollection, WithHeadings
+class ExportPayment implements FromCollection, WithHeadings
 {
     protected $data;
     public function __construct($data)
@@ -24,21 +24,13 @@ class ExportFerry implements FromCollection, WithHeadings
     public function headings(): array
     {
         return [
-            'Track No',
-            'Driver ID',
+            'Payment Id',
+            'Registration No',
             'Name',
-            'Phone',
-            'Car Type',
-            'Car No',
-            'School from Time',
-            'School to Time',
-            'School from Period',
-            'School to Period',
-            'Arrive Student Number',
-            'Township',
-            'Twoway Amount',
-            'Oneway Pickup Amount',
-            'Oneway Back Amount'
+            'Pay Date',
+            'Total Amount',
+            'Discount Percent',
+            'Net Total'
         ];
     }
 }
