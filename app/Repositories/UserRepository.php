@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Interfaces\UserRepositoryInterface;
+use App\Models\Township;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -55,11 +56,12 @@ class UserRepository implements UserRepositoryInterface
     }
     public function getTownship()
     {
-        $township = [
-            "101" => 'Towhship 1',
-            "102" => 'Towhship 2',
-            "103" => 'Towhship 3'
-        ];        
+        $township = [];
+        $res = Township::all();
+        foreach ($res as $t) {
+            $township[$t->code] = $t->name;
+        }
+           
        return $township;
     }
    
