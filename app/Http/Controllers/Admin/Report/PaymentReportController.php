@@ -73,7 +73,7 @@ class PaymentReportController extends Controller
             ]);
         }       
         $res->select('payment_registration.*','student_info.name');
-        $res = $res->paginate(5);
+        $res = $res->paginate(20);
         return view('admin.report.paymentreport',['list_result' => $res]);
     }
 

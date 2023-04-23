@@ -52,6 +52,9 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::resource('school_bus_track','Registration\SchoolBusTrackRegController'); 
     Route::post('/school_bus_track/driver_search','Registration\RegistrationSearchController@driverSearch');
 
+    Route::resource('teacher_attendance','Registration\TeacherAttendanceRegController'); 
+    Route::resource('student_attendance','Registration\StudentAttendanceRegController'); 
+
     //for reporting
     Route::get('/reporting/cancel_report','Report\CancelReportController@cancelReport'); 
     Route::post('/reporting/cancel_report','Report\CancelReportController@cancelReport'); 
@@ -64,6 +67,12 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
 
     Route::get('/reporting/payment_report','Report\PaymentReportController@paymentReport'); 
     Route::post('/reporting/payment_report','Report\PaymentReportController@paymentReport'); 
+
+    Route::get('/reporting/teacher_attendance_report','Report\TeacherAttendanceReportController@teacherAttendanceReport'); 
+    Route::post('/reporting/teacher_attendance_report','Report\TeacherAttendanceReportController@teacherAttendanceReport'); 
+
+    Route::get('/reporting/student_attendance_report','Report\StudentAttendanceReportController@studentAttendanceReport'); 
+    Route::post('/reporting/student_attendance_report','Report\StudentAttendanceReportController@studentAttendanceReport');  
    
 
     //for user 

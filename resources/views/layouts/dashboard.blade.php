@@ -226,6 +226,16 @@
               <span>School Bus Track</span>
             </a>
           </li>
+          <li>
+            <a href="{{route('teacher_attendance.index')}}">
+              <span>Teacher Attendance</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{route('student_attendance.index')}}">
+              <span>Student Attendance</span>
+            </a>
+          </li>
         </ul>
       </li><!-- End Registration Nav -->
 
@@ -253,6 +263,16 @@
           <li>
             <a href="{{ url('admin/reporting/ferry_report') }}">
               <span>Ferry Report</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ url('admin/reporting/teacher_attendance_report') }}">
+              <span>Teacher Attendance Report</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ url('admin/reporting/student_attendance_report') }}">
+              <span>Student Attendance Report</span>
             </a>
           </li>
         </ul>

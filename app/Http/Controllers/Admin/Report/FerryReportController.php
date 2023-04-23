@@ -79,7 +79,7 @@ class FerryReportController extends Controller
             ]);
         }       
        
-        $res = $res->paginate(5);
+        $res = $res->paginate(20);
         return view('admin.report.ferryreport',['list_result' => $res]);
     }
 

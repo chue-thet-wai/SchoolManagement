@@ -88,7 +88,7 @@ class StudentRegReportController extends Controller
         } 
 
         $res->select('student_registration.*','student_info.name');
-        $res = $res->paginate(5);
+        $res = $res->paginate(20);
         return view('admin.report.studentregreport',['list_result' => $res,'class_list'=>$class_list]);
     }
 

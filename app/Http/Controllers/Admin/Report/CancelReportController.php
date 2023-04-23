@@ -70,7 +70,7 @@ class CancelReportController extends Controller
             ]);
         }       
         $res->select('cancel_registration.*','student_info.name');
-        $res = $res->paginate(5);
+        $res = $res->paginate(20);
         return view('admin.report.cancelreport',['list_result' => $res]);
     }
 
