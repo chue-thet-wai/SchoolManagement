@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="pagetitle">
-	<h1>Payment Report</h1>
+	<h1>Monthly Payment Report</h1>
 	<nav>
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
-			<li class="breadcrumb-item active">Report</li>
-			<li class="breadcrumb-item active">Payment Report</li>
+			<li class="breadcrumb-item active">Reporting</li>
+			<li class="breadcrumb-item active">Monthly Payment Report</li>
 		</ol>
 	</nav>
 	@include('layouts.error')

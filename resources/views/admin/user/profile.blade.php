@@ -32,7 +32,13 @@
                                 <b>Role : </b>{{$roleName}}
                                 <br />
                                 <br />
-                                <b>Join Date : </b>{{date("Y-m-d", strtotime($user_res[0]->created_at))}}
+                                @php
+                                    $joinDate = $user_res[0]->created_at;
+                                    if($joinDate !='') {
+                                        $joinDate = date("Y-m-d", strtotime($joinDate));
+                                    }
+                                @endphp
+                                <b>Join Date : </b>{{$joinDate}}
                                 <br />
                                 <br />
                                 <a href="{{ url('admin/logout') }}" class="btn btn-sm btn-primary">Logout</a>

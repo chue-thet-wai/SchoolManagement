@@ -208,7 +208,7 @@
           </li>
           <li>
             <a href="{{route('waitinglist_reg.index')}}">
-              <span>Waiting Registration</span>
+              <span>Waiting List Registration</span>
             </a>
           </li>
           <li>
@@ -218,7 +218,7 @@
           </li>
           <li>
             <a href="{{route('payment.index')}}">
-              <span>Payment</span>
+              <span>Payment Registration</span>
             </a>
           </li>
           <li>

@@ -236,7 +236,7 @@ class TeacherInfoController extends Controller
             $previous_qualification_desc=$request->previous_qualification_desc;
             @unlink(public_path('/assets/teacher_qualifications/'. $previous_qualification_desc));
 
-            $qualification_desc=$request->file('teacher_qualifications');
+            $qualification_desc=$request->file('qualification_desc');
             $extension = $qualification_desc->extension();
             $qualification_desc_name = $id. "_" . time() . "." . $extension;
         }else{

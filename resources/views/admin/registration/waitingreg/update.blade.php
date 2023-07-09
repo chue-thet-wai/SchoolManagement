@@ -7,7 +7,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
             <li class="breadcrumb-item active">Registration</li>
-            <li class="breadcrumb-item active">Update Waiting List Registration</li>
+            <li class="breadcrumb-item active">Waiting List Registration</li>
         </ol>
     </nav>
     @include('layouts.error')
@@ -100,7 +100,7 @@
                                 <option  value="99">select Academic Year</option>
                                 @foreach($academic_list as $a)
                                     <option  value="{{$a->id}}" 
-                                        @if($a->id==$result[0]->grade_id)
+                                        @if($a->id==$result[0]->academic_year_id)
                                             selected
                                         @endif
                                     >{{$a->name}}</option>

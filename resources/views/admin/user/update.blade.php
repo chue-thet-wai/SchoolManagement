@@ -6,7 +6,6 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
-            <li class="breadcrumb-item active">Category</li>
             <li class="breadcrumb-item active">User Management</li>
         </ol>
     </nav>

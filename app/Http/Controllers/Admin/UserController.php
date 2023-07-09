@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function show_profile()
     {
-        $user_id=Auth::id();
+        $user_id=Auth::user()->user_id;
         $role   = Auth::user()->role;
         $returnProfileImg ='assets/images/profile.jpg';
         
@@ -29,7 +29,7 @@ class UserController extends Controller
         }      
         
 
-        $user_res = DB::select('select * from users where id="'.$user_id.'"');
+        $user_res = DB::select('select * from users where user_id="'.$user_id.'"');
        
         return view('admin.user.profile',['user_res' => $user_res,'profile_image'=>$returnProfileImg]);
     }

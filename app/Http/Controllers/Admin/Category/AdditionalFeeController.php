@@ -134,7 +134,9 @@ class AdditionalFeeController extends Controller
                 'updated_by'         =>$login_id,
                 'updated_at'         =>$nowDate
             );
-            
+            if ($request->grade_id !='99') {
+                $updateData['grade_id'] = $request->grade_id;
+            }            
             $result=AdditionalFee::where('id',$id)->update($updateData);
                       
             if($result){

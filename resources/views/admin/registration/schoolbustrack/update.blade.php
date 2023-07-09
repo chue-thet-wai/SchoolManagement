@@ -33,7 +33,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
             <li class="breadcrumb-item active">Registration</li>
-            <li class="breadcrumb-item active">Update School Bus Track</li>
+            <li class="breadcrumb-item active">School Bus Track</li>
         </ol>
     </nav>
     @include('layouts.error')

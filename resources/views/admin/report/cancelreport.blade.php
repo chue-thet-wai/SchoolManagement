@@ -6,7 +6,7 @@
 	<nav>
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
-			<li class="breadcrumb-item active">Report</li>
+			<li class="breadcrumb-item active">Reporting</li>
 			<li class="breadcrumb-item active">Cancel Report</li>
 		</ol>
 	</nav>
@@ -70,6 +70,7 @@
 					<th>No</th>
 					<th>Registration No</th>
 					<th>Student ID</th>
+					<th>Name</th>
 					<th>Cancel Date</th>
 					<th>Refund Amount</th>
 				</tr>
@@ -82,6 +83,7 @@
 						<td>@php echo $i;$i++; @endphp</td>
 						<td>{{$res->registration_no}}</td>
 						<td>{{$res->student_id}}</td>
+						<td>{{$res->name}}</td>
 						@if ($res->cancel_date != null) 
 							<td>{{date('Y-m-d',strtotime($res->cancel_date))}}</td>
 						@else 

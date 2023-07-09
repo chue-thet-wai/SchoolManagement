@@ -68,7 +68,7 @@
 					</div>
 				</div>
 				<div class="form-group col-md-3">
-					<label for=""><b>Grade<</b>/label>
+					<label for=""><b>Grade</b></label>
 					<div class="col-sm-10">
 						<select class="form-select" id="grade_id" name="grade_id" >
 							<option  value="99">select grade</option>
