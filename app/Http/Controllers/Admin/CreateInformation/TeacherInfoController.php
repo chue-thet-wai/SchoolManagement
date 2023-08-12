@@ -28,10 +28,43 @@ class TeacherInfoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {        
         $res = TeacherInfo::leftJoin("users", "users.user_id", "=", "teacher_info.user_id")
-                ->select('teacher_info.*')
-                ->paginate(10);
+            ->select('teacher_info.*')
+            ->paginate(10);
+             
+        $grade_list    = $this->categoryRepository->getGrade();
+        return view('admin.createinformation.teacherinfo.index',['grade_list'=>$grade_list,'list_result' => $res]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function teacherinfoList(Request $request)
+    {  
+        $res = TeacherInfo::leftJoin("users", "users.user_id", "=", "teacher_info.user_id");
+        if ($request['action'] == 'search') {
+            if (request()->has('teacherinfo_name') && request()->input('teacherinfo_name') != '') {
+                $res->where('teacher_info.name', 'Like', '%' . request()->input('teacherinfo_name') . '%');
+            }
+            if (request()->has('teacherinfo_email') && request()->input('teacherinfo_email') != '') {
+                $res->where('teacher_info.email', request()->input('teacherinfo_email'));
+            }
+            if (request()->has('teacherinfo_contactno') && request()->input('teacherinfo_contactno') != '') {
+                $res->where('contact_number', request()->input('teacherinfo_email'));
+            }
+        }else {
+            request()->merge([
+                'teacherinfo_name' => null,
+                'teacherinfo_email' => null,
+                'teacherinfo_contactno' => null,
+            ]);
+        }       
+        $res->select('teacher_info.*');
+        $res = $res->paginate(20);
+             
         $grade_list    = $this->categoryRepository->getGrade();
         return view('admin.createinformation.teacherinfo.index',['grade_list'=>$grade_list,'list_result' => $res]);
     }

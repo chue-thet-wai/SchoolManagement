@@ -19,8 +19,26 @@ class StudentInfoController extends Controller
         $this->userRepository     = $userRepository;
     }
 
-    public function studentInfoList() {
-        $res = StudentInfo::paginate(10);
+    public function studentInfoList(Request $request) {
+        $res = StudentInfo::select('student_info.*');
+        if ($request['action'] == 'search') {
+            if (request()->has('studentinfo_name') && request()->input('studentinfo_name') != '') {
+                $res->where('name', 'Like', '%' . request()->input('studentinfo_name') . '%');
+            }
+            if (request()->has('studentinfo_studentid') && request()->input('studentinfo_studentid') != '') {
+                $res->where('student_id', request()->input('studentinfo_studentid'));
+            }
+            if (request()->has('studentinfo_gender') && request()->input('studentinfo_gender') != '') {
+                $res->where('gender', request()->input('studentinfo_gender'));
+            }
+        }else {
+            request()->merge([
+                'studentinfo_name'      => null,
+                'studentinfo_studentid' => null,
+                'studentinfo_gender'    => null,
+            ]);
+        }       
+        $res = $res->paginate(20);
         $gender        = $this->userRepository->getGender();
         return view('admin.createinformation.studentinfo.studentlist',['list_result' => $res,'gender' => $gender]);
     }

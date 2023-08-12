@@ -147,7 +147,7 @@
                     <div class="form-group">
                         <label for="remark"><b>Remark</b></label>
                         <div class="col-sm-10">
-                            <textarea name="remark" class="form-control"></textarea>
+                            <textarea name="remark" class="form-control" required></textarea>
                         </div>
                     </div>
                 </div>

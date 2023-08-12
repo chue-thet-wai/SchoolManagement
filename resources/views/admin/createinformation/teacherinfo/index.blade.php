@@ -26,6 +26,43 @@
             </div>
         </div>
         <br />
+        <form class="row g-4" method="POST" action="{{ url('admin/teacher_info/list') }}" enctype="multipart/form-data">
+			@csrf
+			<div class='row g-4'>
+				<div class="form-group col-md-3">
+					<label for="teacher_name"><b>Name</b></label>
+					<div class="col-sm-10">
+						<input type="text" name="teacherinfo_name" class="form-control" value="{{ request()->input('teacherinfo_name') }}">
+					</div>
+				</div>
+				<div class="form-group col-md-3">
+					<label for="teacher_email"><b>Email</b></label>
+					<div class="col-sm-10">
+						<input type="text" name="teacherinfo_email" class="form-control" value="{{ request()->input('teacherinfo_email') }}">
+					</div>
+				</div>
+				<div class="form-group col-md-3">
+					<label for="teacher_contactno"><b>Contact Number</b></label>
+					<div class="col-sm-10">
+						<input type="text" name="teacherinfo_contactno" class="form-control" value="{{ request()->input('teacherinfo_contactno') }}">
+					</div>
+				</div>
+			</div>
+			
+			<div class='row p-3'>
+				<div class="form-group col-sm-1 p-2">
+					<div class="d-grid mt-2">
+						<button type="submit" name="action" value="search" class="btn btn-sm btn-primary">Search</button>
+					</div>
+				</div>
+				<div class="form-group col-sm-1 p-2">
+					<div class="d-grid mt-2">
+						<button type="submit" name="action" value="reset" class="btn btn-sm btn-primary">Reset</button>
+					</div>
+				</div>					
+			</div>
+		</form>
+		<br />
         <div class="row g-4 m-2" style="display: flex;overflow-x: auto;">
             <table cellpadding="0" cellspacing="0" class="datatable table table-striped table-bordered">
                 <thead>

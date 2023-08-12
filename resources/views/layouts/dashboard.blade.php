@@ -252,7 +252,7 @@
           </li>
           <li>
             <a href="{{ url('admin/reporting/payment_report') }}">
-              <span>Monthly Payment Report</span>
+              <span>Payment Report</span>
             </a>
           </li>
           <li>

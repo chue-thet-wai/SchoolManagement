@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="pagetitle">
-	<h1>Monthly Payment Report</h1>
+	<h1>Payment Report</h1>
 	<nav>
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
 			<li class="breadcrumb-item active">Reporting</li>
-			<li class="breadcrumb-item active">Monthly Payment Report</li>
+			<li class="breadcrumb-item active">Payment Report</li>
 		</ol>
 	</nav>
 	@include('layouts.error')
@@ -42,6 +42,21 @@
 						<input type="text" name="payment_paymentId" class="form-control" value="{{ request()->input('payment_paymentId') }}">
 					</div>
 				</div>
+				<div class="form-group col-md-3">
+					<label for="payment_type"><b>Payment Type</b></label>
+					<div class="col-sm-10">
+                        <select class="form-select" id="payment_type" name="payment_type">
+                            <option value=''>--Select--</option>
+                            @foreach($payment_types as $key => $value)
+                            <option value="{{$key}}" 
+                            @if (request()->input('payment_type') == $key)
+                                selected
+                            @endif
+                            >{{$value}}</option>
+                            @endforeach
+                        </select>
+					</div>
+				</div>
 			</div>
 			
 			<div class='row p-3'>
@@ -72,6 +87,7 @@
 					<th>Registration No</th>	
                     <th>Name</th>					
 					<th>Pay Date</th>
+					<th>Payment Type</th>
 					<th>Total Amount</th>
                     <th>Discount Percent</th>
                     <th>Net Total</th>
@@ -90,6 +106,11 @@
 							<td>{{date('Y-m-d',strtotime($res->pay_date))}}</td>
 						@else 
 							<td></td>
+						@endif
+						@if ($res->payment_type == 0) 
+							<td>{{$payment_types[2]}}</td>
+						@else
+							<td>{{$payment_types[$res->payment_type]}}</td>
 						@endif
 						<td>{{$res->total_amount}}</td>
                         <td>{{$res->discount_percent}}</td>

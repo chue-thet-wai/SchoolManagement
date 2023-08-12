@@ -124,7 +124,7 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label for="cancel_date"><b>Cancel Date</b></label>
+                        <label for="cancel_date"><b>Cancel Date</b><span style="color:brown">*</span></label>
                         <div class="col-sm-10">
                             <input type="date" id="cancel_date" name="cancel_date" value="{{date('Y-m-d',strtotime($result[0]->cancel_date))}}" class="form-control" required>
                         </div>
@@ -148,9 +148,9 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label for="remark"><b>Remark</b></label>
+                        <label for="remark"><b>Remark</b><span style="color:brown">*</span></label>
                         <div class="col-sm-10">
-                            <textarea name="remark" class="form-control">{{$result[0]->remark}}</textarea>
+                            <textarea name="remark" class="form-control" required>{{$result[0]->remark}}</textarea>
                         </div>
                     </div>
                 </div>

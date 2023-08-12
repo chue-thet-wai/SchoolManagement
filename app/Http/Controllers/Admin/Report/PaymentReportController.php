@@ -18,9 +18,12 @@ class PaymentReportController extends Controller
     }
 
     public function paymentReport(Request $request) {
+        $paymentType = array(
+            '2'  => 'Monthly',
+            '1'  => 'Yearly'
+        );  
         $res = PaymentRegistration::leftjoin('student_registration','student_registration.registration_no','payment_registration.registration_no')
-                ->leftJoin('student_info','student_info.student_id','=','student_registration.student_id')
-                ->where('payment_registration.payment_type',0);
+                ->leftJoin('student_info','student_info.student_id','=','student_registration.student_id');
         if ($request['action'] == 'search') {
             if (request()->has('payment_regno') && request()->input('payment_regno') != '') {
                 $res->where('payment_registration.registration_no', request()->input('payment_regno'));
@@ -30,6 +33,13 @@ class PaymentReportController extends Controller
             }
             if (request()->has('payment_name') && request()->input('payment_name') != '') {
                 $res->where('name', 'Like', '%' . request()->input('payment_name') . '%');
+            }
+            if (request()->has('payment_type') && request()->input('payment_type') != '') {
+                if (request()->input('payment_type')==2) {
+                    $res->where('payment_type', 0);  
+                } else {
+                    $res->where('payment_type', request()->input('payment_type'));
+                }               
             }
         } else if ($request['action'] == 'export') {
 
@@ -41,6 +51,13 @@ class PaymentReportController extends Controller
             }
             if (request()->has('payment_name') && request()->input('payment_name') != '') {
                 $res->where('name', 'Like', '%' . request()->input('payment_name') . '%');
+            }
+            if (request()->has('payment_type') && request()->input('payment_type') != '') {
+                if (request()->input('payment_type')==2) {
+                    $res->where('payment_type', 0);  
+                } else {
+                    $res->where('payment_type', request()->input('payment_type'));
+                }               
             }
 
             $res->select('payment_registration.*','student_info.name');
@@ -57,7 +74,12 @@ class PaymentReportController extends Controller
                 } else {
                     $resArr['pay_date'] = $res->pay_date;
                 }
-
+                if ($res->payment_type == 0) {
+                    $resArr['payment_type']      = $paymentType[2];
+                } else {
+                    $resArr['payment_type']      = $paymentType[$res->payment_type];
+                }
+               
                 $resArr['total_amount']      = $res->total_amount;
                 $resArr['discount_percent']  = $res->discount_percent;
                 $resArr['net_total']         = $res->net_total;
@@ -71,10 +93,11 @@ class PaymentReportController extends Controller
                 'payment_paymentId' => null,
                 'payment_name'      => null,
             ]);
-        }       
+        }  
+           
         $res->select('payment_registration.*','student_info.name');
         $res = $res->paginate(20);
-        return view('admin.report.paymentreport',['list_result' => $res]);
+        return view('admin.report.paymentreport',['list_result' => $res,'payment_types'=> $paymentType]);
     }
 
 }

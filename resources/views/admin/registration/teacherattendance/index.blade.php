@@ -35,7 +35,7 @@
 					</div>
 				</div>
 				<div class="form-group col-md-3">
-					<label for="attendance_teacherdate"><b>Teacher Date</b></label>
+					<label for="attendance_teacherdate"><b>Choose Date</b></label>
 					<div class="col-sm-10">
 						<input type="date" name="attendance_teacherdate" class="form-control" required>
 					</div>

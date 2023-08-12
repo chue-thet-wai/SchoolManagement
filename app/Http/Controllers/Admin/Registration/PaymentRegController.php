@@ -70,6 +70,11 @@ class PaymentRegController extends Controller
         if (empty($studentRegSearch)) {
             return redirect()->back()->with('danger','Registration ID not found!');
         }
+
+        $discount_precent =0;
+        if($request->discount_percent != '') {
+            $discount_precent = $request->discount_percent;
+        }
      
         $paymentID = $this->regRepository->generatePaymentID();
 
@@ -102,7 +107,7 @@ class PaymentRegController extends Controller
                 'pay_to_period'     =>$request->pay_to_period,
                 'grade_level_fee'   =>$request->grade_level_fee,
                 'total_amount'      =>$request->total_amount,
-                'discount_percent'  =>$request->discount_percent,
+                'discount_percent'  =>$discount_precent,
                 'net_total'         =>$request->net_total,
                 'created_by'        =>$login_id,
                 'updated_by'        =>$login_id,
@@ -192,6 +197,10 @@ class PaymentRegController extends Controller
         if (empty($studentRegSearch)) {
             return redirect()->back()->with('danger','Registration ID not found!');
         }
+        $discount_precent =0;
+        if($request->discount_percent != '') {
+            $discount_precent = $request->discount_percent;
+        }
 
         DB::beginTransaction();
         try{
@@ -230,7 +239,7 @@ class PaymentRegController extends Controller
                 'pay_to_period'     =>$request->pay_to_period,
                 'grade_level_fee'   =>$request->grade_level_fee,
                 'total_amount'      =>$request->total_amount,
-                'discount_percent'  =>$request->discount_percent,
+                'discount_percent'  =>$discount_precent,
                 'net_total'         =>$request->net_total,
                 'updated_by'        =>$login_id,
                 'updated_at'        =>$nowDate

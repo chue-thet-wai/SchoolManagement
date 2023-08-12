@@ -28,6 +28,7 @@ class ExportPayment implements FromCollection, WithHeadings
             'Registration No',
             'Name',
             'Pay Date',
+            'Payment Type',
             'Total Amount',
             'Discount Percent',
             'Net Total'

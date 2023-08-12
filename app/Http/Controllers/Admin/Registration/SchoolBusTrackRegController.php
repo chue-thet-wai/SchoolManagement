@@ -54,6 +54,7 @@ class SchoolBusTrackRegController extends Controller
 
         $request->validate([
             'track_no'            =>'required',
+            'arrive_student_no'   =>'integer'
         ]); 
         $driverSearch = DriverInfo::where('driver_id',$request->driver_id)->first();
         if (empty($driverSearch)) {
@@ -143,6 +144,7 @@ class SchoolBusTrackRegController extends Controller
 
         $request->validate([
             'track_no'            =>'required',
+            'arrive_student_no'   =>'integer'
         ]); 
         $driverSearch = DriverInfo::where('driver_id',$request->driver_id)->first();
         if (empty($driverSearch)) {

@@ -30,6 +30,36 @@ class DriverInfoController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function driverinfoList(Request $request)
+    {  
+        $res = DriverInfo::select('driver_info.*');;
+        if ($request['action'] == 'search') {
+            if (request()->has('driverinfo_name') && request()->input('driverinfo_name') != '') {
+                $res->where('name', 'Like', '%' . request()->input('driverinfo_name') . '%');
+            }
+            if (request()->has('driverinfo_driverid') && request()->input('driverinfo_driverid') != '') {
+                $res->where('driver_id', request()->input('driverinfo_driverid'));
+            }
+            if (request()->has('driverinfo_phone') && request()->input('driverinfo_phone') != '') {
+                $res->where('phone', request()->input('driverinfo_phone'));
+            }
+        }else {
+            request()->merge([
+                'driverinfo_driverid' => null,
+                'driverinfo_name' => null,
+                'driverinfo_name' => null,
+            ]);
+        }       
+        $res = $res->paginate(20);
+            
+        return view('admin.createinformation.driverinfo.index',['list_result' => $res]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

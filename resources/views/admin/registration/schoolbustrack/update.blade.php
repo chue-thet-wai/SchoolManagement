@@ -197,7 +197,7 @@
                     <div class="form-group">
                         <label for="arrive_student_no"><b>Arrive by Student Number<span style="color:brown">*</span></b></label>
                         <div class="col-sm-10">
-                            <input type="text" name="arrive_student_no" value="{{$result[0]->arrive_student_no}}" class="form-control" required>
+                            <input type="number" name="arrive_student_no" value="{{$result[0]->arrive_student_no}}" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -212,10 +212,10 @@
                     <div class="form-group ">
                         <div class="row col-md-10">
                             <div class='col-sm-4'>
-                                <label for="township"><b>Township</b></label>
+                                <label for="township"><b>Township</b><span style="color:brown">*</span></label>
                             </div>
                             <div class='col-sm-8'>
-                                <select class="form-select" id="township" name="township">
+                                <select class="form-select" id="township" name="township" required>
                                     @foreach($township as $key => $value)
                                     <option value="{{$key}}" 
                                         @if($key==$result[0]->township_id)
@@ -231,10 +231,10 @@
                     <div class="form-group ">
                         <div class="row col-md-10">
                             <div class='col-sm-4'>
-                                <label for="two_way_amount"><b>Two Way Amount</b></label>
+                                <label for="two_way_amount"><b>Two Way Amount</b><span style="color:brown">*</span></label>
                             </div>
                             <div class='col-sm-8'>
-                                <input type="number" name="two_way_amount" value="{{$result[0]->two_way_amount}}" class="form-control">
+                                <input type="number" name="two_way_amount" value="{{$result[0]->two_way_amount}}" class="form-control" required>
                             </div>
                         </div>
                     </div>
@@ -242,10 +242,10 @@
                     <div class="form-group ">
                         <div class="row col-md-10">
                             <div class='col-sm-4'>
-                                <label for="oneway_pickup"><b>One Way Pickup</b></label>
+                                <label for="oneway_pickup"><b>One Way Pickup</b><span style="color:brown">*</span></label>
                             </div>
                             <div class='col-sm-8'>
-                                <input type="number" name="oneway_pickup" value="{{$result[0]->oneway_pickup_amount}}" class="form-control">
+                                <input type="number" name="oneway_pickup" value="{{$result[0]->oneway_pickup_amount}}" class="form-control" required>
                             </div>
                         </div>
                     </div>
@@ -253,10 +253,10 @@
                     <div class="form-group ">
                         <div class="row col-md-10">
                             <div class='col-sm-4'>
-                                <label for="oneway_back"><b>One Way Back</b></label>
+                                <label for="oneway_back"><b>One Way Back</b><span style="color:brown">*</span></label>
                             </div>
                             <div class='col-sm-8'>
-                                <input type="number" name="oneway_back" value="{{$result[0]->oneway_back_amount}}" class="form-control">
+                                <input type="number" name="oneway_back" value="{{$result[0]->oneway_back_amount}}" class="form-control" required>
                             </div>
                         </div>
                     </div>

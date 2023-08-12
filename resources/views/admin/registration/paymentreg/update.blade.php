@@ -125,7 +125,7 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label for="pay_date"><b>Pay Date</b></label>
+                        <label for="pay_date"><b>Pay Date</b><span style="color:brown">*</span></label>
                         <div class="col-sm-10">
                             <input type="date" id="pay_date" name="pay_date" value="{{date('Y-m-d',strtotime($result[0]->pay_date))}}" class="form-control" required>
                         </div>
@@ -159,7 +159,7 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label for="pay_from_period"><b>Pay Period (From)</b></label>
+                        <label for="pay_from_period"><b>Pay Period (From)</b><span style="color:brown">*</span></label>
                         <div class="col-sm-10">
                             <input type="date" id="pay_from_period" name="pay_from_period" value="{{date('Y-m-d',strtotime($result[0]->pay_from_period))}}" class="form-control" required>
                         </div>
@@ -167,7 +167,7 @@
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label for="pay_to_period"><b>Pay Period (To)</b></label>
+                        <label for="pay_to_period"><b>Pay Period (To)</b><span style="color:brown">*</span></label>
                         <div class="col-sm-10">
                             <input type="date" id="pay_to_period" name="pay_to_period" value="{{date('Y-m-d',strtotime($result[0]->pay_to_period))}}" class="form-control" required>
                         </div>

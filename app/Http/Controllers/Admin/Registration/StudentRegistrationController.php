@@ -75,6 +75,19 @@ class StudentRegistrationController extends Controller
         $request->validate([
             'registration_type' =>'required',
             'student_profile'   =>'mimes:jpeg,jpg,png | max:1000',
+            'name'              => 'required',
+            'name_mm'           => 'required',
+            'religion'          => 'required',
+            'nationality'       => 'required',
+            'date_of_birth'     => 'required',
+            'father_name'       => 'required',
+            'father_name_mm'    => 'required',
+            'mother_name'       => 'required',
+            'mother_name_mm'    => 'required',
+            'father_phone'      => 'required',
+            'mother_phone'      => 'required',
+            'registration_date' => 'required',
+            'new_class'         =>  'required',
         ]); 
 
         if ($request->registration_type == 1) { //new student
@@ -93,6 +106,7 @@ class StudentRegistrationController extends Controller
                 $extension = $biography->extension();
                 $biography_name = $studentID. "_" . time() . "." . $extension;
             }else{
+                $biography = '';
                 $biography_name="";
             }      
                     
@@ -102,6 +116,9 @@ class StudentRegistrationController extends Controller
                 if (isset($request->guardian_id) && $request->guardian_id != '') {
                     $guardianId = $request->guardian_id;
                 } else {
+                    if ($request->guardian_name =='' || $request->guardian_phone=='' || $request->guardian_address=='') {
+                        return redirect()->back()->with('danger','Please fill all guardian information !');
+                    }
                     $guardianData = array(
                         'name'              =>$request->guardian_name,
                         'phone'             =>$request->guardian_phone,

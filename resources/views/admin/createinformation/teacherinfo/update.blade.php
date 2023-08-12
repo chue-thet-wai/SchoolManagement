@@ -228,13 +228,21 @@
                         <div class="form-group col-md-6">
                             <label for="start_date"><b>Start Date</b></label>
                             <div class="col-sm-10">
-                                <input type="date" name="start_date" class="form-control" value="{{date('Y-m-d',strtotime($result[0]->start_date))}}">
+                                @if($result[0]->start_date != null)
+                                    <input type="date" name="start_date" class="form-control" value="{{date('Y-m-d',strtotime($result[0]->start_date))}}">
+                                @else 
+                                    <input type="date" name="start_date" class="form-control">
+                                @endif
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="end_date"><b>End Date</b></label>
                             <div class="col-sm-10">
-                                <input type="date" name="end_date" class="form-control" value="{{date('Y-m-d',strtotime($result[0]->end_date))}}">
+                                @if($result[0]->end_date != null) 
+                                    <input type="date" name="end_date" class="form-control" value="{{date('Y-m-d',strtotime($result[0]->end_date))}}">
+                                @else 
+                                    <input type="date" name="end_date" class="form-control">
+                                @endif
                             </div>
                         </div>
                     </div>

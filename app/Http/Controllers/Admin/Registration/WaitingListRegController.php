@@ -75,6 +75,7 @@ class WaitingListRegController extends Controller
 
         $request->validate([
             'name'            =>'required|min:3',
+            'enquiry_date'    => 'required'
         ]); 
         $errmsg =array();
         if ($request->grade_id == '99') {
@@ -165,6 +166,7 @@ class WaitingListRegController extends Controller
 
         $request->validate([
             'name'            =>'required|min:3',
+            'enquiry_date'    => 'required'
         ]); 
 
         DB::beginTransaction();

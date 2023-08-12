@@ -35,7 +35,7 @@
 					</div>
 				</div>
 				<div class="form-group col-md-3">
-					<label for="attendance_section"><b>Grade</b></label>
+					<label for="attendance_section"><b>Section</b></label>
 					<div class="col-sm-10">
 						<select class="form-select" id="attendance_section" name="attendance_section">
 							@foreach($section_list as $key => $value)

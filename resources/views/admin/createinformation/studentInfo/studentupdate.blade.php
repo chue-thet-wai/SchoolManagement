@@ -23,7 +23,7 @@
         <div class="row g-4">
             <div class="col-md-1"></div>
             <div class="col-md-9" style='color:#012970;'>
-                <h4><b>Update Driver Information</b></h4>
+                <h4><b>Update Student Information</b></h4>
             </div>
             <div class="col-md-1">
                 <a class="btn btn-sm btn-primary" href="{{ url('admin/student_info/list') }}" id="form-header-btn"> Back</a>

@@ -59,6 +59,64 @@ class ClassSetupController extends Controller
             'list_result'  => $res]);
     }
 
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function classSetupList(Request $request)
+    {  
+        $res = ClassSetup::select('class_setup.*');
+        if ($request['action'] == 'search') {
+            if (request()->has('classsetup_name') && request()->input('classsetup_name') != '') {
+                $res->where('name', 'Like', '%' . request()->input('classsetup_name') . '%');
+            }
+            if (request()->has('classsetup_room') && request()->input('classsetup_room') != '') {
+                $res->where('room_id', request()->input('classsetup_room'));
+            }
+            if (request()->has('classsetup_academic') && request()->input('classsetup_academic') != '') {
+                $res->where('academic_year_id', request()->input('classsetup_academic'));
+            }
+        }else {
+            request()->merge([
+                'classsetup_name' => null,
+                'classsetup_room' => null,
+                'classsetup_academic' => null,
+            ]);
+        }       
+    
+        $res = $res->paginate(20);
+             
+        $academic_list = $this->categoryRepository->getAcademicYear();
+        $academic=[];
+        foreach($academic_list as $a) {
+            $academic[$a->id] = $a->name;
+        }
+        $grade_list    = $this->categoryRepository->getGrade();
+        $grade=[];
+        foreach($grade_list as $a) {
+            $grade[$a->id] = $a->name;
+        }
+        $section_list    = $this->categoryRepository->getSection();
+        $section=[];
+        foreach($section_list as $a) {
+            $section[$a->id] = $a->name;
+        }
+        $room_list    = $this->categoryRepository->getRoom();
+        $room=[];
+        foreach($room_list as $a) {
+            $room[$a->id] = $a->name;
+        }
+
+        return view('admin.createinformation.classsetup.index',[
+            'room_list'=>$room,
+            'academic_list'=>$academic,
+            'grade_list'   =>$grade,
+            'section_list' =>$section,
+            'list_result'  => $res]);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *

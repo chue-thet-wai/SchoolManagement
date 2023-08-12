@@ -368,10 +368,10 @@
                                 <div class="form-group ">
                                     <div class="row col-md-10">
                                         <div class='col-sm-4'>
-                                            <label for="guardian_phone"><b>Phone</b></label>
+                                            <label for="guardian_phone"><b>Phone</b><span style="color:brown">*</span></label>
                                         </div>
                                         <div class='col-sm-6'>
-                                            <input type="text" id="guardian_phone" name="guardian_phone" class="form-control">
+                                            <input type="text" id="guardian_phone" name="guardian_phone" class="form-control" required>
                                         </div>
                                         <div class='col-sm-2'>
                                             <button type="button" name="guardian_search" id="guardian_search" class="btn btn-sm btn-primary" onclick="getGuardianData()">Search</button>
@@ -388,10 +388,10 @@
                                 <div class="form-group ">
                                     <div class="row col-md-10">
                                         <div class='col-sm-4'>
-                                            <label for="guardian_name"><b>Name</b></label>
+                                            <label for="guardian_name"><b>Name</b><span style="color:brown">*</span></label>
                                         </div>
                                         <div class='col-sm-8'>
-                                            <input type="text" id="guardian_name" name="guardian_name" class="form-control">
+                                            <input type="text" id="guardian_name" name="guardian_name" class="form-control" required>
                                         </div>
                                     </div>
                                 </div>
@@ -399,7 +399,7 @@
                                 <div class="form-group ">
                                     <div class="row col-md-10">
                                         <div class='col-sm-4'>
-                                            <label for="guardian_address"><b>Address</b></label>
+                                            <label for="guardian_address"><b>Address</b><span style="color:brown">*</span></label>
                                         </div>
                                         <div class='col-sm-8'>
                                             <textarea id="guardian_address" name="guardian_address" class="form-control"></textarea>
@@ -423,10 +423,10 @@
                             <div class="form-group col-md-8">
                                 <div class="row col-md-10">
                                     <div class='col-sm-4'>
-                                        <label for="new_class_select"><b>New Class</b></label>
+                                        <label for="new_class_select"><b>New Class</b><span style="color:brown">*</span></label>
                                     </div>
                                     <div class='col-sm-8'>
-                                        <select class="form-select" id="new_class" name="new_class" onchange="onchangeNewClass(this.value);">
+                                        <select class="form-select" id="new_class" name="new_class" onchange="onchangeNewClass(this.value);" required>
                                             <option value="99">select class</option>
                                             @foreach($class as $c)
                                             <option value="{{$c->id}}">{{$c->name}}</option>
@@ -461,10 +461,10 @@
                             <div class="form-group col-md-8">
                                 <div class="row col-md-10">
                                     <div class='col-sm-4'>
-                                        <label for="registration_date"><b>Registration Date</b></label>
+                                        <label for="registration_date"><b>Registration Date</b><span style="color:brown">*</span></label>
                                     </div>
                                     <div class='col-sm-8'>
-                                        <input type="date" id="registration_date" name="registration_date" class="form-control">
+                                        <input type="date" id="registration_date" name="registration_date" class="form-control" required>
                                     </div>
                                 </div>
                             </div>

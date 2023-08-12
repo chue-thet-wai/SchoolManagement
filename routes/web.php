@@ -31,9 +31,13 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
 
     //for Create Information
     Route::resource('teacher_info','CreateInformation\TeacherInfoController'); 
+    Route::post('teacher_info/list','CreateInformation\TeacherInfoController@teacherinfoList'); 
     Route::resource('driver_info','CreateInformation\DriverInfoController');  
+    Route::post('driver_info/list','CreateInformation\DriverInfoController@driverinfoList');
     Route::resource('class_setup','CreateInformation\ClassSetupController'); 
+    Route::post('class_setup/list','CreateInformation\ClassSetupController@classSetupList');
     Route::get('/student_info/list','CreateInformation\StudentInfoController@studentInfoList');
+    Route::post('/student_info/list','CreateInformation\StudentInfoController@studentInfoList');
     Route::get('/student_info/edit/{id}','CreateInformation\StudentInfoController@studentInfoEdit'); 
     Route::post('/student_info/update/{id}','CreateInformation\StudentInfoController@studentInfoUpdate'); 
 

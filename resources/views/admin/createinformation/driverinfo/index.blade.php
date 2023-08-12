@@ -26,6 +26,43 @@
             </div>
         </div>
         <br />
+        <form class="row g-4" method="POST" action="{{ url('admin/driver_info/list') }}" enctype="multipart/form-data">
+			@csrf
+			<div class='row g-4'>
+				<div class="form-group col-md-3">
+					<label for="driver_id"><b>Driver ID</b></label>
+					<div class="col-sm-10">
+						<input type="text" name="driverinfo_driverid" class="form-control" value="{{ request()->input('driverinfo_driverid') }}">
+					</div>
+				</div>
+				<div class="form-group col-md-3">
+					<label for="driver_name"><b>Name</b></label>
+					<div class="col-sm-10">
+						<input type="text" name="driverinfo_name" class="form-control" value="{{ request()->input('driverinfo_name') }}">
+					</div>
+				</div>
+				<div class="form-group col-md-3">
+					<label for="driver_phone"><b>Phone</b></label>
+					<div class="col-sm-10">
+						<input type="text" name="driverinfo_phone" class="form-control" value="{{ request()->input('driverinfo_phone') }}">
+					</div>
+				</div>
+			</div>
+			
+			<div class='row p-3'>
+				<div class="form-group col-sm-1 p-2">
+					<div class="d-grid mt-2">
+						<button type="submit" name="action" value="search" class="btn btn-sm btn-primary">Search</button>
+					</div>
+				</div>
+				<div class="form-group col-sm-1 p-2">
+					<div class="d-grid mt-2">
+						<button type="submit" name="action" value="reset" class="btn btn-sm btn-primary">Reset</button>
+					</div>
+				</div>					
+			</div>
+		</form>
+		<br />
         <div class="row g-4 m-2" style="display: flex;overflow-x: auto;">
             <table cellpadding="0" cellspacing="0" class="datatable table table-striped table-bordered">
                 <thead>
