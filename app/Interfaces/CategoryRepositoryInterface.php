@@ -8,5 +8,7 @@ interface CategoryRepositoryInterface
     public function getGrade();
     public function getBranch();
     public function getSection();
-    public function getRoom();
+    public function getRoom(); 
+    public function getSubject();
+
 }

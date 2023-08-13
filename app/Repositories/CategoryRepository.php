@@ -8,6 +8,7 @@ use App\Models\Branch;
 use App\Models\Grade;
 use App\Models\Room;
 use App\Models\Section;
+use App\Models\Subject;
 
 class CategoryRepository implements CategoryRepositoryInterface 
 {
@@ -31,6 +32,10 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function getSection() 
     {
         return Section::all();
+    }
+    public function getSubject() 
+    {
+        return Subject::all();
     }
    
 }

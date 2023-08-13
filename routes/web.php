@@ -40,6 +40,8 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::post('/student_info/list','CreateInformation\StudentInfoController@studentInfoList');
     Route::get('/student_info/edit/{id}','CreateInformation\StudentInfoController@studentInfoEdit'); 
     Route::post('/student_info/update/{id}','CreateInformation\StudentInfoController@studentInfoUpdate'); 
+    Route::resource('schedule','CreateInformation\ScheduleController'); 
+    Route::post('schedule/list','CreateInformation\ScheduleController@ScheduleList');
 
     //for Registration
     Route::resource('student_reg','Registration\StudentRegistrationController'); 
@@ -78,6 +80,22 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::get('/reporting/student_attendance_report','Report\StudentAttendanceReportController@studentAttendanceReport'); 
     Route::post('/reporting/student_attendance_report','Report\StudentAttendanceReportController@studentAttendanceReport');  
    
+    //for exam
+    Route::get('/exam_terms/list','Exam\ExamTermsController@examTermsList');
+    Route::post('/exam_terms/list','Exam\ExamTermsController@examTermsList');
+    Route::get('/exam_terms/create','Exam\ExamTermsController@examTermsCreate'); 
+    Route::post('/exam_terms/save','Exam\ExamTermsController@examTermsSave'); 
+    Route::get('/exam_terms/edit/{id}','Exam\ExamTermsController@examTermsEdit'); 
+    Route::post('/exam_terms/update/{id}','Exam\ExamTermsController@examTermsUpdate'); 
+    Route::delete('/exam_terms/delete/{id}','Exam\ExamTermsController@examTermsDelete'); 
+
+    Route::get('/exam_marks/list','Exam\ExamMarksController@examMarksList');
+    Route::post('/exam_marks/list','Exam\ExamMarksController@examMarksList');
+    Route::get('/exam_marks/create','Exam\ExamMarksController@examMarksCreate'); 
+    Route::post('/exam_marks/save','Exam\ExamMarksController@examMarksSave'); 
+    Route::get('/exam_marks/edit/{id}','Exam\ExamMarksController@examMarksEdit'); 
+    Route::post('/exam_marks/update/{id}','Exam\ExamMarksController@examMarksUpdate'); 
+    Route::delete('/exam_marks/delete/{id}','Exam\ExamMarksController@examMarksDelete'); 
 
     //for user 
     Route::resource('user','StaffInfoController');   

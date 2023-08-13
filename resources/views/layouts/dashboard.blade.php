@@ -192,6 +192,11 @@
               <span>Driver Information</span>
             </a>
           </li>
+          <li>
+            <a href="{{route('schedule.index')}}">
+              <span>Schedule</span>
+            </a>
+          </li>
         </ul>
       </li><!-- End Create Information Nav -->
 
@@ -238,6 +243,26 @@
           </li>
         </ul>
       </li><!-- End Registration Nav -->
+      
+      <!-- Create Exam Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#exam-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Exam</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="exam-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{{url('admin/exam_terms/list')}}">
+              <span>Exam Terms</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ url('admin/exam_marks/list') }}">
+              <span>Exam Marks</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <!-- End Exam Nav -->
 
       <!-- Report Nav -->
       <li class="nav-item">
