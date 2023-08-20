@@ -139,4 +139,21 @@ class RegistrationSearchController extends Controller
             ), 200);
         }
     }
+
+    public function cardDataSearch(Request $request)
+    {
+        
+        $studentSearch = StudentInfo::where('card_id',$request->card_id)->first();
+        if (!empty($studentSearch)) {
+            return response()->json(array(
+                'msg'             => 'found',
+                'student_id'      => $studentSearch->student_id,
+                'student_name'    => $studentSearch->name,
+            ), 200);
+        } else {
+            return response()->json(array(
+                'msg'             => 'notfound',
+            ), 200);
+        }
+    }
 }

@@ -42,6 +42,9 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::post('/student_info/update/{id}','CreateInformation\StudentInfoController@studentInfoUpdate'); 
     Route::resource('schedule','CreateInformation\ScheduleController'); 
     Route::post('schedule/list','CreateInformation\ScheduleController@ScheduleList');
+    Route::resource('activity','CreateInformation\ActivityController'); 
+    Route::post('activity/list','CreateInformation\ActivityController@ActivityList');
+
 
     //for Registration
     Route::resource('student_reg','Registration\StudentRegistrationController'); 
@@ -96,6 +99,18 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::get('/exam_marks/edit/{id}','Exam\ExamMarksController@examMarksEdit'); 
     Route::post('/exam_marks/update/{id}','Exam\ExamMarksController@examMarksUpdate'); 
     Route::delete('/exam_marks/delete/{id}','Exam\ExamMarksController@examMarksDelete'); 
+
+    //for wallet
+    Route::get('/cash_counter/list','Wallet\CashCounterController@CashCounterList');
+    Route::post('/cash_counter/list','Wallet\CashCounterController@CashCounterList');
+    Route::get('/cash_counter/create','Wallet\CashCounterController@CashCounterCreate'); 
+    Route::post('/cash_counter/save','Wallet\CashCounterController@CashCounterSave'); 
+    Route::get('/cash_counter/edit/{id}','Wallet\CashCounterController@CashCounterEdit'); 
+    Route::post('/cash_counter/update/{id}','Wallet\CashCounterController@CashCounterUpdate'); 
+    Route::post('/cash_counter/card_data','Registration\RegistrationSearchController@cardDataSearch');
+
+    Route::get('/cash_in_history/list','Wallet\CashInHistoryController@CashInHistoryList');
+    Route::post('/cash_in_history/list','Wallet\CashInHistoryController@CashInHistoryList');
 
     //for user 
     Route::resource('user','StaffInfoController');   

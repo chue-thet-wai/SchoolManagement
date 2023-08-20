@@ -117,6 +117,12 @@
                         <input type="date" name="date_of_birth" value="{{date('Y-m-d',strtotime($result[0]->date_of_birth))}}" class="form-control" required>
                     </div>
                 </div>
+                <div class="form-group col-md-5">
+                    <label for="card_id"><b>Card ID<span style="color:brown">*</span></b></label>
+                    <div class="col-sm-10">
+                        <input type="text" name="card_id" value="{{$result[0]->card_id}}" class="form-control" required disabled>
+                    </div>
+                </div>
             </div>
 
             <br />

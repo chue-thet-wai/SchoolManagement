@@ -197,6 +197,11 @@
               <span>Schedule</span>
             </a>
           </li>
+          <li>
+            <a href="{{route('activity.index')}}">
+              <span>Activity</span>
+            </a>
+          </li>
         </ul>
       </li><!-- End Create Information Nav -->
 
@@ -258,6 +263,25 @@
           <li>
             <a href="{{ url('admin/exam_marks/list') }}">
               <span>Exam Marks</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <!-- End Exam Nav -->
+      <!-- Create Wallet Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#wallet-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Wallet</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="wallet-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{{url('admin/cash_counter/list')}}">
+              <span>Cash Counter</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ url('admin/cash_in_history/list') }}">
+              <span>Cash In History</span>
             </a>
           </li>
         </ul>

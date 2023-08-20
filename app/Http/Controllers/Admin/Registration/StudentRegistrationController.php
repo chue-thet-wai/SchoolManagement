@@ -72,25 +72,25 @@ class StudentRegistrationController extends Controller
         $login_id = Auth::user()->user_id;
         $nowDate  = date('Y-m-d H:i:s', time());
 
-        $request->validate([
-            'registration_type' =>'required',
-            'student_profile'   =>'mimes:jpeg,jpg,png | max:1000',
-            'name'              => 'required',
-            'name_mm'           => 'required',
-            'religion'          => 'required',
-            'nationality'       => 'required',
-            'date_of_birth'     => 'required',
-            'father_name'       => 'required',
-            'father_name_mm'    => 'required',
-            'mother_name'       => 'required',
-            'mother_name_mm'    => 'required',
-            'father_phone'      => 'required',
-            'mother_phone'      => 'required',
-            'registration_date' => 'required',
-            'new_class'         =>  'required',
-        ]); 
-
         if ($request->registration_type == 1) { //new student
+            $request->validate([
+                'registration_type' =>'required',
+                'student_profile'   =>'mimes:jpeg,jpg,png | max:1000',
+                'name'              => 'required',
+                'name_mm'           => 'required',
+                'religion'          => 'required',
+                'nationality'       => 'required',
+                'date_of_birth'     => 'required',
+                'father_name'       => 'required',
+                'father_name_mm'    => 'required',
+                'mother_name'       => 'required',
+                'mother_name_mm'    => 'required',
+                'father_phone'      => 'required',
+                'mother_phone'      => 'required',
+                'registration_date' => 'required',
+                'new_class'         => 'required',
+                'card_id'           => 'required'
+            ]); 
             $studentID = $this->regRepository->generateStudentID();
 
             if($request->hasFile('student_profile')){
@@ -134,6 +134,7 @@ class StudentRegistrationController extends Controller
                 //student info save
                 $studentInfoData = array(
                     'student_id'        =>$studentID,
+                    'card_id'           =>$request->card_id,
                     'name'              =>$request->name,
                     'name_mm'           =>$request->name_mm,
                     'date_of_birth'     =>$request->date_of_birth,
@@ -197,6 +198,11 @@ class StudentRegistrationController extends Controller
                 return redirect()->back()->with('error','Student Registration Created Fail !');
             }  
         } else {
+            $request->validate([
+                'registration_type' =>'required',
+                'registration_date' => 'required',
+                'new_class'         => 'required',
+            ]); 
             DB::beginTransaction();
             try{
                 $registration_no = $this->regRepository->generateRegistrationNo();

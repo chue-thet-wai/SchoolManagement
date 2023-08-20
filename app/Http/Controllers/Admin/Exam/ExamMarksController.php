@@ -67,6 +67,7 @@ class ExamMarksController extends Controller
         foreach($class_list as $a) {
             $classes[$a->id] = $a->name;
         }
+
         return view('admin.exam.exammarks.exammarks_list',['list_result' => $res,'subjects' => $subjects,
         'examterms' => $examterms, 'classes' => $classes]);
     }
@@ -81,11 +82,13 @@ class ExamMarksController extends Controller
         $subjects = $this->categoryRepository->getSubject();
         $examterms = $this->getExamTerms();
         $classes   = $this->regRepository->getClass();
+        $student_list    = $this->regRepository->getStudentInfo();
         
         return view('admin.exam.exammarks.exammarks_create',[
-            'subjects' => $subjects,
-            'examterms' => $examterms, 
-            'classes' => $classes
+            'subjects'    => $subjects,
+            'examterms'   => $examterms, 
+            'classes'     => $classes,
+            'student_list'=>$student_list
         ]);
     }
 
@@ -101,11 +104,13 @@ class ExamMarksController extends Controller
         $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
-            'student_id'       =>'required',
             'mark'            =>'required|integer',
         ]); 
        
         $errmsg =array();
+        if ($request->student_id == '99') {
+            array_push($errmsg,'Student ID');
+        }  
         if ($request->class_id == '99') {
             array_push($errmsg,'Class');
         }  
@@ -160,12 +165,14 @@ class ExamMarksController extends Controller
         $subjects = $this->categoryRepository->getSubject();
         $examterms = $this->getExamTerms();
         $classes    = $this->regRepository->getClass();
+        $student_list    = $this->regRepository->getStudentInfo();
     
         $res = ExamMarks::where('id',$id)->get();
         return view('admin.exam.exammarks.exammarks_update',[
             'subjects' => $subjects,
             'examterms' => $examterms, 
             'classes' => $classes,
+            'student_list'=>$student_list,
             'result'=>$res]);
     }
 
@@ -187,6 +194,9 @@ class ExamMarksController extends Controller
         ]);
 
         $errmsg =array();
+        if ($request->student_id == '99') {
+            array_push($errmsg,'Student ID');
+        }  
         if ($request->class_id == '99') {
             array_push($errmsg,'Class');
         }  

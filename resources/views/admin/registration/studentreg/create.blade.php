@@ -471,6 +471,21 @@
                             <div class="col-md-3"></div>
                         </div>
                         <br />
+                        <div class="row g-4">
+                            <div class="col-md-1"></div>
+                            <div class="form-group col-md-8">
+                                <div class="row col-md-10">
+                                    <div class='col-sm-4'>
+                                        <label for="card_id"><b>Card ID</b></label>
+                                    </div>
+                                    <div class='col-sm-8'>
+                                        <input type="text" id="card_id" name="card_id" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3"></div>
+                        </div>
+                        <br />
 
                         <div class="row g-4">
                             <div class="col-md-1"></div>

@@ -61,6 +61,7 @@ class StudentInfoController extends Controller
         DB::beginTransaction();
         try{
             $infoData = array(
+                'card_id'           =>$request->card_id,
                 'name'              =>$request->name,
                 'name_mm'           =>$request->name_mm,
                 'date_of_birth'     =>$request->date_of_birth,

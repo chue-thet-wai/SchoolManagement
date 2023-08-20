@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('student_registration', function($table) {
-            $table->string('registration_no')->after('id');
+        Schema::table('student_info', function (Blueprint $table) {
+            $table->string('card_id')->after('student_id');
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('student_registration', function($table) {
-            $table->dropColumn('registration_no');
+        Schema::table('student_info', function (Blueprint $table) {
+            $table->dropColumn('card_id');
         });
     }
 };

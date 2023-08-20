@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\RegistrationRepositoryInterface;
 use App\Models\ClassSetup;
+use App\Models\StudentInfo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -59,5 +60,9 @@ class RegistrationRepository implements RegistrationRepositoryInterface
             }    
         }
         return $randomString;  
+    }
+    public function getStudentInfo() 
+    {
+        return StudentInfo::all();
     }
 }

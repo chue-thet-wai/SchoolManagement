@@ -38,27 +38,39 @@
             {{method_field('POST')}}
             <div class="row g-4">
                 <div class="col-md-1"></div>
-                <div class="form-group col-md-5">
-                    <label for="student_id"><b>Student ID<span style="color:brown">*</span></b></label>
-                    <div class="col-sm-10">
-                        <input type="text" name="student_id" value="{{$result[0]->student_id}}" class="form-control" required>
+                <div class="col-md-10">                    
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="student_id"><b>Student ID<span style="color:brown">*</span></b></label>
+                            <div class="col-sm-10">
+                                <select class="form-select" id="student_id" name="student_id" >
+                                    <option  value="99">--Select Student--</option>
+                                    @foreach($student_list as $a)
+                                        <option  value="{{$a->student_id}}"
+                                        @if ($result[0]->student_id == $a->student_id)
+                                            selected
+                                        @endif
+                                        >{{$a->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for=""><b>Exam Terms</b></label>
+                            <div class="col-sm-10">
+                                <select class="form-select" id="exam_terms_id" name="exam_terms_id" >
+                                    <option  value="99">--Select Exam Terms--</option>
+                                    @foreach($examterms as $a)
+                                        <option  value="{{$a->id}}"
+                                        @if ($result[0]->exam_terms_id == $a->id)
+                                            selected
+                                        @endif
+                                        >{{$a->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for=""><b>Exam Terms</b></label>
-                    <div class="col-sm-10">
-                        <select class="form-select" id="exam_terms_id" name="exam_terms_id" >
-                            <option  value="99">--Select Exam Terms--</option>
-                            @foreach($examterms as $a)
-                                <option  value="{{$a->id}}"
-                                @if ($result[0]->exam_terms_id == $a->id)
-                                    selected
-                                @endif
-                                >{{$a->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
                 <div class="col-md-1"></div>
             </div>
             <br />
@@ -111,7 +123,6 @@
                 </div>
                 <div class="col-md-6"></div>
             </div>
-            <br />
             <br />
             <div class="row g-4">
                 <div class="col-md-1"></div>

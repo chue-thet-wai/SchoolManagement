@@ -8,4 +8,5 @@ interface RegistrationRepositoryInterface
     public function getClass();
     public function generateRegistrationNo();
     public function generatePaymentID();
+    public function getStudentInfo();
 }
