@@ -112,6 +112,18 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::get('/cash_in_history/list','Wallet\CashInHistoryController@CashInHistoryList');
     Route::post('/cash_in_history/list','Wallet\CashInHistoryController@CashInHistoryList');
 
+    //for shop
+    Route::prefix('menu')->group(function () {
+        Route::get('list','Shop\ShopMenuController@shopMenuList');
+        Route::post('list','Shop\ShopMenuController@shopMenuList');
+        Route::get('create','Shop\ShopMenuController@shopMenuCreate'); 
+        Route::post('save','Shop\ShopMenuController@shopMenuSave'); 
+        Route::get('edit/{id}','Shop\ShopMenuController@shopMenuEdit'); 
+        Route::post('update/{id}','Shop\ShopMenuController@shopMenuUpdate'); 
+        Route::delete('delete/{id}','Shop\ShopMenuController@shopMenuDelete'); 
+    });
+
+
     //for user 
     Route::resource('user','StaffInfoController');   
     Route::get('/profile','UserController@show_profile'); 

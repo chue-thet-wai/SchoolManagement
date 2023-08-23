@@ -286,7 +286,26 @@
           </li>
         </ul>
       </li>
-      <!-- End Exam Nav -->
+      <!-- End Wallet Nav -->
+      <!-- Create Shop Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#shop-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Shop</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="shop-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{{url('admin/menu/list')}}">
+              <span>Menu</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ url('admin/cash_in_history/list') }}">
+              <span>Daily Shop</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <!-- End Shop Nav -->
 
       <!-- Report Nav -->
       <li class="nav-item">
