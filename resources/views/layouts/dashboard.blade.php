@@ -299,8 +299,8 @@
             </a>
           </li>
           <li>
-            <a href="{{ url('admin/cash_in_history/list') }}">
-              <span>Daily Shop</span>
+            <a href="{{ url('admin/food_order/list') }}">
+              <span>Food Order</span>
             </a>
           </li>
         </ul>

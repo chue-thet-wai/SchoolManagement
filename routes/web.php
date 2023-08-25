@@ -123,6 +123,16 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
         Route::delete('delete/{id}','Shop\ShopMenuController@shopMenuDelete'); 
     });
 
+    Route::prefix('food_order')->group(function () {
+        Route::get('list','Shop\FoodOrderController@foodOrderList');
+        Route::post('list','Shop\FoodOrderController@foodOrderList');
+        Route::get('create','Shop\FoodOrderController@foodOrderCreate'); 
+        Route::post('save','Shop\FoodOrderController@foodOrderSave'); 
+        Route::get('edit/{id}','Shop\FoodOrderController@foodOrderEdit'); 
+        Route::post('update/{id}','Shop\FoodOrderController@foodOrderuUpdate'); 
+        Route::delete('delete/{id}','Shop\FoodOrderController@foodOrderDelete'); 
+    });
+
 
     //for user 
     Route::resource('user','StaffInfoController');   
