@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Shop;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\FoodOrder;
 use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -18,21 +19,21 @@ class FoodOrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function shopMenuList(Request $request)
+    public function foodOrderList(Request $request)
     {
-        $res = Menu::select('menu.*');
+        $res = FoodOrder::select('food_order.*');
         if ($request['action'] == 'search') {
-            if (request()->has('menu_name') && request()->input('menu_name') != '') {
-                $res->where('name', request()->input('menu_name'));
+            if (request()->has('order_invoiceid') && request()->input('order_invoiceid') != '') {
+                $res->where('invoice_id', request()->input('order_invoiceid'));
             }
         }else {
             request()->merge([
-                'menu_name'      => null,
+                'order_invoiceid'      => null,
             ]);
         }       
         $res = $res->paginate(20);
 
-        return view('admin.shop.menu.menu_list',['list_result' => $res]);
+        return view('admin.shop.foodorder.foodorder_list',['list_result' => $res]);
     }
 
     /**
@@ -40,9 +41,12 @@ class FoodOrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function shopMenuCreate()
+    public function foodOrderCreate()
     {
-        return view('admin.shop.menu.menu_create');
+        $menu_list = $this->getMenus();
+        return view('admin.shop.foodorder.foodorder_create',[
+            'menu_list'   => $menu_list
+        ]);
     }
 
     /**
@@ -51,52 +55,73 @@ class FoodOrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function shopMenuSave(Request $request)
+    public function foodOrderSave(Request $request)
     {
         $login_id = Auth::user()->user_id;
         $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
-            'price'     =>'required|integer',
-            'name'      =>'required',
-            'menu_image'=>'required | mimes:jpeg,jpg,png | max:1000',
+            'card_id'     =>'required',
         ]); 
 
-        if($request->hasFile('menu_image')){
-            $image=$request->file('menu_image');
-            $extension = $image->extension();
-            $image_name = time() . "." . $extension;
-        }else{
-            $image_name="";
-        } 
+        $checkMenu = $request->checkMenu;
+        if (empty($checkMenu)) {
+            return redirect()->back()->with('danger','Please check menu !');
+        }
        
         DB::beginTransaction();
         try{
-            $insertData = array(
-                'name'              =>$request->name,
-                'price'             =>$request->price,
-                'menu_image'        =>$image_name,
+            //generate invoice id
+            $invoice_id = '12321';
+            $toal_amount =0 ;
+            for ($i=0;$i<count($checkMenu);$i++) {
+                $menu_id = $checkMenu[$i];
+                $qty_data     = $request[$menu_id.'-qty'];
+                $qty_data     = explode('-',$qty_data);
+                $qty     = $qty_data[0];
+                $price   = $qty_data[2];
+
+                $remark     = $request[$menu_id.'-remark'];
+                if ($remark==null) {
+                    $remark = "";
+                }
+                
+                $insertItem = array(
+                    'invoice_id'        => $invoice_id,
+                    'menu_id'           => $menu_id,
+                    'price'             => $price,
+                    'quantity'          => $qty,
+                    'description'       => $remark,
+                    'created_by'        =>$login_id,
+                    'updated_by'        =>$login_id,
+                    'created_at'        =>$nowDate,
+                    'updated_at'        =>$nowDate
+                );
+                $res=DB::table('food_order_items')->insert($insertItem);
+                if (!$res) {
+                    return redirect()->back()->with('danger','Food Order Fail !');
+                } else {
+                    $toal_amount += $qty * $price;
+                }
+            }
+            $insertOrder = array(
+                'invoice_id'        => $invoice_id,
+                'card_id'           => $request->card_id,
+                'total_amount'      => $toal_amount,
                 'created_by'        =>$login_id,
                 'updated_by'        =>$login_id,
                 'created_at'        =>$nowDate,
                 'updated_at'        =>$nowDate
             );
-            $result=Menu::insert($insertData);
-                        
-            if($result){   
-                if ($image_name != '') {
-                    $image->move(public_path('assets/menu'),$image_name); 
-                }   
-                DB::commit();
-                return redirect(url('admin/menu/list'))->with('success','Menu Created Successfully!');
-            }else{
-                return redirect()->back()->with('danger','Menu Created Fail !');
-            }
+            $res=DB::table('food_order')->insert($insertOrder);
+
+            DB::commit();
+            return redirect(url('admin/menu/list'))->with('success','Food Order Created Successfully!');
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Menu Created Fail !');
+            return redirect()->back()->with('error','Food Order Created Fail !');
         }    
     }
 
@@ -106,11 +131,26 @@ class FoodOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function shopMenuEdit($id)
+    public function foodOrderEdit($id)
     {    
-        $res = Menu::where('id',$id)->get();
-        return view('admin.shop.menu.menu_update',[
-            'result'=>$res]);
+        $res = FoodOrder::where('id',$id)->get();
+        $order_item = DB::table('food_order_items')
+                        ->whereNull('deleted_at')
+                        ->where('invoice_id',$res[0]['invoice_id'])
+                        ->get();
+        $order_item_array=[];
+        foreach ($order_item as $item) {
+            $item_array['quantity']  = $item->quantity;
+            $item_array['price']     = $item->price;
+            $item_array['qty_total'] = $item->quantity * $item->price;
+            $order_item_array[$item->menu_id] = $item_array;
+        }
+        $menu_list = $this->getMenus();
+        return view('admin.shop.foodorder.foodorder_update',[
+            'menu_list'   => $menu_list,
+            'order_item'  => $order_item_array,
+            'result'      =>$res
+        ]);
     }
 
     /**
@@ -120,55 +160,81 @@ class FoodOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function shopMenuUpdate(Request $request, $id)
+    public function foodOrderUpdate(Request $request, $id)
     {
         $login_id = Auth::user()->user_id;
         $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
-            'price'     =>'required|integer',
-            'name'      =>'required',
-            'menu_image'=>'required | mimes:jpeg,jpg,png | max:1000',
+            'card_id'     =>'required',
         ]); 
 
-        if($request->hasFile('menu_image')){
-            $previous_img=$request->previous_image;
-            @unlink(public_path('/assets/menu/'. $previous_img));
-
-            $image=$request->file('menu_image');
-            $extension = $image->extension();
-            $image_name = time() . "." . $extension;
-        }else{
-            $image_name="";
-        } 
+        $checkMenu = $request->checkMenu;
+        if (empty($checkMenu)) {
+            return redirect()->back()->with('danger','Please check menu !');
+        }
 
         DB::beginTransaction();
         try{
-            $menuData = array(
-                'name'              =>$request->name,
-                'price'             =>$request->price,
-                'menu_image'        =>$image_name,
-                'updated_by'        =>$login_id,
-                'updated_at'        =>$nowDate
+            $checkData = FoodOrder::where('id',$id)->first();
+            if (!empty($checkData)) {
+                $invoice_id = $checkData['invoice_id'];
+                //To delete old food item
+                $res = DB::table('food_order_items')->where('invoice_id',$invoice_id)->delete();
 
-            );
-            
-            $result=Menu::where('id',$id)->update($menuData);
-                      
-            if($result){
-                if ($image_name != "") {
-                    $image->move(public_path('assets/menu'),$image_name);  
+                $toal_amount =0 ;
+                for ($i=0;$i<count($checkMenu);$i++) {
+                    $menu_id = $checkMenu[$i];
+                    $qty_data     = $request[$menu_id.'-qty'];
+                    $qty_data     = explode('-',$qty_data);
+                    $qty     = $qty_data[0];
+                    $price   = $qty_data[2];
+
+                    $remark     = $request[$menu_id.'-remark'];
+                    if ($remark==null) {
+                        $remark = "";
+                    }
+                    
+                    $insertItem = array(
+                        'invoice_id'        => $invoice_id,
+                        'menu_id'           => $menu_id,
+                        'price'             => $price,
+                        'quantity'          => $qty,
+                        'description'       => $remark,
+                        'created_by'        =>$login_id,
+                        'updated_by'        =>$login_id,
+                        'created_at'        =>$nowDate,
+                        'updated_at'        =>$nowDate
+                    );
+                    $res=DB::table('food_order_items')->insert($insertItem);
+                    if (!$res) {
+                        return redirect()->back()->with('danger','Food Order Fail !');
+                    } else {
+                        $toal_amount += $qty * $price;
+                    }
                 }
-                DB::commit();               
-                return redirect(url('admin/menu/list'))->with('success','Menu Updated Successfully!');
-            }else{
-                return redirect()->back()->with('danger','Menu Updated Fail !');
-            }
+                $insertOrder = array(
+                    'card_id'           => $request->card_id,
+                    'total_amount'      => $toal_amount,
+                    'updated_by'        => $login_id,
+                    'updated_at'        => $nowDate
+                );
+                $result=DB::table('food_order')->where('id',$id)->update($insertOrder);
+                        
+                if($result){
+                    DB::commit();               
+                    return redirect(url('admin/food_order/list'))->with('success','Food Order Updated Successfully!');
+                }else{
+                    return redirect()->back()->with('danger','Food Order Updated Fail !');
+                }
+            } else {
+                return redirect()->back()->with('danger','Food Order Updated Data not found !');
+            }            
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Menu Updared Fail !');
+            return redirect()->back()->with('error','Food Order Updared Fail !');
         }  
     }
 
@@ -178,32 +244,37 @@ class FoodOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function shopMenuDelete($id)
+    public function foodOrderDelete($id)
     {
         DB::beginTransaction();
         try{
-            $checkData = Menu::where('id',$id)->first();
+            $checkData = FoodOrder::where('id',$id)->first();
 
             if (!empty($checkData)) {
                 
-                $res = Menu::where('id',$id)->delete();
+                $res = FoodOrder::where('id',$id)->delete();
                 if($res){
-                    //To delete image
-                    $image=$checkData['menu_image'];
-                    @unlink(public_path('/assets/menu/'. $image));
+                    //To delete food item
+                    $res = DB::table('food_order_items')->where('invoice_id',$checkData['invoice_id'])->delete();
                 }
             }else{
-                return redirect()->back()->with('error','There is no result with this menu.');
+                return redirect()->back()->with('error','There is no result with this food order.');
             }
             DB::commit();
             //To return list
-            return redirect(route('menu.index'))->with('success','Menu Deleted Successfully!');
+            return redirect(route('food_order.index'))->with('success','Food Order Deleted Successfully!');
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Menu Deleted Failed!');
+            return redirect()->back()->with('error','Food Order Deleted Failed!');
         }
         
+    }
+
+    public function getMenus() {
+        $login_id = Auth::user()->user_id;
+        $menu_list = Menu::where('created_by',$login_id)->get();      
+        return $menu_list;
     }
 }

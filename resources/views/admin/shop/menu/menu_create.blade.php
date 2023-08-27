@@ -57,6 +57,18 @@
             <div class="row g-4">
                 <div class="col-md-1"></div>
                 <div class="form-group col-md-10">
+                    <label for="status"><b>Status</b></label>
+                    <div class="col-sm-10">
+                        <input type="radio" id="inactive" name="status" value="0" checked><b> Inactive</b>
+                        <input type="radio" id="active" name="status" value="1"><b> Active</b>
+                    </div>
+                </div>               
+                <div class="col-md-1"></div>
+            </div>
+            <br />
+            <div class="row g-4">
+                <div class="col-md-1"></div>
+                <div class="form-group col-md-10">
                     <label for="menu_image"><b>Upload Image</b></label>
                     <div class="image-preview-container">
                         <div class="preview">
@@ -67,6 +79,17 @@
                     </div>
                 </div>               
                 <div class="col-md-1"></div>
+            </div>
+            <br />
+            <div class="row g-4">
+                <div class="col-md-1"></div>
+                <div class="form-group col-md-5">
+                    <label for="description"><b>Description</b></label>
+                    <div class="col-sm-10"> 
+                        <textarea name="description" class="form-control" required></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6"></div>
             </div>
             <br />
             <div class="row g-4">

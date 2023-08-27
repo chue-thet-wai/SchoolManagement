@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\Township;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -35,15 +36,10 @@ class UserRepository implements UserRepositoryInterface
 
     public function getDepartment()
     {
-        $deptArr = array('Head Office','Branch');
-        $dept = [];
-        for ($i=0;$i< count($deptArr);$i++) {
-            $deptOne['id'] = $i+1;
-            $deptOne['name']= $deptArr[$i];
-            $dept[] = $deptOne;
-        }
+        $leftRole = array('Teacher','Driver');
+        $dept = Role::whereNotIn('name',$leftRole)->get();
         
-       return $dept;
+        return $dept;
     }
 
     public function getGender()

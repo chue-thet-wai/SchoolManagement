@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="pagetitle">
-	<h1>Food Order</h1>
+	<h1>Sale Counter</h1>
 	<nav>
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
 			<li class="breadcrumb-item active">Shop</li>
-			<li class="breadcrumb-item active">Food Order</li>
+			<li class="breadcrumb-item active">Sale Counter</li>
 		</ol>
 	</nav>
 	@include('layouts.error')
@@ -22,17 +22,17 @@
                 <h4><b>Food Order List</b></h4>
             </div>
             <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{url('admin/menu/create')}}" id="form-header-btn"> Create</a>
+                <a class="btn btn-sm btn-primary" href="{{url('admin/food_order/create')}}" id="form-header-btn"> Create</a>
             </div>
         </div>
         <br />
-        <form class="row g-4" method="POST" href="{{ url('admin/menu/list') }}" enctype="multipart/form-data">
+        <form class="row g-4" method="POST" href="{{ url('admin/food_order/list') }}" enctype="multipart/form-data">
 			@csrf
 			<div class='row g-4'>
 				<div class="form-group col-md-3">
-					<label for="menu_name"><b>Name</b></label>
+					<label for="order_invoiceid"><b>Invoice ID</b></label>
 					<div class="col-sm-10">
-						<input type="text" name="menu_name" class="form-control" value="{{ request()->input('menu_name') }}">
+						<input type="text" name="order_invoiceid" class="form-control" value="{{ request()->input('order_invoiceid') }}">
 					</div>
 				</div>
 			</div>			
@@ -55,9 +55,9 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Status</th>
+                        <th>Invoice ID</th>
+                        <th>Card ID</th>
+                        <th>Totoal Amount</th>
                         <th>Created at</th>
                         <th>Action</th>
                     </tr>
@@ -68,17 +68,17 @@
                         @foreach($list_result as $res)
                         <tr>
                             <td>@php echo $i;$i++; @endphp</td>
-                            <td>{{ $res->name }}</td>
-                            <td>{{ $res->price }}</td>
-                            <td>{{ $res->status }}</td>
-                            <td>{{ $$res->created_at }}</td>
+                            <td>{{ $res->invoice_id }}</td>
+                            <td>{{ $res->card_id }}</td>
+                            <td>{{ $res->total_amount }}</td>
+                            <td>{{ $res->created_at }}</td>
                             <td class="center">
-                                <a href="{{ url('admin/menu/edit/'.$res->id) }}">
+                                <a href="{{ url('admin/food_order/edit/'.$res->id) }}">
                                     <button type="submit" value="edit" class="btn m-1 p-0 border-0">
                                         <span id="boot-icon" class="bi bi-pencil-square" style="font-size: 20px; color:rgb(58 69 207);"></span>
                                     </button>                            
                                 </a>
-                                <form method="post" action="{{ url('admin/menu/delete/'.$res->id) }}" style="display: inline;">
+                                <form method="post" action="{{ url('admin/food_order/delete/'.$res->id) }}" style="display: inline;">
                                     @csrf
                                     {{ method_field('DELETE') }}
                                     <button type="submit" value="delete" class="btn m-1 p-0 border-0">

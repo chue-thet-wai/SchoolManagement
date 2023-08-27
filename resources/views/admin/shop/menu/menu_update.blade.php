@@ -19,7 +19,7 @@
         <div class="row g-4">
             <div class="col-md-1"></div>
             <div class="col-md-9" style='color:#012970;'>
-                <h4><b>Update Exam Marks</b></h4>
+                <h4><b>Update Menu</b></h4>
             </div>
             <div class="col-md-1">
                 <a class="btn btn-sm btn-primary" href="{{ url('admin/menu/list') }}" id="form-header-btn"> Back</a>
@@ -56,6 +56,26 @@
             </div>
             <br />
             <div class="row g-4">
+                <div class="col-md-1"></div>
+                <div class="form-group col-md-10">
+                    <label for="status"><b>Status</b></label>
+                    <div class="col-sm-10">
+                        <input type="radio" id="inactive" name="status" value="0" 
+                            @if($result[0]->status != "1")
+                                checked
+                            @endif
+                            ><b> Inactive</b>
+                        <input type="radio" id="active" name="status" value="1"
+                            @if($result[0]->status == "1")
+                                checked
+                            @endif
+                            ><b> Active</b>
+                    </div>
+                </div>               
+                <div class="col-md-1"></div>
+            </div>
+            <br />
+            <div class="row g-4">
                 <div class="col-md-1">
                     <input type="hidden" id="previous_image" name="previous_image" value="{{$result[0]->menu_image}}">
                 </div>
@@ -70,6 +90,17 @@
                     </div>
                 </div>               
                 <div class="col-md-1"></div>
+            </div>
+            <br />
+            <div class="row g-4">
+                <div class="col-md-1"></div>
+                <div class="form-group col-md-5">
+                    <label for="description"><b>Description</b></label>
+                    <div class="col-sm-10"> 
+                        <textarea name="description" class="form-control" required>{{$result[0]->description}}</textarea>
+                    </div>
+                </div>
+                <div class="col-md-6"></div>
             </div>
             <br />
             <div class="row g-4">

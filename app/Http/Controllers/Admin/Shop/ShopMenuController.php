@@ -75,7 +75,9 @@ class ShopMenuController extends Controller
             $insertData = array(
                 'name'              =>$request->name,
                 'price'             =>$request->price,
+                'status'            =>$request->status,
                 'menu_image'        =>$image_name,
+                'description'       =>$request->description,
                 'created_by'        =>$login_id,
                 'updated_by'        =>$login_id,
                 'created_at'        =>$nowDate,
@@ -128,7 +130,7 @@ class ShopMenuController extends Controller
         $request->validate([
             'price'     =>'required|integer',
             'name'      =>'required',
-            'menu_image'=>'required | mimes:jpeg,jpg,png | max:1000',
+            'menu_image'=>'mimes:jpeg,jpg,png | max:1000',
         ]); 
 
         if($request->hasFile('menu_image')){
@@ -147,11 +149,15 @@ class ShopMenuController extends Controller
             $menuData = array(
                 'name'              =>$request->name,
                 'price'             =>$request->price,
-                'menu_image'        =>$image_name,
+                'status'            =>$request->status,
+                'description'       =>$request->description,
                 'updated_by'        =>$login_id,
                 'updated_at'        =>$nowDate
 
             );
+            if ($image_name != "") {
+                $menuData['menu_image'] = $image_name;
+            }
             
             $result=Menu::where('id',$id)->update($menuData);
                       

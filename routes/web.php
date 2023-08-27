@@ -129,7 +129,7 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
         Route::get('create','Shop\FoodOrderController@foodOrderCreate'); 
         Route::post('save','Shop\FoodOrderController@foodOrderSave'); 
         Route::get('edit/{id}','Shop\FoodOrderController@foodOrderEdit'); 
-        Route::post('update/{id}','Shop\FoodOrderController@foodOrderuUpdate'); 
+        Route::post('update/{id}','Shop\FoodOrderController@foodOrderUpdate'); 
         Route::delete('delete/{id}','Shop\FoodOrderController@foodOrderDelete'); 
     });
 
@@ -138,6 +138,9 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::resource('user','StaffInfoController');   
     Route::get('/profile','UserController@show_profile'); 
     Route::get('/logout','UserController@logout');
+
+    //for permission
+    Route::resource('role_permission','RoleandPermissionController'); 
 });
 
 Route::get('/', function () {

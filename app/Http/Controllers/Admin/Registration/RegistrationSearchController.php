@@ -143,12 +143,16 @@ class RegistrationSearchController extends Controller
     public function cardDataSearch(Request $request)
     {
         
-        $studentSearch = StudentInfo::where('card_id',$request->card_id)->first();
+        $studentSearch = StudentInfo::leftjoin('wallet','wallet.card_id','=','student_info.card_id')
+                            ->where('student_info.card_id',$request->card_id)
+                            ->select('student_info.*','wallet.total_amount as total_amount')
+                            ->first();
         if (!empty($studentSearch)) {
             return response()->json(array(
                 'msg'             => 'found',
                 'student_id'      => $studentSearch->student_id,
                 'student_name'    => $studentSearch->name,
+                'card_amount'     => $studentSearch->total_amount,
             ), 200);
         } else {
             return response()->json(array(

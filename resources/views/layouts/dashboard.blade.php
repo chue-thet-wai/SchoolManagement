@@ -47,13 +47,15 @@
               $profileImgUrl = 'assets/images/profile.jpg';
             }   
             $role = Auth::user()->role;
-            if ($role == 2) {
-              $roleName = 'Branch Admin';
-            } else if ($role== 3){
-              $roleName = 'Teacher';
-            }  else {
-              $roleName = 'Super Admin';
-            }    
+
+            $roleList = App\Http\Controllers\Admin\UserController::getDepartment();
+            $roleName = 'Super Admin';
+            foreach ($roleList as $roleData) {
+              if ($role == $roleData['id']) {
+                $roleName = $roleData['name'];
+                break;
+              }              
+            } 
         @endphp
         <li class="nav-item dropdown pe-3">
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
@@ -105,246 +107,50 @@
         </a>
       </li><!-- End Dashboard Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="{{route('user.index')}}"">
-        <i class="bi bi-menu-button-wide"></i>
-        <span>User Management</span>
-        </a>
-      </li><!-- End User Management Nav -->
+          @php
+            $dashboard = App\Http\Controllers\Admin\UserController::getDashboardPermission();
+            $icon_array = [
+                "User Management"    => "bi bi-menu-button-wide",
+                "Category"           => "bi bi-journal-text",
+                "Create Information" => "bi bi-layout-text-window-reverse",
+                "Registration"       => "bi bi-card-list",
+                "Exam"               => "bi bi-layout-text-window-reverse",
+                "Wallet"             => "bi bi-layout-text-window-reverse",
+                "Shop"               => "bi bi-layout-text-window-reverse",
+                "Reporting"          => "bi bi-view-list",
+              ];
 
-      <!-- Category Nav -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#category-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-journal-text"></i><span>Category</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="category-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="{{route('academic_year.index')}}">
-              <span>Academic Year</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('branch.index')}}">
-              <span>Branch</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('room.index')}}">
-              <span>Room</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('grade.index')}}">
-              <span>Grade</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('section.index')}}">
-              <span>Section</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('grade_level_fee.index')}}">
-              <span>Grade Level Fee</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('additional_fee.index')}}">
-              <span>Additional Fee</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('subject.index')}}">
-              <span>Subject</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{ url('admin/township/list') }}">
-              <span>Township</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Category Nav -->
-
-      <!-- Create Information Nav -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#createinfo-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Create Information</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="createinfo-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="{{route('teacher_info.index')}}">
-              <span>Teacher Information</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{ url('admin/student_info/list') }}">
-              <span>Student Information</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('class_setup.index')}}">
-              <span>Class Setup</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('driver_info.index')}}">
-              <span>Driver Information</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('schedule.index')}}">
-              <span>Schedule</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('activity.index')}}">
-              <span>Activity</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Create Information Nav -->
-
-      <!-- Registration Nav -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#registration-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-card-list"></i><span>Registration</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="registration-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="{{route('student_reg.index')}}">
-              <span>Student Registration</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('waitinglist_reg.index')}}">
-              <span>Waiting List Registration</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('cancel_reg.index')}}">
-              <span>Cancel Registration</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('payment.index')}}">
-              <span>Payment Registration</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('school_bus_track.index')}}">
-              <span>School Bus Track</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('teacher_attendance.index')}}">
-              <span>Teacher Attendance</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{route('student_attendance.index')}}">
-              <span>Student Attendance</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Registration Nav -->
-      
-      <!-- Create Exam Nav -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#exam-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Exam</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="exam-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="{{url('admin/exam_terms/list')}}">
-              <span>Exam Terms</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{ url('admin/exam_marks/list') }}">
-              <span>Exam Marks</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <!-- End Exam Nav -->
-      <!-- Create Wallet Nav -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#wallet-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Wallet</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="wallet-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="{{url('admin/cash_counter/list')}}">
-              <span>Cash Counter</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{ url('admin/cash_in_history/list') }}">
-              <span>Cash In History</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <!-- End Wallet Nav -->
-      <!-- Create Shop Nav -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#shop-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Shop</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="shop-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="{{url('admin/menu/list')}}">
-              <span>Menu</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{ url('admin/food_order/list') }}">
-              <span>Food Order</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <!-- End Shop Nav -->
-
-      <!-- Report Nav -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#report-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-view-list"></i><span>Reporting</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="report-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="{{ url('admin/reporting/studentregistration_report') }}">
-              <span>Student Registration Report</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{ url('admin/reporting/payment_report') }}">
-              <span>Payment Report</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{ url('admin/reporting/cancel_report') }}">
-              <span>Cancel Report</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{ url('admin/reporting/ferry_report') }}">
-              <span>Ferry Report</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{ url('admin/reporting/teacher_attendance_report') }}">
-              <span>Teacher Attendance Report</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{ url('admin/reporting/student_attendance_report') }}">
-              <span>Student Attendance Report</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Report Nav -->
+            foreach ($dashboard as $main_menu => $sub_menu) {
+              $targetNavName = '#'.str_replace(' ', '', $main_menu).'-nav';
+              $navId         =  str_replace(' ', '', $main_menu).'-nav';
+              @endphp
+              <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="{{$targetNavName}}" data-bs-toggle="collapse" href="#">
+                  <i class="{{$icon_array[$main_menu]}}"></i><span>{{$main_menu}}</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="{{$navId}}" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  @php 
+                    foreach ($sub_menu as $menu) { 
+                  @endphp
+                        @if ($menu['type'] == 'route')
+                          <li>
+                            <a href="{{route($menu['menu_route'])}}">
+                              <span>{{$menu['sub_menu']}}</span>
+                            </a>
+                          </li>
+                        @else 
+                          <li>
+                            <a href="{{ url($menu['menu_route']) }}">
+                              <span>{{$menu['sub_menu']}}</span>
+                            </a>
+                          </li>
+                        @endif
+                  @php
+                    }
+                  @endphp
+                </ul>
+              </li>
+       @php } @endphp
 
       <!--<li class="nav-heading">Pages</li>-->
 
