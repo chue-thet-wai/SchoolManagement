@@ -133,6 +133,36 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
         Route::delete('delete/{id}','Shop\FoodOrderController@foodOrderDelete'); 
     });
 
+    Route::prefix('book_category')->group(function () {
+        Route::get('list','Library\BookCategoryController@bookCategoryList');
+        Route::post('list','Library\BookCategoryController@bookCategoryList');
+        Route::get('create','Library\BookCategoryController@bookCategoryCreate'); 
+        Route::post('save','Library\BookCategoryController@bookCategorySave'); 
+        Route::get('edit/{id}','Library\BookCategoryController@bookCategoryEdit'); 
+        Route::post('update/{id}','Library\BookCategoryController@bookCategoryUpdate'); 
+        Route::delete('delete/{id}','Library\BookCategoryController@bookCategoryDelete'); 
+    });
+
+    Route::prefix('book_register')->group(function () {
+        Route::get('list','Library\BookRegisterController@bookRegisterList');
+        Route::post('list','Library\BookRegisterController@bookRegisterList');
+        Route::get('create','Library\BookRegisterController@bookRegisterCreate'); 
+        Route::post('save','Library\BookRegisterController@bookRegisterSave'); 
+        Route::get('edit/{id}','Library\BookRegisterController@bookRegisterEdit'); 
+        Route::post('update/{id}','Library\BookRegisterController@bookRegisterUpdate'); 
+        Route::delete('delete/{id}','Library\BookRegisterController@bookRegisterDelete'); 
+    });
+
+    Route::prefix('book_rent')->group(function () {
+        Route::get('list','Library\BookRentController@bookRentList');
+        Route::post('list','Library\BookRentController@bookRentList');
+        Route::get('create','Library\BookRentController@bookRentCreate'); 
+        Route::post('save','Library\BookRentController@bookRentSave'); 
+        Route::get('edit/{id}','Library\BookRentController@bookRentEdit'); 
+        Route::post('update/{id}','Library\BookRentController@bookRentUpdate'); 
+        Route::delete('delete/{id}','Library\BookRentController@bookRentDelete'); 
+    });
+
 
     //for user 
     Route::resource('user','StaffInfoController');   

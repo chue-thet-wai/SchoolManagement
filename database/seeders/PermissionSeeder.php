@@ -192,6 +192,24 @@ class PermissionSeeder extends Seeder
                 "type"      =>"url"
             ),
             array(
+                'main_menu' =>"Library",
+                "sub_menu"  =>"Book Category",
+                "menu_route"=>"admin/book_category/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Library",
+                "sub_menu"  =>"Book Register",
+                "menu_route"=>"admin/book_register/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Library",
+                "sub_menu"  =>"Book Rent",
+                "menu_route"=>"admin/book_rent/list",
+                "type"      =>"url"
+            ),
+            array(
                 'main_menu' =>"Reporting",
                 "sub_menu"  =>"Student Registration Report",
                 "menu_route"=>"admin/reporting/studentregistration_report",
