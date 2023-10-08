@@ -15,8 +15,7 @@
 
 <section class="card">
     <div class="card-body">
-        <br />
-        
+        <br />        
         <div class="row g-4">
             <div class="col-md-1"></div>
             <div class="col-md-9" style='color:#012970;'>
@@ -36,11 +35,11 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label for="book_category"><b>Books<span style="color:brown">*</span></b></label>
+                        <label for="book_name"><b>Books<span style="color:brown">*</span></b></label>
                         <div class="col-sm-10">
-                            <select class="form-select" id="book_category" name="student_id" >
+                            <select class="form-select" id="book_name" name="book_id" >
                                 <option  value="99">--Select Books--</option>
-                                @foreach($books_list as $a)
+                                @foreach($book_list as $a)
                                     <option  value="{{$a->id}}">{{$a->title}}</option>
                                 @endforeach
                             </select>
@@ -58,7 +57,7 @@
                             <select class="form-select" id="book_category" name="student_id" >
                                 <option  value="99">--Select Student--</option>
                                 @foreach($student_list as $a)
-                                    <option  value="{{$a->id}}">{{$a->name}}</option>
+                                    <option  value="{{$a->student_id}}">{{$a->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -94,45 +93,9 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label for="actural_return_date"><b>Actual Return Date<span style="color:brown">*</span></b></label>
+                        <label for="actual_return_date"><b>Actual Return Date</b></label>
                         <div class="col-sm-10">
-                            <input type="date" name="actural_return_date" class="form-control" required>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br />
-            <div class="row g-4">
-                <div class="col-md-1"></div>
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <label for="author"><b>Author<span style="color:brown">*</span></b></label>
-                        <div class="col-sm-10">
-                            <input type="text" name="author" class="form-control" required>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br />
-            <div class="row g-4">
-                <div class="col-md-1"></div>
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <label for="quantity"><b>Quantity<span style="color:brown">*</span></b></label>
-                        <div class="col-sm-10">
-                            <input type="number" name="quantity" class="form-control" required>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br />
-            <div class="row g-4">
-                <div class="col-md-1"></div>
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <label for="name"><b>Description</b></label>
-                        <div class="col-sm-10">
-                            <textarea type="text" name="description" class="form-control"></textarea>
+                            <input type="date" name="actual_return_date" class="form-control">
                         </div>
                     </div>
                 </div>

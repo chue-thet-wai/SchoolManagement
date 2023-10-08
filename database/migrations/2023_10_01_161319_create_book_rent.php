@@ -22,6 +22,7 @@ return new class extends Migration
             $table->timestamp('actual_return_date')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
+            $table->softDeletes(); 
             $table->timestamps();
         });
     }

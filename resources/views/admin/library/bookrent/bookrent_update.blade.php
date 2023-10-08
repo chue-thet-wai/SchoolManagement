@@ -37,12 +37,16 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label for="book_category"><b>Books<span style="color:brown">*</span></b></label>
+                        <label for="book_name"><b>Books<span style="color:brown">*</span></b></label>
                         <div class="col-sm-10">
-                            <select class="form-select" id="book_category" name="student_id" >
+                            <select class="form-select" id="book_name" name="book_id" >
                                 <option  value="99">--Select Books--</option>
-                                @foreach($books_list as $a)
-                                    <option  value="{{$a->id}}">{{$a->title}}</option>
+                                @foreach($book_list as $a)
+                                    <option  value="{{$a->id}}"
+                                    @if ($result[0]->book_id == $a->id)
+                                        selected
+                                    @endif
+                                    >{{$a->title}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -59,7 +63,11 @@
                             <select class="form-select" id="book_category" name="student_id" >
                                 <option  value="99">--Select Student--</option>
                                 @foreach($student_list as $a)
-                                    <option  value="{{$a->id}}">{{$a->name}}</option>
+                                <option  value="{{$a->student_id}}"
+                                    @if ($result[0]->student_id == $a->id)
+                                        selected
+                                    @endif
+                                    >{{$a->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -95,9 +103,13 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label for="actural_return_date"><b>Actual Return Date<span style="color:brown">*</span></b></label>
+                        <label for="actual_return_date"><b>Actual Return Date</b></label>
                         <div class="col-sm-10">
-                            <input type="date" name="actural_return_date" value="{{date('Y-m-d',strtotime($result[0]->actual_return_date))}}" class="form-control" required>
+                            @if($result[0]->actual_return_date == null)
+                                <input type="date" name="actual_return_date" value="{{$result[0]->actual_return_date}}" class="form-control">
+                            @else
+                                <input type="date" name="actual_return_date" value="{{date('Y-m-d',strtotime($result[0]->actual_return_date))}}" class="form-control">
+                            @endif
                         </div>
                     </div>
                 </div>

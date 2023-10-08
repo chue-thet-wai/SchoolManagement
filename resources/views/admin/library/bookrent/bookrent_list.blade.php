@@ -55,7 +55,7 @@
                     <tr>
                         <th>No</th>
                         <th>Book</th>
-                        <th>Student Name</th>
+                        <th>Student ID</th>
                         <th>Rent Date</th>
                         <th>Return Date</th>
                         <th>Actual Return Date</th>
@@ -68,8 +68,8 @@
                         @foreach($list_result as $res)
                         <tr>
                             <td>@php echo $i;$i++; @endphp</td>
-                            <td>{{ $books[$res->book_id] }}</td>
-                            <td>{{ $studentList[$res->student_id] }}</td>
+                            <td>{{ $book_list[$res->book_id] }}</td>
+                            <td>{{$res->student_id}}</td>
                             <td>{{ $res->rent_date }}</td>
                             <td>{{ $res->return_date }}</td>
                             <td>{{ $res->actual_return_date }}</td>
@@ -91,7 +91,7 @@
                         @endforeach
                     @else
                     <tr>
-                        <td colspan="6">There are no data.</td>
+                        <td colspan="8">There are no data.</td>
                     </tr>
                     @endif
                 </tbody>

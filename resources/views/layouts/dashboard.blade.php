@@ -114,9 +114,10 @@
                 "Category"           => "bi bi-journal-text",
                 "Create Information" => "bi bi-layout-text-window-reverse",
                 "Registration"       => "bi bi-card-list",
-                "Exam"               => "bi bi-layout-text-window-reverse",
-                "Wallet"             => "bi bi-layout-text-window-reverse",
-                "Shop"               => "bi bi-layout-text-window-reverse",
+                "Exam"               => "bi bi-pencil-square",
+                "Wallet"             => "bi bi-wallet-fill",
+                "Shop"               => "bi bi-shop",
+                "Library"            => "bi bi-journals",
                 "Reporting"          => "bi bi-view-list",
               ];
 

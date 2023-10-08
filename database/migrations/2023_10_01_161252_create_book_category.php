@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('book_category', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('name');
             $table->string('remark')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->softDeletes(); 
+            $table->timestamps();
         });
     }
 

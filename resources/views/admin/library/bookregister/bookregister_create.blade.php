@@ -38,7 +38,7 @@
                     <div class="form-group">
                         <label for="book_category"><b>Book Category<span style="color:brown">*</span></b></label>
                         <div class="col-sm-10">
-                            <select class="form-select" id="book_category" name="student_id" >
+                            <select class="form-select" id="book_category" name="category_id" >
                                 <option  value="99">--Select Category--</option>
                                 @foreach($bookcategory_list as $a)
                                     <option  value="{{$a->id}}">{{$a->name}}</option>

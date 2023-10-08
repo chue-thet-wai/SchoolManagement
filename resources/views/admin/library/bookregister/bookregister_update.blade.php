@@ -23,13 +23,13 @@
                 <h4><b>Update Book Register</b></h4>
             </div>
             <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{ url('admin/book_category/list') }}" id="form-header-btn"> Back</a>
+                <a class="btn btn-sm btn-primary" href="{{ url('admin/book_register/list') }}" id="form-header-btn"> Back</a>
             </div>
             <div class="col-md-1"></div>
         </div>
 
         <br />
-        <form method="POST" action="{{ url('admin/book_category/update/'.$result[0]->id) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ url('admin/book_register/update/'.$result[0]->id) }}" enctype="multipart/form-data">
             @csrf
             <br />
             {{method_field('POST')}}
@@ -40,10 +40,14 @@
                     <div class="form-group">
                         <label for="book_category"><b>Book Category<span style="color:brown">*</span></b></label>
                         <div class="col-sm-10">
-                            <select class="form-select" id="book_category" name="student_id" >
+                            <select class="form-select" id="book_category" name="category_id" >
                                 <option  value="99">--Select Category--</option>
                                 @foreach($bookcategory_list as $a)
-                                    <option  value="{{$a->id}}">{{$a->name}}</option>
+                                    <option  value="{{$a->id}}"
+                                    @if ($result[0]->category_id == $a->id)
+                                        selected
+                                    @endif
+                                    >{{$a->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -57,7 +61,7 @@
                     <div class="form-group">
                         <label for="title"><b>Title<span style="color:brown">*</span></b></label>
                         <div class="col-sm-10">
-                            <input type="text" name="title" class="form-control" value="{{$result[0]->title)}}" required>
+                            <input type="text" name="title" class="form-control" value="{{$result[0]->title}}" required>
                         </div>
                     </div>
                 </div>
@@ -69,7 +73,7 @@
                     <div class="form-group">
                         <label for="author"><b>Author<span style="color:brown">*</span></b></label>
                         <div class="col-sm-10">
-                            <input type="text" name="author" class="form-control" value="{{$result[0]->author)}}" required>
+                            <input type="text" name="author" class="form-control" value="{{$result[0]->author}}" required>
                         </div>
                     </div>
                 </div>
@@ -81,7 +85,7 @@
                     <div class="form-group">
                         <label for="quantity"><b>Quantity<span style="color:brown">*</span></b></label>
                         <div class="col-sm-10">
-                            <input type="number" name="quantity" class="form-control" value="{{$result[0]->quantity)}}" required>
+                            <input type="number" name="quantity" class="form-control" value="{{$result[0]->quantity}}" required>
                         </div>
                     </div>
                 </div>
@@ -93,7 +97,7 @@
                     <div class="form-group">
                         <label for="name"><b>Description</b></label>
                         <div class="col-sm-10">
-                            <textarea type="text" name="description" class="form-control">{{$result[0]->description)}}</textarea>
+                            <textarea type="text" name="description" class="form-control">{{$result[0]->description}}</textarea>
                         </div>
                     </div>
                 </div>

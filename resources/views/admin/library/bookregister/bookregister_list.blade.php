@@ -68,7 +68,7 @@
                         <tr>
                             <td>@php echo $i;$i++; @endphp</td>
                             <td>{{ $res->title }}</td>
-                            <td>{{ $book_category[$res->category_id] }}</td>
+                            <td>{{ $bookcategory_list[$res->category_id] }}</td>
                             <td>{{ $res->author }}</td>
                             <td>{{ $res->quantity }}</td>
                             <td>{{ $res->remark }}</td>
