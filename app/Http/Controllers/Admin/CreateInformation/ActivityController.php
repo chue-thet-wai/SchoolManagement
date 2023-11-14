@@ -28,7 +28,7 @@ class ActivityController extends Controller
         $res = Activity::paginate(10);
         
         $class_list = $this->createInfoRepository->getClassSetup();
-        $classes=[];
+        $classes[0]="All";
         foreach($class_list as $a) {
             $classes[$a->id] = $a->name;
         }
@@ -63,7 +63,7 @@ class ActivityController extends Controller
         $res = $res->paginate(20);
              
         $class_list = $this->createInfoRepository->getClassSetup();
-        $classes=[];
+        $classes[0]="All";
         foreach($class_list as $a) {
             $classes[$a->id] = $a->name;
         }        

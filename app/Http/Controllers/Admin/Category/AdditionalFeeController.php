@@ -26,11 +26,50 @@ class AdditionalFeeController extends Controller
     public function index()
     {
         $res = AdditionalFee::paginate(10);
-        $grade_list    = $this->categoryRepository->getGrade();
+       
+        $grade_list_data    = $this->categoryRepository->getGrade();
+        $grade_list=[];
+        foreach($grade_list_data as $g) {
+            $grade_list[$g->id] = $g->name;
+        } 
         return view('admin.category.additionalfee_index',[
             'grade_list'=>$grade_list,
-            'list_result' => $res,
-            'action'=>'Add']);
+            'list_result' => $res
+            ]);
+    }
+
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function AdditionalFeeList(Request $request)
+    {  
+        $res = AdditionalFee::select('additional_fee.*');
+        if ($request['action'] == 'search') {
+            if (request()->has('additional_fee_name') && request()->input('additional_fee_name') != '') {
+                $res->where('name','Like', '%' . request()->input('additional_fee_name') . '%');
+            }
+            if (request()->has('additional_fee_grade_id') && request()->input('additional_fee_grade_id') != '') {
+                $res->where('grade_id', request()->input('additional_fee_grade_id'));
+            }
+        }else {
+            request()->merge([
+                'additional_fee_name'      => null,
+                'additional_fee_grade_id'  => null,
+            ]);
+        }       
+    
+        $res = $res->paginate(20);     
+
+        $grade_list_data    = $this->categoryRepository->getGrade();
+        $grade_list=[];
+        foreach($grade_list_data as $g) {
+            $grade_list[$g->id] = $g->name;
+        } 
+        return view('admin.category.additionalfee_index',[
+            'grade_list'=>$grade_list,
+            'list_result' => $res]);
     }
 
     /**
@@ -40,7 +79,11 @@ class AdditionalFeeController extends Controller
      */
     public function create()
     {
-        //
+        $grade_list    = $this->categoryRepository->getGrade();
+        return view('admin.category.additionalfee_registration',[
+            'grade_list'=>$grade_list,
+            'action'=>'Add'
+        ]);
     }
 
     /**
@@ -99,12 +142,10 @@ class AdditionalFeeController extends Controller
      */
     public function edit($id)
     {
-        $res = AdditionalFee::paginate(10);
         $grade_list    = $this->categoryRepository->getGrade();
         $update_res = AdditionalFee::where('id',$id)->get();
-        return view('admin.category.additionalfee_index',[
+        return view('admin.category.additionalfee_registration',[
             'grade_list'=>$grade_list,
-            'list_result' => $res,
             'result'      => $update_res,
             'action'      =>'Update'
         ]);

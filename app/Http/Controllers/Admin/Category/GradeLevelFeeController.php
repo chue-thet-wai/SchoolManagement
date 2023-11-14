@@ -26,16 +26,83 @@ class GradeLevelFeeController extends Controller
      */
     public function index()
     {
-        $res = GradeLevelFee::paginate(10);
-        $academic_list = $this->categoryRepository->getAcademicYear();
-        $grade_list    = $this->categoryRepository->getGrade();
-        $branch_list   = $this->categoryRepository->getBranch();
+        $res = GradeLevelFee::paginate(20);
+
+        $academic_list_data = $this->categoryRepository->getAcademicYear();
+        $academic_list=[];
+        foreach($academic_list_data as $a) {
+            $academic_list[$a->id] = $a->name;
+        } 
+
+        $branch_list_data   = $this->categoryRepository->getBranch();
+        $branch_list=[];
+        foreach($branch_list_data as $b) {
+            $branch_list[$b->id] = $b->name;
+        } 
+
+        $grade_list_data    = $this->categoryRepository->getGrade();
+        $grade_list=[];
+        foreach($grade_list_data as $g) {
+            $grade_list[$g->id] = $g->name;
+        } 
         return view('admin.category.gradelevelfee_index',[
             'academic_list'=>$academic_list,
             'grade_list'  =>$grade_list,
             'branch_list' =>$branch_list,
-            'list_result' => $res,
-            'action'      => 'Add'
+            'list_result' => $res
+        ]);
+    }
+
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function GradeLevelFeeList(Request $request)
+    {  
+        $res = GradeLevelFee::select('grade_level_fee.*');
+        if ($request['action'] == 'search') {
+            if (request()->has('grade_level_fee_branch_id') && request()->input('grade_level_fee_branch_id') != '') {
+                $res->where('branch_id', request()->input('grade_level_fee_branch_id'));
+            }
+            if (request()->has('grade_level_fee_academic_year_id') && request()->input('grade_level_fee_academic_year_id') != '') {
+                $res->where('academic_year_id', request()->input('grade_level_fee_academic_year_id'));
+            }
+            if (request()->has('grade_level_fee_grade_id') && request()->input('grade_level_fee_grade_id') != '') {
+                $res->where('grade_id', request()->input('grade_level_fee_grade_id'));
+            }
+        }else {
+            request()->merge([
+                'grade_level_fee_branch_id'         => null,
+                'grade_level_fee_academic_year_id'  => null,
+                'grade_level_fee_grade_id'          => null,
+            ]);
+        }     
+        $res = $res->paginate(20);  
+        
+        $academic_list_data = $this->categoryRepository->getAcademicYear();
+        $academic_list=[];
+        foreach($academic_list_data as $a) {
+            $academic_list[$a->id] = $a->name;
+        } 
+
+        $branch_list_data   = $this->categoryRepository->getBranch();
+        $branch_list=[];
+        foreach($branch_list_data as $b) {
+            $branch_list[$b->id] = $b->name;
+        } 
+
+        $grade_list_data    = $this->categoryRepository->getGrade();
+        $grade_list=[];
+        foreach($grade_list_data as $g) {
+            $grade_list[$g->id] = $g->name;
+        } 
+
+        return view('admin.category.gradelevelfee_index',[
+            'academic_list'=>$academic_list,
+            'grade_list'  =>$grade_list,
+            'branch_list' =>$branch_list,
+            'list_result' => $res
         ]);
     }
 
@@ -46,7 +113,16 @@ class GradeLevelFeeController extends Controller
      */
     public function create()
     {
-        //
+        $academic_list = $this->categoryRepository->getAcademicYear();
+        $grade_list    = $this->categoryRepository->getGrade();
+        $branch_list   = $this->categoryRepository->getBranch();
+
+        return view('admin.category.gradelevelfee_registration',[
+            'academic_list'=>$academic_list,
+            'grade_list'  =>$grade_list,
+            'branch_list' =>$branch_list,
+            'action'=>'Add'
+        ]);
     }
 
     /**
@@ -118,16 +194,16 @@ class GradeLevelFeeController extends Controller
      */
     public function edit($id)
     {
-        $res = GradeLevelFee::paginate(10);
         $academic_list = $this->categoryRepository->getAcademicYear();
         $grade_list    = $this->categoryRepository->getGrade();
         $branch_list   = $this->categoryRepository->getBranch();
+
         $update_res    = GradeLevelFee::where('id',$id)->get();
-        return view('admin.category.gradelevelfee_index',[
+
+        return view('admin.category.gradelevelfee_registration',[
             'academic_list'=>$academic_list,
             'grade_list'  =>$grade_list,
             'branch_list' =>$branch_list,
-            'list_result' => $res,
             'result'      => $update_res,
             'action'      => 'Update'
         ]);

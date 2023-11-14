@@ -41,6 +41,11 @@
                         <div class="col-sm-10">
                             <select class="form-select" id="class_id" name="class_id" >
                                 <option  value="99">select Class</option>
+                                <option  value="0" 
+                                    @if ($result[0]->class_id == '0')
+                                        selected
+                                    @endif
+                                >All</option>
                                 @foreach($classes as $a)
                                     <option  value="{{$a->id}}"
                                     @if ($result[0]->class_id == $a->id)

@@ -25,12 +25,52 @@ class RoomController extends Controller
      */
     public function index()
     {
-        $res = Room::paginate(10);
-        $branch_list   = $this->categoryRepository->getBranch();
+        $res = Room::paginate(20);
+
+        $branch_list_data   = $this->categoryRepository->getBranch();
+        $branch_list=[];
+        foreach($branch_list_data as $b) {
+            $branch_list[$b->id] = $b->name;
+        } 
+
         return view('admin.category.room_index',[
             'list_result' => $res,
-            'branch_list' =>$branch_list,
-            'action'      => 'Add'
+            'branch_list' =>$branch_list
+        ]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function RoomList(Request $request)
+    {  
+        $res = Room::select('room.*');
+        if ($request['action'] == 'search') {
+            if (request()->has('room_name') && request()->input('room_name') != '') {
+                $res->where('name','Like', '%' . request()->input('room_name') . '%');
+            }
+            if (request()->has('room_branch_id') && request()->input('room_branch_id') != '') {
+                $res->where('branch_id', request()->input('room_branch_id'));
+            }
+        }else {
+            request()->merge([
+                'room_name'         => null,
+                'room_branch_id'    => null,
+            ]);
+        }     
+        $res = $res->paginate(20);  
+      
+        $branch_list_data   = $this->categoryRepository->getBranch();
+        $branch_list=[];
+        foreach($branch_list_data as $b) {
+            $branch_list[$b->id] = $b->name;
+        } 
+
+        return view('admin.category.room_index',[
+            'list_result' => $res,
+            'branch_list' =>$branch_list
         ]);
     }
 
@@ -41,7 +81,12 @@ class RoomController extends Controller
      */
     public function create()
     {
-        //
+        $branch_list   = $this->categoryRepository->getBranch();
+
+        return view('admin.category.room_registration',[
+            'branch_list' =>$branch_list,
+            'action'=>'Add'
+        ]);
     }
 
     /**
@@ -101,11 +146,9 @@ class RoomController extends Controller
      */
     public function edit($id)
     {
-        $res = Room::paginate(10);
         $branch_list   = $this->categoryRepository->getBranch();
         $update_res = Room::where('id',$id)->get();
-        return view('admin.category.room_index',[
-            'list_result'=> $res,
+        return view('admin.category.room_registration',[
             'branch_list'=> $branch_list,
             'result'     => $update_res,
             'action'     => 'Update'

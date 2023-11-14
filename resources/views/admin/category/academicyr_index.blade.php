@@ -16,114 +16,115 @@
 <section class="card">
 
 	<div class="card-body">
-		@if ($action == 'Add')
-			<form class="row g-4" method="POST" action="{{route('academic_year.store')}}" enctype="multipart/form-data">
-				@csrf
-				<div class="form-group col-md-3">
-					<label for="name"><b>Name<span style="color:brown">*</span></b></label>
+		<div class="row g-4">
+            <div class="col-md-11" style='color:#012970;'>
+                <h4><b>Academic Year List</b></h4>
+            </div>
+            <div class="col-md-1">
+                <a class="btn btn-sm btn-primary" href="{{route('academic_year.create')}}" id="form-header-btn"> Create</a>
+            </div>
+        </div>
+        <br />
+		<form class="row g-4" method="POST" action="{{ url('admin/academic_year/list') }}" enctype="multipart/form-data">
+			@csrf
+			<div class='row g-4'>
+                <div class="form-group col-md-3">
+					<label for="academic_year_name"><b>Name</b></label>
 					<div class="col-sm-10">
-						<input type="text" name="name" class="form-control" required>
-					</div>
-				</div>
-				<div class="form-group col-md-3">
-					<label for="start_date"><b>Start Year</b></label>
-					<div class="col-sm-10">
-						<input type="date" name="start_date" class="form-control">
-					</div>
-				</div>
-				<div class="form-group col-md-3">
-					<label for="end_date"><b>End Year</b></label>
-					<div class="col-sm-10">
-						<input type="date" name="end_date" class="form-control">
-					</div>
-				</div>
-				<div class="form-group col-md-2">
-					<div class="d-grid mt-4">
-						<input type="submit" value="Add" class="btn btn-primary">
-					</div>
-				</div>
-			</form>
-		@else
-			<form class="row g-4" method="POST" action="{{route('academic_year.update',$result[0]->id)}}" enctype="multipart/form-data">
-				@csrf
-				{{method_field('PUT')}}
-				<div class="form-group col-md-3">
-					<label for="name"><b>Name<span style="color:brown">*</span></b></label>
-					<div class="col-sm-10">
-						<input type="text" name="name" value="{{$result[0]->name}}" class="form-control" required>
+						@if (request()->input('academic_year_name')=='')
+                            <input type="text" id="academic_year_name" name="academic_year_name" class="form-control">
+                        @else 
+                            <input type="text" id="academic_year_name" name="academic_year_name" value="{{request()->input('academic_year_name')}}" class="form-control">
+                        @endif
 					</div>
 				</div>
 				<div class="form-group col-md-3">
-					<label for="start_date"><b>Start Year</b></label>
+					<label for="academic_year_startdate"><b>Start Year</b></label>
 					<div class="col-sm-10">
-						<input type="date" name="start_date" value="{{date('Y-m-d',strtotime($result[0]->start_date))}}" class="form-control">
+                        @if (request()->input('academic_year_startdate')=='')
+                            <input type="date" id="academic_year_startdate" name="academic_year_startdate" class="form-control">
+                        @else 
+                            <input type="date" id="academic_year_startdate" name="academic_year_startdate" value="{{date('Y-m-d',strtotime(request()->input('academic_year_startdate')))}}" class="form-control">
+                        @endif
 					</div>
 				</div>
 				<div class="form-group col-md-3">
-					<label for="end_date"><b>End Year</b></label>
+					<label for="academic_year_enddate"><b>End Year</b></label>
 					<div class="col-sm-10">
-						<input type="date" name="end_date" value="{{date('Y-m-d',strtotime($result[0]->end_date))}}" class="form-control">
+                        @if (request()->input('academic_year_enddate')=='')
+                            <input type="date" id="academic_year_enddate" name="academic_year_enddate" class="form-control">
+                        @else 
+                            <input type="date" id="academic_year_enddate" name="academic_year_enddate" value="{{date('Y-m-d',strtotime(request()->input('academic_year_enddate')))}}" class="form-control">
+                        @endif
 					</div>
 				</div>
-				<div class="form-group col-md-2">
-					<div class="d-grid mt-4">
-						<input type="submit" value="Update" class="btn btn-primary">
+			</div>			
+			<div class='row p-3'>
+				<div class="form-group col-sm-1 p-2">
+					<div class="d-grid mt-2">
+						<button type="submit" name="action" value="search" class="btn btn-sm btn-primary">Search</button>
 					</div>
 				</div>
-			</form>
-		@endif
+				<div class="form-group col-sm-1 p-2">
+					<div class="d-grid mt-2">
+						<button type="submit" name="action" value="reset" class="btn btn-sm btn-primary">Reset</button>
+					</div>
+				</div>					
+			</div>
+		</form>
 		<br />
-		<br />
-		<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
-			<thead>
-				<tr>
-					<th>No</th>
-					<th>Name</th>
-					<th>Start</th>
-					<th>End</th>
-					<th>Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				@if(!empty($list_result) && $list_result->count())
-					@php $i=1;@endphp
-					@foreach($list_result as $res)
+		<div class="row g-4 m-2" style="display: flex;overflow-x: auto;">
+			<table cellpadding="0" cellspacing="0" class="datatable table table-striped table-bordered">
+				<thead>
 					<tr>
-						<td>@php echo $i;$i++; @endphp</td>
-						<td>{{$res->name}}</td>
-						@if ($res->start_date != null) 
-							<td>{{date('Y-m-d',strtotime($res->start_date))}}</td>
-						@else 
-							<td></td>
-						@endif
-						@if ($res->end_date != null) 
-							<td>{{date('Y-m-d',strtotime($res->end_date))}}</td>
-						@else 
-							<td></td>
-						@endif
-						<td class="center">
-							<a href="{{route('academic_year.edit',$res->id)}}">
-								<button type="submit" value="edit" class="btn m-1 p-0 border-0">
-									<span id="boot-icon" class="bi bi-pencil-square" style="font-size: 20px; color:rgb(58 69 207);"></span>
-								</button>                            
-							</a>
-							<form method="post" action="{{route('academic_year.destroy',$res->id)}}" style="display: inline;">
-								@csrf
-								{{ method_field('DELETE') }}
-								<button type="submit" value="delete" class="btn m-0 p-0 border-0">
-									<span id="boot-icon" class="bi bi-trash" style="font-size: 20px; color: rgb(165, 42, 42);"></span>
-								</button>
-							</form>
-						</td>
+						<th>No</th>
+						<th>Name</th>
+						<th>Start</th>
+						<th>End</th>
+						<th>Action</th>
 					</tr>
-					@endforeach
-				@else
-				<tr>
-					<td colspan="5">There are no data.</td>
-				</tr>
-				@endif
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					@if(!empty($list_result) && $list_result->count())
+						@php $i=1;@endphp
+						@foreach($list_result as $res)
+						<tr>
+							<td>@php echo $i;$i++; @endphp</td>
+							<td>{{$res->name}}</td>
+							@if ($res->start_date != null) 
+								<td>{{date('Y-m-d',strtotime($res->start_date))}}</td>
+							@else 
+								<td></td>
+							@endif
+							@if ($res->end_date != null) 
+								<td>{{date('Y-m-d',strtotime($res->end_date))}}</td>
+							@else 
+								<td></td>
+							@endif
+							<td class="center">
+								<a href="{{route('academic_year.edit',$res->id)}}">
+									<button type="submit" value="edit" class="btn m-1 p-0 border-0">
+										<span id="boot-icon" class="bi bi-pencil-square" style="font-size: 20px; color:rgb(58 69 207);"></span>
+									</button>                            
+								</a>
+								<form method="post" action="{{route('academic_year.destroy',$res->id)}}" style="display: inline;">
+									@csrf
+									{{ method_field('DELETE') }}
+									<button type="submit" value="delete" class="btn m-0 p-0 border-0">
+										<span id="boot-icon" class="bi bi-trash" style="font-size: 20px; color: rgb(165, 42, 42);"></span>
+									</button>
+								</form>
+							</td>
+						</tr>
+						@endforeach
+					@else
+					<tr>
+						<td colspan="5">There are no data.</td>
+					</tr>
+					@endif
+				</tbody>
+			</table>
+		</div>
 		<div class="d-flex">
             {!! $list_result->links() !!}
         </div>

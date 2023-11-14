@@ -17,13 +17,21 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middleware'=>['adminpermission']],function(){
     //for Category
     Route::resource('academic_year','Category\AcademicYearController');  
+    Route::post('academic_year/list','Category\AcademicYearController@AcademicYearList');
     Route::resource('branch','Category\BranchController'); 
+    Route::post('branch/list','Category\BranchController@BranchList');
     Route::resource('room','Category\RoomController'); 
+    Route::post('room/list','Category\RoomController@RoomList');
     Route::resource('grade','Category\GradeController');  
+    Route::post('grade/list','Category\GradeController@GradeList');
     Route::resource('section','Category\SectionController'); 
+    Route::post('section/list','Category\SectionController@SectionList');
     Route::resource('grade_level_fee','Category\GradeLevelFeeController'); 
+    Route::post('grade_level_fee/list','Category\GradeLevelFeeController@GradeLevelFeeList');
     Route::resource('additional_fee','Category\AdditionalFeeController'); 
+    Route::post('additional_fee/list','Category\AdditionalFeeController@AdditionalFeeList');
     Route::resource('subject','Category\SubjectController'); 
+    Route::post('subject/list','Category\SubjectController@SubjectList');
 
     //import township
     Route::get('/township/list','Category\TownshipController@townshipList');

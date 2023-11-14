@@ -39,6 +39,7 @@
                         <div class="col-sm-10">
                             <select class="form-select" id="class_id" name="class_id" >
                                 <option  value="99">select Class</option>
+                                <option  value="0">All</option>
                                 @foreach($classes as $a)
                                     <option  value="{{$a->id}}">{{$a->name}}</option>
                                 @endforeach

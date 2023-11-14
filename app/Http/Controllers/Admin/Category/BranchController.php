@@ -18,8 +18,34 @@ class BranchController extends Controller
      */
     public function index()
     {
-        $res = Branch::paginate(10);
-        return view('admin.category.branch_index',['list_result' => $res,'action'=>'Add']);
+        $res = Branch::paginate(20);
+        return view('admin.category.branch_index',['list_result' => $res]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function BranchList(Request $request)
+    {  
+        $res = Branch::select('branch.*');
+        if ($request['action'] == 'search') {
+            if (request()->has('branch_name') && request()->input('branch_name') != '') {
+                $res->where('name','Like', '%' . request()->input('branch_name') . '%');
+            }
+            if (request()->has('branch_phone') && request()->input('branch_phone') != '') {
+                $res->where('phone', request()->input('branch_phone'));
+            }
+        }else {
+            request()->merge([
+                'branch_name'      => null,
+                'branch_phone'     => null,
+            ]);
+        }     
+        $res = $res->paginate(20);   
+
+        return view('admin.category.branch_index',['list_result' => $res]);
     }
 
     /**
@@ -29,7 +55,9 @@ class BranchController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.category.branch_registration',[
+            'action'=>'Add'
+        ]);
     }
 
     /**
@@ -88,7 +116,7 @@ class BranchController extends Controller
     {
         $res = Branch::paginate(10);
         $update_res = Branch::where('id',$id)->get();
-        return view('admin.category.branch_index',[
+        return view('admin.category.branch_registration',[
             'list_result' => $res,
             'result'      => $update_res,
             'action'      => 'Update'

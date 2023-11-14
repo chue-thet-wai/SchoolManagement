@@ -19,7 +19,29 @@ class GradeController extends Controller
     public function index()
     {
         $res = Grade::paginate(10);
-        return view('admin.category.grade_index',['list_result' => $res,'action'=>'Add']);
+        return view('admin.category.grade_index',['list_result' => $res]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function GradeList(Request $request)
+    {  
+        $res = Grade::select('grade.*');
+        if ($request['action'] == 'search') {
+            if (request()->has('grade_name') && request()->input('grade_name') != '') {
+                $res->where('name','Like', '%' . request()->input('grade_name') . '%');
+            }
+        }else {
+            request()->merge([
+                'grade_name'      => null,
+            ]);
+        }     
+        $res = $res->paginate(20);  
+
+        return view('admin.category.grade_index',['list_result' => $res]);
     }
 
     /**
@@ -29,7 +51,9 @@ class GradeController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.category.grade_registration',[
+            'action'=>'Add'
+        ]);
     }
 
     /**
@@ -84,10 +108,8 @@ class GradeController extends Controller
      */
     public function edit($id)
     {
-        $res = Grade::paginate(10);
         $update_res = Grade::where('id',$id)->get();
-        return view('admin.category.grade_index',[
-            'list_result' => $res,
+        return view('admin.category.grade_registration',[
             'result'      => $update_res,
             'action'      => 'Update'
         ]);

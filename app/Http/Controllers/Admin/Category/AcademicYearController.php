@@ -19,7 +19,39 @@ class AcademicYearController extends Controller
     public function index()
     {
         $res = AcademicYear::paginate(10);
-        return view('admin.category.academicyr_index',['list_result' => $res,'action'=>'Add']);
+        return view('admin.category.academicyr_index',['list_result' => $res]);
+    }
+
+    
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function AcademicYearList(Request $request)
+    {  
+        $res = AcademicYear::select('academic_year.*');
+        if ($request['action'] == 'search') {
+            if (request()->has('academic_year_name') && request()->input('academic_year_name') != '') {
+                $res->where('name','Like', '%' . request()->input('academic_year_name') . '%');
+            }
+            if (request()->has('academic_year_startdate') && request()->input('academic_year_startdate') != '') {
+                $res->where('start_date', '>=',request()->input('academic_year_startdate'));
+            }
+            if (request()->has('academic_year_enddate') && request()->input('academic_year_enddate') != '') {
+                $res->where('end_date', '<=', request()->input('academic_year_enddate'));
+            }
+        }else {
+            request()->merge([
+                'academic_year_name'      => null,
+                'academic_year_startdate' => null,
+                'academic_year_enddate'   => null,
+            ]);
+        }       
+    
+        $res = $res->paginate(20);     
+
+        return view('admin.category.academicyr_index',['list_result' => $res]);
     }
 
     /**
@@ -28,8 +60,10 @@ class AcademicYearController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        //
+    {          
+        return view('admin.category.academicyr_registration',[
+            'action'=>'Add'
+        ]);
     }
 
     /**
@@ -86,10 +120,8 @@ class AcademicYearController extends Controller
      */
     public function edit($id)
     {
-        $list_res = AcademicYear::paginate(10);
         $res = AcademicYear::where('id',$id)->get();
-        return view('admin.category.academicyr_index',[
-            'list_result'=>$list_res,
+        return view('admin.category.academicyr_registration',[
             'result'=>$res,
             'action'=>'Update'
         ]);

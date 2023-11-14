@@ -26,12 +26,50 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $res = Subject::paginate(10);
-        $grade_list = $this->categoryRepository->getGrade();
+        $res = Subject::paginate(20);
+
+        $grade_list_data = $this->categoryRepository->getGrade();
+        $grade_list=[];
+        foreach($grade_list_data as $g) {
+            $grade_list[$g->id] = $g->name;
+        } 
         return view('admin.category.subject_index',[
             'grade_list'  =>$grade_list,
-            'list_result' => $res,
-            'action'      => 'Add'
+            'list_result' => $res
+        ]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function SubjectList(Request $request)
+    {  
+        $res = Subject::select('subject.*');
+        if ($request['action'] == 'search') {
+            if (request()->has('subject_name') && request()->input('subject_name') != '') {
+                $res->where('name','Like', '%' . request()->input('subject_name') . '%');
+            }
+            if (request()->has('subject_grade_id') && request()->input('subject_grade_id') != '') {
+                $res->where('grade_id', request()->input('subject_grade_id'));
+            }
+        }else {
+            request()->merge([
+                'subject_name'         => null,
+                'subject_grade_id'     => null,
+            ]);
+        }     
+        $res = $res->paginate(20);  
+      
+        $grade_list_data = $this->categoryRepository->getGrade();
+        $grade_list=[];
+        foreach($grade_list_data as $g) {
+            $grade_list[$g->id] = $g->name;
+        } 
+        return view('admin.category.subject_index',[
+            'grade_list'  =>$grade_list,
+            'list_result' => $res
         ]);
     }
 
@@ -42,7 +80,11 @@ class SubjectController extends Controller
      */
     public function create()
     {
-        //
+        $grade_list = $this->categoryRepository->getGrade();
+        return view('admin.category.subject_registration',[
+            'grade_list'  =>$grade_list,
+            'action'      => 'Add'
+        ]);
     }
 
     /**
@@ -103,12 +145,10 @@ class SubjectController extends Controller
      */
     public function edit($id)
     {
-        $res = Subject::paginate(10);
         $grade_list = $this->categoryRepository->getGrade();
         $update_res = Subject::where('id',$id)->get();
-        return view('admin.category.subject_index',[
+        return view('admin.category.subject_registration',[
             'grade_list'  =>$grade_list,
-            'list_result' => $res,
             'result'      => $update_res,
             'action'      => 'Update'
         ]);
