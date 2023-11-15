@@ -11,16 +11,6 @@ use Illuminate\Support\Facades\Log;
 
 class SectionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $res = Section::paginate(20);
-        return view('admin.category.section_index',['list_result' => $res]);
-    }
 
     /**
      * Display a listing of the resource.
@@ -82,7 +72,7 @@ class SectionController extends Controller
         
         if($result){
             $res = Section::paginate(10);
-            return redirect(route('section.index',['list_result' => $res]))
+            return redirect(url('admin/section/list'))
                             ->with('success','Section Added Successfully!');
         }else{
             return redirect()->back()->with('danger','Section Added Fail !');
@@ -144,7 +134,7 @@ class SectionController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(route('section.index'))->with('success','Section Updated Successfully!');
+                return redirect(url('admin/section/list'))->with('success','Section Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Section Updated Fail !');
             }
@@ -169,8 +159,7 @@ class SectionController extends Controller
             
             $res = Section::where('id',$id)->delete();
             if($res){
-                $listres = Section::paginate(10);
-                return redirect(route('section.index',['list_result' => $listres]))
+                return redirect(url('admin/section/list'))
                             ->with('success','Section Deleted Successfully!');
             }
         }else{

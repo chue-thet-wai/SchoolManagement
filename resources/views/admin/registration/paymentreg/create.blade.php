@@ -78,7 +78,7 @@
                 <h4><b>Create Payment Registration</b></h4>
             </div>
             <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{route('payment.index')}}" id="form-header-btn"> Back</a>
+                <a class="btn btn-sm btn-primary" href="{{url('admin/payment/list')}}" id="form-header-btn"> Back</a>
             </div>
             <div class="col-md-1"></div>
         </div>

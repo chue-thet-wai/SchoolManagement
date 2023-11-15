@@ -26,7 +26,7 @@
             @endif
             </div>
             <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{route('additional_fee.index')}}" id="form-header-btn"> Back</a>
+                <a class="btn btn-sm btn-primary" href="{{url('admin/branch/list')}}" id="form-header-btn"> Back</a>
             </div>
             <div class="col-md-1"></div>
         </div>

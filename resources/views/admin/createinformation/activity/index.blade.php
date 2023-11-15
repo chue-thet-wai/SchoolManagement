@@ -33,7 +33,11 @@
 					<label for="activity_classid"><b>Class</b></label>
 					<div class="col-sm-10">
                         <select class="form-select" id="activity_classid" name="activity_classid">
-                            <option value=''>--Select--</option>
+                            @if (request()->input('activity_classid') == '' || request()->input('activity_classid')=='99')
+                                <option value='99' selected>--Select--</option>
+                            @else
+                                <option value='99'>--Select--</option>
+                            @endif
                             @foreach($classes as $key => $value)
                             <option value="{{$key}}" 
                             @if (request()->input('activity_classid') == $key)
@@ -101,7 +105,7 @@
                                     @csrf
                                     {{ method_field('DELETE') }}
                                     <button type="submit" value="delete" class="btn m-1 p-0 border-0">
-                                        <span id="boot-icon" class="bi bi-trash" style="font-size: 20px; color: rgb(58 69 207);"></span>
+                                        <span id="boot-icon" class="bi bi-trash" style="font-size: 20px; color: rgb(165, 42, 42);"></span>
                                     </button>
                                 </form>
                             </td>

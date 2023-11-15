@@ -11,16 +11,6 @@ use Illuminate\Support\Facades\Log;
 
 class GradeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $res = Grade::paginate(10);
-        return view('admin.category.grade_index',['list_result' => $res]);
-    }
 
     /**
      * Display a listing of the resource.
@@ -81,9 +71,7 @@ class GradeController extends Controller
         $result=Grade::insert($insertData);
         
         if($result){
-            $res = Grade::paginate(10);
-            return redirect(route('grade.index',['list_result' => $res]))
-                            ->with('success','Grade Added Successfully!');
+            return redirect(url('admin/grade/list'))->with('success','Grade Added Successfully!');
         }else{
             return redirect()->back()->with('danger','Grade Added Fail !');
         }
@@ -143,7 +131,7 @@ class GradeController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(route('grade.index'))->with('success','Grade Updated Successfully!');
+                return redirect(url('admin/grade/list'))->with('success','Grade Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Grade Updated Fail !');
             }
@@ -169,10 +157,7 @@ class GradeController extends Controller
             
             $res = Grade::where('id',$id)->delete();
             if($res){
-                $listres = Grade::paginate(10);
-
-                return redirect(route('grade.index',['list_result' => $listres]))
-                            ->with('success','Grade Deleted Successfully!');
+                return redirect(url('admin/grade/list'))->with('success','Grade Deleted Successfully!');
             }
         }else{
             return redirect()->back()->with('error','There is no result with this grade.');

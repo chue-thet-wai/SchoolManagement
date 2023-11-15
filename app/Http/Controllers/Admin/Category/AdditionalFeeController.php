@@ -18,26 +18,6 @@ class AdditionalFeeController extends Controller
     {
         $this->categoryRepository = $categoryRepository;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $res = AdditionalFee::paginate(10);
-       
-        $grade_list_data    = $this->categoryRepository->getGrade();
-        $grade_list=[];
-        foreach($grade_list_data as $g) {
-            $grade_list[$g->id] = $g->name;
-        } 
-        return view('admin.category.additionalfee_index',[
-            'grade_list'=>$grade_list,
-            'list_result' => $res
-            ]);
-    }
-
      /**
      * Display a listing of the resource.
      *
@@ -115,8 +95,7 @@ class AdditionalFeeController extends Controller
         $result=AdditionalFee::insert($insertData);
         
         if($result){
-            $res = AdditionalFee::paginate(10);
-            return redirect(route('additional_fee.index',['list_result' => $res]))
+            return redirect(url('admin/additional_fee/list'))
                             ->with('success','Additional Fee Added Successfully!');
         }else{
             return redirect()->back()->with('danger','Additional Fee Added Fail !');
@@ -182,7 +161,7 @@ class AdditionalFeeController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(route('additional_fee.index'))->with('success','Additionnal Fee Updated Successfully!');
+                return redirect(url('admin/additional_fee/list'))->with('success','Additionnal Fee Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Additional Fee Updated Fail !');
             }
@@ -208,9 +187,7 @@ class AdditionalFeeController extends Controller
             
             $res = AdditionalFee::where('id',$id)->delete();
             if($res){
-                $listres = AdditionalFee::paginate(10);
-
-                return redirect(route('additional_fee.index',['list_result' => $listres]))
+                return redirect(url('admin/additional_fee/list'))
                             ->with('success','Additional Fee Deleted Successfully!');
             }
         }else{

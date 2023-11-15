@@ -21,39 +21,6 @@ class ScheduleController extends Controller
         $this->createInfoRepository = $createInfoRepository;
         $this->categoryRepository = $categoryRepository;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $res = Schedules::paginate(10);
-        
-        $class_list = $this->createInfoRepository->getClassSetup();
-        $classes=[];
-        foreach($class_list as $a) {
-            $classes[$a->id] = $a->name;
-        }
-        $teacher_list    = $this->createInfoRepository->getTeacherList();
-        $teachers=[];
-        foreach($teacher_list as $a) {
-            $teachers[$a->id] = $a->name;
-        }
-        $subject_list    = $this->categoryRepository->getSubject();
-        $subjects=[];
-        foreach($subject_list as $a) {
-            $subjects[$a->id] = $a->name;
-        }
-        $weekdays    = $this->createInfoRepository->getWeekDays();
-
-        return view('admin.createinformation.schedule.index',[
-            'classes'      =>$classes,
-            'teacher_list' =>$teachers,
-            'subjects'     =>$subjects,
-            'weekdays'     =>$weekdays,
-            'list_result'  => $res]);
-    }
 
      /**
      * Display a listing of the resource.
@@ -180,7 +147,7 @@ class ScheduleController extends Controller
                         
             if($result){      
                 DB::commit();
-                return redirect(route('schedule.index'))->with('success','Schedule Created Successfully!');
+                return redirect(url('admin/schedule/list'))->with('success','Schedule Created Successfully!');
             }else{
                 return redirect()->back()->with('danger','Schedule Created Fail !');
             }
@@ -276,7 +243,7 @@ class ScheduleController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(route('schedule.index'))->with('success','Schedule Updated Successfully!');
+                return redirect(url('admin/schedule/list'))->with('success','Schedule Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Schedule Updated Fail !');
             }
@@ -306,7 +273,7 @@ class ScheduleController extends Controller
                 if($res){
                     DB::commit();
                     //To return list
-                    return redirect(route('schedule.index'))->with('success','Schedule Deleted Successfully!');
+                    return redirect(url('admin/schedule/list'))->with('success','Schedule Deleted Successfully!');
                 }
             }else{
                 return redirect()->back()->with('error','There is no result with this schedule.');

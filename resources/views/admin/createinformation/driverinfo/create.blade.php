@@ -26,7 +26,7 @@
                 <h4><b>Create Driver Information</b></h4>
             </div>
             <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{route('driver_info.index')}}" id="form-header-btn"> Back</a>
+                <a class="btn btn-sm btn-primary" href="{{url('admin/driver_info/list')}}" id="form-header-btn"> Back</a>
             </div>
             <div class="col-md-1"></div>
         </div>

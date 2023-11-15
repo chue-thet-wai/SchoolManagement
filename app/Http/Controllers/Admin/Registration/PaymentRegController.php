@@ -26,9 +26,25 @@ class PaymentRegController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function paymentList(Request $request)
     {
-        $res = PaymentRegistration::paginate(10);
+        $res = PaymentRegistration::select('payment_registration.*');
+        if ($request['action'] == 'search') {
+            if (request()->has('payment_id') && request()->input('payment_id') != '') {
+                $res->where('payment_id',request()->input('payment_id'));
+            }
+            if (request()->has('payment_regno') && request()->input('payment_regno') != '') {
+                $res->where('registration_no', request()->input('payment_regno'));
+            }
+        }else {
+            request()->merge([
+                'payment_id'      => null,
+                'payment_regno'   => null
+            ]);
+        }  
+        
+        $res=$res->paginate(20);
+
         $paymentType = array(
             '0'  => 'Monthly',
             '1'  => 'Yearly'
@@ -118,7 +134,7 @@ class PaymentRegController extends Controller
                         
             if($result){            
                 DB::commit();
-                return redirect(route('payment.index'))->with('success','Payment Registration Created Successfully!');
+                return redirect(url('admin/payment/list'))->with('success','Payment Registration Created Successfully!');
             }else{
                 return redirect()->back()->with('danger','Payment Registration Created Fail !');
             }
@@ -249,7 +265,7 @@ class PaymentRegController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(route('payment.index'))->with('success','Payment Registration Updated Successfully!');
+                return redirect(url('admin/payment/list'))->with('success','Payment Registration Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Payment Registration Updated Fail !');
             }
@@ -286,7 +302,7 @@ class PaymentRegController extends Controller
             }
             DB::commit();
             //To return list
-            return redirect(route('payment.index'))->with('success','Payment Registration Deleted Successfully!');
+            return redirect(url('admin/payment/list'))->with('success','Payment Registration Deleted Successfully!');
 
         }catch(\Exception $e){
             DB::rollback();

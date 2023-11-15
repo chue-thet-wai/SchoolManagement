@@ -2,12 +2,11 @@
 
 @section('content')
 <div class="pagetitle">
-	<h1>User Management</h1>
+	<h1>Expense</h1>
 	<nav>
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
-			<li class="breadcrumb-item active">User Management</li>
-            <li class="breadcrumb-item active">User</li>
+			<li class="breadcrumb-item active">Expense</li>
 		</ol>
 	</nav>
 	@include('layouts.error')
@@ -16,39 +15,37 @@
 <section class="card">
     <div class="card-body">
         <br />
-        
+       
         <div class="row g-4">
             <div class="col-md-11" style='color:#012970;'>
-                <h4><b>User List</b></h4>
+                <h4><b>Expense List</b></h4>
             </div>
             <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{route('user.create')}}" id="form-header-btn"> Create</a>
+                <a class="btn btn-sm btn-primary" href="{{url('admin/expense/create')}}" id="form-header-btn"> Create</a>
             </div>
         </div>
         <br />
-        <form class="row g-4" method="POST" action="{{ url('admin/user/list') }}" enctype="multipart/form-data">
+        <form class="row g-4" method="POST" href="{{ url('admin/expense/list') }}" enctype="multipart/form-data">
 			@csrf
 			<div class='row g-4'>
 				<div class="form-group col-md-3">
-					<label for="staffinfo_name"><b>Name</b></label>
+					<label for="expense_title"><b>Title</b></label>
 					<div class="col-sm-10">
-						<input type="text" name="staffinfo_name" class="form-control" value="{{ request()->input('staffinfo_name') }}">
+						<input type="text" name="expense_title" class="form-control" value="{{ request()->input('expense_title') }}">
 					</div>
 				</div>
-				<div class="form-group col-md-3">
-					<label for="staffinfo_email"><b>Email</b></label>
+                <div class="form-group col-md-3">
+					<label for="expensefilter_date"><b>Expense Date</b></label>
 					<div class="col-sm-10">
-						<input type="text" name="staffinfo_email" class="form-control" value="{{ request()->input('staffinfo_email') }}">
+                        @if (request()->input('expensefilter_date')=='')
+                            <input type="date" id="expensefilter_date" name="expensefilter_date" class="form-control">
+                        @else 
+                            <input type="date" id="expensefilter_date" name="expensefilter_date" value="{{date('Y-m-d',strtotime(request()->input('expensefilter_date')))}}" class="form-control">
+                        @endif
 					</div>
 				</div>
-				<div class="form-group col-md-3">
-					<label for="staffinfo_contactno"><b>Contact Number</b></label>
-					<div class="col-sm-10">
-						<input type="text" name="staffinfo_contactno" class="form-control" value="{{ request()->input('staffinfo_contactno') }}">
-					</div>
-				</div>
-			</div>
-			
+				
+			</div>			
 			<div class='row p-3'>
 				<div class="form-group col-sm-1 p-2">
 					<div class="d-grid mt-2">
@@ -68,12 +65,9 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Name</th>
-                        <th>Login Name</th>
-                        <th>Email</th>
-                        <th>Contact Number</th>
-                        <th>Start Working Date</th>
-                        <th>Status</th>
+                        <th>Title</th>
+                        <th>Expense Date</th>
+                        <th>Amount</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -83,24 +77,18 @@
                         @foreach($list_result as $res)
                         <tr>
                             <td>@php echo $i;$i++; @endphp</td>
-                            <td>{{ $res->name }}</td>
-                            <td>{{ $res->login_name }}</td>
-                            <td>{{ $res->email }}</td>
-                            <td>{{ $res->contact_number }}</td>
-                            <td>{{ $res->startworking_date }}</td>
-                            <td>@if ($res->resign_status == '1')
-                                    Active
-                                @else
-                                    Inactive
-                                @endif
+                            <td>{{ $res->title }}</td>
+                            <td>@if($res->expense_date != '') 
+                                {{ date('Y-m-d',strtotime($res->expense_date)) }} @else '' @endif
                             </td>
+                            <td>{{ $res->amount }}</td>
                             <td class="center">
-                                <a href="{{route('user.edit',$res->user_id)}}">
-                                    <button type="submit" value="delete" class="btn m-1 p-0 border-0">
+                                <a href="{{ url('admin/expense/edit/'.$res->id) }}">
+                                    <button type="submit" value="edit" class="btn m-1 p-0 border-0">
                                         <span id="boot-icon" class="bi bi-pencil-square" style="font-size: 20px; color:rgb(58 69 207);"></span>
                                     </button>                            
                                 </a>
-                                <form method="post" action="{{route('user.destroy',$res->user_id)}}" style="display: inline;">
+                                <form method="post" action="{{ url('admin/expense/delete/'.$res->id) }}" style="display: inline;">
                                     @csrf
                                     {{ method_field('DELETE') }}
                                     <button type="submit" value="delete" class="btn m-1 p-0 border-0">
@@ -112,7 +100,7 @@
                         @endforeach
                     @else
                     <tr>
-                        <td colspan="8">There are no data.</td>
+                        <td colspan="5">There are no data.</td>
                     </tr>
                     @endif
                 </tbody>

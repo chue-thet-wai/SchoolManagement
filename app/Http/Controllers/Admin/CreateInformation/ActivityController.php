@@ -18,25 +18,6 @@ class ActivityController extends Controller
     {
         $this->createInfoRepository = $createInfoRepository;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $res = Activity::paginate(10);
-        
-        $class_list = $this->createInfoRepository->getClassSetup();
-        $classes[0]="All";
-        foreach($class_list as $a) {
-            $classes[$a->id] = $a->name;
-        }
-
-        return view('admin.createinformation.activity.index',[
-            'classes'      =>$classes,
-            'list_result'  => $res]);
-    }
 
      /**
      * Display a listing of the resource.
@@ -47,7 +28,7 @@ class ActivityController extends Controller
     {  
         $res = Activity::select('activities.*');
         if ($request['action'] == 'search') {
-            if (request()->has('activity_classid') && request()->input('activity_classid') != '') {
+            if (request()->has('activity_classid') && request()->input('activity_classid') != '' && request()->input('activity_classid') != '99') {
                 $res->where('class_id', request()->input('activity_classid'));
             }
             if (request()->has('activity_date') && request()->input('activity_date') != '') {
@@ -55,7 +36,7 @@ class ActivityController extends Controller
             }
         }else {
             request()->merge([
-                'activity_classid' => null,
+                'activity_classid' => '99',
                 'activity_date' => null,
             ]);
         }       
@@ -129,7 +110,7 @@ class ActivityController extends Controller
                         
             if($result){      
                 DB::commit();
-                return redirect(route('activity.index'))->with('success','Acivity Created Successfully!');
+                return redirect(url('admin/activity/list'))->with('success','Acivity Created Successfully!');
             }else{
                 return redirect()->back()->with('danger','Activity Created Fail !');
             }
@@ -210,7 +191,7 @@ class ActivityController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(route('activity.index'))->with('success','Activity Updated Successfully!');
+                return redirect(url('admin/activity/list'))->with('success','Activity Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Activity Updated Fail !');
             }
@@ -240,7 +221,7 @@ class ActivityController extends Controller
                 if($res){
                     DB::commit();
                     //To return list
-                    return redirect(route('activity.index'))->with('success','Activity Deleted Successfully!');
+                    return redirect(url('admin/activity/list'))->with('success','Activity Deleted Successfully!');
                 }
             }else{
                 return redirect()->back()->with('error','There is no result with this activity.');

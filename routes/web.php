@@ -16,42 +16,55 @@ use Illuminate\Support\Facades\Route;
 //Admin
 Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middleware'=>['adminpermission']],function(){
     //for Category
-    Route::resource('academic_year','Category\AcademicYearController');  
-    Route::post('academic_year/list','Category\AcademicYearController@AcademicYearList');
-    Route::resource('branch','Category\BranchController'); 
-    Route::post('branch/list','Category\BranchController@BranchList');
-    Route::resource('room','Category\RoomController'); 
-    Route::post('room/list','Category\RoomController@RoomList');
-    Route::resource('grade','Category\GradeController');  
-    Route::post('grade/list','Category\GradeController@GradeList');
-    Route::resource('section','Category\SectionController'); 
-    Route::post('section/list','Category\SectionController@SectionList');
-    Route::resource('grade_level_fee','Category\GradeLevelFeeController'); 
-    Route::post('grade_level_fee/list','Category\GradeLevelFeeController@GradeLevelFeeList');
-    Route::resource('additional_fee','Category\AdditionalFeeController'); 
-    Route::post('additional_fee/list','Category\AdditionalFeeController@AdditionalFeeList');
-    Route::resource('subject','Category\SubjectController'); 
-    Route::post('subject/list','Category\SubjectController@SubjectList');
+    Route::resource('academic_year','Category\AcademicYearController', ['only' => ['create','store','edit', 'update', 'destroy']]);  
+    Route::match(['get', 'post'],'academic_year/list','Category\AcademicYearController@AcademicYearList');
+
+    Route::resource('branch','Category\BranchController', ['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'], 'branch/list', 'Category\BranchController@BranchList');
+    
+    Route::resource('room','Category\RoomController', ['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'room/list','Category\RoomController@RoomList');
+
+    Route::resource('grade','Category\GradeController', ['only' => ['create','store','edit', 'update', 'destroy']]);  
+    Route::match(['get', 'post'],'grade/list','Category\GradeController@GradeList');
+
+    Route::resource('section','Category\SectionController', ['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'section/list','Category\SectionController@SectionList');
+
+    Route::resource('grade_level_fee','Category\GradeLevelFeeController', ['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'grade_level_fee/list','Category\GradeLevelFeeController@GradeLevelFeeList');
+
+    Route::resource('additional_fee','Category\AdditionalFeeController', ['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'additional_fee/list','Category\AdditionalFeeController@AdditionalFeeList');
+
+    Route::resource('subject','Category\SubjectController', ['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'subject/list','Category\SubjectController@SubjectList');
 
     //import township
     Route::get('/township/list','Category\TownshipController@townshipList');
     Route::post('/township/import','Category\TownshipController@importTownship');
 
     //for Create Information
-    Route::resource('teacher_info','CreateInformation\TeacherInfoController'); 
-    Route::post('teacher_info/list','CreateInformation\TeacherInfoController@teacherinfoList'); 
-    Route::resource('driver_info','CreateInformation\DriverInfoController');  
-    Route::post('driver_info/list','CreateInformation\DriverInfoController@driverinfoList');
-    Route::resource('class_setup','CreateInformation\ClassSetupController'); 
-    Route::post('class_setup/list','CreateInformation\ClassSetupController@classSetupList');
-    Route::get('/student_info/list','CreateInformation\StudentInfoController@studentInfoList');
+    Route::resource('teacher_info','CreateInformation\TeacherInfoController', ['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'teacher_info/list','CreateInformation\TeacherInfoController@teacherinfoList'); 
+
+    Route::resource('driver_info','CreateInformation\DriverInfoController', ['only' => ['create','store','edit', 'update', 'destroy']]);  
+    Route::match(['get', 'post'],'driver_info/list','CreateInformation\DriverInfoController@driverinfoList');
+
+    Route::resource('class_setup','CreateInformation\ClassSetupController', ['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'class_setup/list','CreateInformation\ClassSetupController@classSetupList');
+
+    Route::get('/student_info/list','CreateInformation\StudentInfoController@studentInfoList', ['only' => ['create','store','edit', 'update', 'destroy']]);
     Route::post('/student_info/list','CreateInformation\StudentInfoController@studentInfoList');
-    Route::get('/student_info/edit/{id}','CreateInformation\StudentInfoController@studentInfoEdit'); 
+
+    Route::get('/student_info/edit/{id}','CreateInformation\StudentInfoController@studentInfoEdit', ['only' => ['create','store','edit', 'update', 'destroy']]); 
     Route::post('/student_info/update/{id}','CreateInformation\StudentInfoController@studentInfoUpdate'); 
-    Route::resource('schedule','CreateInformation\ScheduleController'); 
-    Route::post('schedule/list','CreateInformation\ScheduleController@ScheduleList');
-    Route::resource('activity','CreateInformation\ActivityController'); 
-    Route::post('activity/list','CreateInformation\ActivityController@ActivityList');
+
+    Route::resource('schedule','CreateInformation\ScheduleController', ['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'schedule/list','CreateInformation\ScheduleController@ScheduleList');
+
+    Route::resource('activity','CreateInformation\ActivityController', ['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'activity/list','CreateInformation\ActivityController@ActivityList');
 
 
     //for Registration
@@ -60,13 +73,21 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::post('/student_registration/class_search','Registration\RegistrationSearchController@classSearch');
     Route::post('/student_registration/student_search','Registration\RegistrationSearchController@studentSearch');
     
-    Route::resource('waitinglist_reg','Registration\WaitingListRegController'); 
-    Route::resource('cancel_reg','Registration\CancelListRegController'); 
-    Route::resource('payment','Registration\PaymentRegController'); 
+    Route::resource('waitinglist_reg','Registration\WaitingListRegController',['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'waitinglist_reg/list','Registration\WaitingListRegController@waitingRegList');
+
+    Route::resource('cancel_reg','Registration\CancelListRegController',['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'cancel_reg/list','Registration\CancelListRegController@cancelList');
+
+    Route::resource('payment','Registration\PaymentRegController',['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'payment/list','Registration\PaymentRegController@paymentList');
 
     Route::post('/cancel_reg/registration_search','Registration\RegistrationSearchController@studentRegistrationSearch');
     Route::post('/payment/paymentreg_search','Registration\RegistrationSearchController@paymentRegistrationSearch');
-    Route::resource('school_bus_track','Registration\SchoolBusTrackRegController'); 
+
+    Route::resource('school_bus_track','Registration\SchoolBusTrackRegController',['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'school_bus_track/list','Registration\SchoolBusTrackRegController@schoolBusTracktList');
+
     Route::post('/school_bus_track/driver_search','Registration\RegistrationSearchController@driverSearch');
 
     Route::resource('teacher_attendance','Registration\TeacherAttendanceRegController'); 
@@ -92,30 +113,36 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::post('/reporting/student_attendance_report','Report\StudentAttendanceReportController@studentAttendanceReport');  
    
     //for exam
-    Route::get('/exam_terms/list','Exam\ExamTermsController@examTermsList');
-    Route::post('/exam_terms/list','Exam\ExamTermsController@examTermsList');
-    Route::get('/exam_terms/create','Exam\ExamTermsController@examTermsCreate'); 
-    Route::post('/exam_terms/save','Exam\ExamTermsController@examTermsSave'); 
-    Route::get('/exam_terms/edit/{id}','Exam\ExamTermsController@examTermsEdit'); 
-    Route::post('/exam_terms/update/{id}','Exam\ExamTermsController@examTermsUpdate'); 
-    Route::delete('/exam_terms/delete/{id}','Exam\ExamTermsController@examTermsDelete'); 
+    Route::prefix('exam_terms')->group(function () {
+        Route::get('list','Exam\ExamTermsController@examTermsList');
+        Route::post('list','Exam\ExamTermsController@examTermsList');
+        Route::get('create','Exam\ExamTermsController@examTermsCreate'); 
+        Route::post('save','Exam\ExamTermsController@examTermsSave'); 
+        Route::get('edit/{id}','Exam\ExamTermsController@examTermsEdit'); 
+        Route::post('update/{id}','Exam\ExamTermsController@examTermsUpdate'); 
+        Route::delete('delete/{id}','Exam\ExamTermsController@examTermsDelete');
+    }); 
 
-    Route::get('/exam_marks/list','Exam\ExamMarksController@examMarksList');
-    Route::post('/exam_marks/list','Exam\ExamMarksController@examMarksList');
-    Route::get('/exam_marks/create','Exam\ExamMarksController@examMarksCreate'); 
-    Route::post('/exam_marks/save','Exam\ExamMarksController@examMarksSave'); 
-    Route::get('/exam_marks/edit/{id}','Exam\ExamMarksController@examMarksEdit'); 
-    Route::post('/exam_marks/update/{id}','Exam\ExamMarksController@examMarksUpdate'); 
-    Route::delete('/exam_marks/delete/{id}','Exam\ExamMarksController@examMarksDelete'); 
+    Route::prefix('exam_marks')->group(function () {
+        Route::get('list','Exam\ExamMarksController@examMarksList');
+        Route::post('list','Exam\ExamMarksController@examMarksList');
+        Route::get('create','Exam\ExamMarksController@examMarksCreate'); 
+        Route::post('save','Exam\ExamMarksController@examMarksSave'); 
+        Route::get('edit/{id}','Exam\ExamMarksController@examMarksEdit'); 
+        Route::post('update/{id}','Exam\ExamMarksController@examMarksUpdate'); 
+        Route::delete('delete/{id}','Exam\ExamMarksController@examMarksDelete');
+    }); 
 
     //for wallet
-    Route::get('/cash_counter/list','Wallet\CashCounterController@CashCounterList');
-    Route::post('/cash_counter/list','Wallet\CashCounterController@CashCounterList');
-    Route::get('/cash_counter/create','Wallet\CashCounterController@CashCounterCreate'); 
-    Route::post('/cash_counter/save','Wallet\CashCounterController@CashCounterSave'); 
-    Route::get('/cash_counter/edit/{id}','Wallet\CashCounterController@CashCounterEdit'); 
-    Route::post('/cash_counter/update/{id}','Wallet\CashCounterController@CashCounterUpdate'); 
-    Route::post('/cash_counter/card_data','Registration\RegistrationSearchController@cardDataSearch');
+    Route::prefix('cash_counter')->group(function () {
+        Route::get('list','Wallet\CashCounterController@CashCounterList');
+        Route::post('list','Wallet\CashCounterController@CashCounterList');
+        Route::get('create','Wallet\CashCounterController@CashCounterCreate'); 
+        Route::post('save','Wallet\CashCounterController@CashCounterSave'); 
+        Route::get('edit/{id}','Wallet\CashCounterController@CashCounterEdit'); 
+        Route::post('update/{id}','Wallet\CashCounterController@CashCounterUpdate'); 
+        Route::post('card_data','Registration\RegistrationSearchController@cardDataSearch');
+    });
 
     Route::get('/cash_in_history/list','Wallet\CashInHistoryController@CashInHistoryList');
     Route::post('/cash_in_history/list','Wallet\CashInHistoryController@CashInHistoryList');
@@ -171,9 +198,21 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
         Route::delete('delete/{id}','Library\BookRentController@bookRentDelete'); 
     });
 
+    //for expense
+    Route::prefix('expense')->group(function () {
+        Route::get('list','Expense\ExpenseController@expenseList');
+        Route::post('list','Expense\ExpenseController@expenseList');
+        Route::get('create','Expense\ExpenseController@expenseCreate'); 
+        Route::post('save','Expense\ExpenseController@expenseSave'); 
+        Route::get('edit/{id}','Expense\ExpenseController@expenseEdit'); 
+        Route::post('update/{id}','Expense\ExpenseController@expenseUpdate'); 
+        Route::delete('delete/{id}','Expense\ExpenseController@expenseDelete'); 
+    });
 
     //for user 
-    Route::resource('user','StaffInfoController');   
+    Route::resource('user','StaffInfoController', ['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'user/list','StaffInfoController@staffInfoList');
+   
     Route::get('/profile','UserController@show_profile'); 
     Route::get('/logout','UserController@logout');
 

@@ -24,26 +24,6 @@ class SubjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $res = Subject::paginate(20);
-
-        $grade_list_data = $this->categoryRepository->getGrade();
-        $grade_list=[];
-        foreach($grade_list_data as $g) {
-            $grade_list[$g->id] = $g->name;
-        } 
-        return view('admin.category.subject_index',[
-            'grade_list'  =>$grade_list,
-            'list_result' => $res
-        ]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function SubjectList(Request $request)
     {  
         $res = Subject::select('subject.*');
@@ -119,7 +99,7 @@ class SubjectController extends Controller
         
         if($result){
             $res = Subject::paginate(10);
-            return redirect(route('subject.index',['list_result' => $res]))
+            return redirect(url('admin/subject/list'))
                             ->with('success','Subject Added Successfully!');
         }else{
             return redirect()->back()->with('danger','Subject Added Fail !');
@@ -187,7 +167,7 @@ class SubjectController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(route('subject.index'))->with('success','Subject Updated Successfully!');
+                return redirect(url('admin/subject/list'))->with('success','Subject Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Subject Updated Fail !');
             }
@@ -213,7 +193,7 @@ class SubjectController extends Controller
             $res = Subject::where('id',$id)->delete();
             if($res){
                 $listres = Subject::paginate(10);
-                return redirect(route('subject.index',['list_result' => $listres]))
+                return redirect(url('admin/subject/list'))
                             ->with('success','Subject Deleted Successfully!');
             }
         }else{

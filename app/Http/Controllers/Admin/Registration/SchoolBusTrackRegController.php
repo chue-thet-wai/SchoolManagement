@@ -24,9 +24,24 @@ class SchoolBusTrackRegController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function schoolBusTracktList(Request $request)
     {
-        $res = SchoolBusTrack::paginate(10);
+        $res = SchoolBusTrack::select('school_bus_track.*');
+        if ($request['action'] == 'search') {
+            if (request()->has('schoolbustrack_trackno') && request()->input('schoolbustrack_trackno') != '') {
+                $res->where('school_bus_track.track_no',request()->input('schoolbustrack_trackno'));
+            }
+            if (request()->has('schoolbustrack_driverid') && request()->input('schoolbustrack_driverid') != '') {
+                $res->where('school_bus_track.driver_id', request()->input('schoolbustrack_driverid'));
+            }
+        }else {
+            request()->merge([
+                'schoolbustrack_trackno'   => null,
+                'schoolbustrack_driverid'  => null
+            ]);
+        }  
+        
+        $res=$res->paginate(20);
         return view('admin.registration.schoolbustrack.index',['list_result' => $res]);
     }
 
@@ -86,7 +101,7 @@ class SchoolBusTrackRegController extends Controller
                         
             if($result){            
                 DB::commit();
-                return redirect(route('school_bus_track.index'))->with('success','School Bus Track Created Successfully!');
+                return redirect(url('admin/school_bus_track/list'))->with('success','School Bus Track Created Successfully!');
             }else{
                 return redirect()->back()->with('danger','School Bus Track Created Fail !');
             }
@@ -175,7 +190,7 @@ class SchoolBusTrackRegController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(route('school_bus_track.index'))->with('success','School Bus Track Updated Successfully!');
+                return redirect(url('admin/school_bus_track/list'))->with('success','School Bus Track Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','School Bus Track Updated Fail !');
             }
@@ -207,7 +222,7 @@ class SchoolBusTrackRegController extends Controller
             }
             DB::commit();
             //To return list
-            return redirect(route('school_bus_track.index'))->with('success','School Bus Track Deleted Successfully!');
+            return redirect(url('admin/school_bus_track/list'))->with('success','School Bus Track Deleted Successfully!');
 
         }catch(\Exception $e){
             DB::rollback();

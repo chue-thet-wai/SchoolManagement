@@ -18,26 +18,6 @@ class RoomController extends Controller
     {
         $this->categoryRepository = $categoryRepository;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $res = Room::paginate(20);
-
-        $branch_list_data   = $this->categoryRepository->getBranch();
-        $branch_list=[];
-        foreach($branch_list_data as $b) {
-            $branch_list[$b->id] = $b->name;
-        } 
-
-        return view('admin.category.room_index',[
-            'list_result' => $res,
-            'branch_list' =>$branch_list
-        ]);
-    }
 
     /**
      * Display a listing of the resource.
@@ -119,8 +99,7 @@ class RoomController extends Controller
         $result=Room::insert($insertData);
         
         if($result){
-            $res = Room::paginate(10);
-            return redirect(route('room.index',['list_result' => $res]))
+            return redirect(url('admin/room/list'))
                             ->with('success','Room Added Successfully!');
         }else{
             return redirect()->back()->with('danger','Room Added Fail !');
@@ -188,7 +167,7 @@ class RoomController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(route('room.index'))->with('success','Room Updated Successfully!');
+                return redirect(url('admin/room/list'))->with('success','Room Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Room Updated Fail !');
             }
@@ -214,9 +193,7 @@ class RoomController extends Controller
             
             $res = Room::where('id',$id)->delete();
             if($res){
-                $listres = Room::paginate(10);
-
-                return redirect(route('room.index',['list_result' => $listres]))
+                return redirect(url('admin/room/list'))
                             ->with('success','Room Deleted Successfully!');
             }
         }else{

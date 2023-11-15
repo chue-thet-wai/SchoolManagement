@@ -11,16 +11,6 @@ use Illuminate\Support\Facades\Log;
 
 class BranchController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $res = Branch::paginate(20);
-        return view('admin.category.branch_index',['list_result' => $res]);
-    }
 
     /**
      * Display a listing of the resource.
@@ -87,9 +77,7 @@ class BranchController extends Controller
         $result=Branch::insert($insertData);
         
         if($result){
-            $res = Branch::paginate(10);
-            return redirect(route('branch.index',['list_result' => $res]))
-                            ->with('success','Branch Added Successfully!');
+            return redirect(url('admin/branch/list'))->with('success','Branch Added Successfully!');
         }else{
             return redirect()->back()->with('danger','Branch Added Fail !');
         }
@@ -114,10 +102,8 @@ class BranchController extends Controller
      */
     public function edit($id)
     {
-        $res = Branch::paginate(10);
         $update_res = Branch::where('id',$id)->get();
         return view('admin.category.branch_registration',[
-            'list_result' => $res,
             'result'      => $update_res,
             'action'      => 'Update'
         ]);
@@ -153,7 +139,7 @@ class BranchController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(route('branch.index'))->with('success','Branch Updated Successfully!');
+                return redirect(url('admin/branch/list'))->with('success','Branch Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Branch Updated Fail !');
             }
@@ -179,10 +165,7 @@ class BranchController extends Controller
             
             $res = Branch::where('id',$id)->delete();
             if($res){
-                $listres = Branch::paginate(10);
-
-                return redirect(route('branch.index',['list_result' => $listres]))
-                            ->with('success','Branch Deleted Successfully!');
+                return redirect(url('admin/branch/list'))->with('success','Branch Deleted Successfully!');                
             }
         }else{
             return redirect()->back()->with('error','There is no result with this branch.');

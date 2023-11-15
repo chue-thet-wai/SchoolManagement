@@ -22,20 +22,6 @@ class TeacherInfoController extends Controller
         $this->categoryRepository = $categoryRepository;
         $this->userRepository     = $userRepository;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {        
-        $res = TeacherInfo::leftJoin("users", "users.user_id", "=", "teacher_info.user_id")
-            ->select('teacher_info.*')
-            ->paginate(10);
-             
-        $grade_list    = $this->categoryRepository->getGrade();
-        return view('admin.createinformation.teacherinfo.index',['grade_list'=>$grade_list,'list_result' => $res]);
-    }
 
     /**
      * Display a listing of the resource.
@@ -183,7 +169,7 @@ class TeacherInfoController extends Controller
                         $qualification_desc->move(public_path('assets/teacher_qualifications'),$qualification_desc_name); 
                     }
                     DB::commit();
-                    return redirect(route('teacher_info.index'))->with('success','Teacher Information Created Successfully!');
+                    return redirect(url('admin/teacher_info/list'))->with('success','Teacher Information Created Successfully!');
                 }else{
                     return redirect()->back()->with('danger','Teacher Information Created Fail !');
                 }
@@ -340,7 +326,7 @@ class TeacherInfoController extends Controller
                         $qualification_desc->move(public_path('assets/teacher_qualifications'),$qualification_desc_name);  
                     }   
                     DB::commit();                     
-                    return redirect(route('teacher_info.index'))->with('success','Teacher Information Updated Successfully!');
+                    return redirect(url('admin/teacher_info/list'))->with('success','Teacher Information Updated Successfully!');
                 }else{
                     return redirect()->back()->with('danger','Teacher Information Updated Fail !');
                 }
@@ -386,7 +372,7 @@ class TeacherInfoController extends Controller
             }
             DB::commit();
             //To return list
-            return redirect(route('teacher_info.index'))->with('success','Teacher Information Deleted Successfully!');
+            return redirect(url('admin/teacher_info/list'))->with('success','Teacher Information Deleted Successfully!');
 
         }catch(\Exception $e){
             DB::rollback();

@@ -21,43 +21,6 @@ class ClassSetupController extends Controller
         $this->createInfoRepository = $createInfoRepository;
         $this->categoryRepository = $categoryRepository;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $res = ClassSetup::paginate(10);
-        
-        $academic_list = $this->categoryRepository->getAcademicYear();
-        $academic=[];
-        foreach($academic_list as $a) {
-            $academic[$a->id] = $a->name;
-        }
-        $grade_list    = $this->categoryRepository->getGrade();
-        $grade=[];
-        foreach($grade_list as $a) {
-            $grade[$a->id] = $a->name;
-        }
-        $section_list    = $this->categoryRepository->getSection();
-        $section=[];
-        foreach($section_list as $a) {
-            $section[$a->id] = $a->name;
-        }
-        $room_list    = $this->categoryRepository->getRoom();
-        $room=[];
-        foreach($room_list as $a) {
-            $room[$a->id] = $a->name;
-        }
-
-        return view('admin.createinformation.classsetup.index',[
-            'room_list'=>$room,
-            'academic_list'=>$academic,
-            'grade_list'   =>$grade,
-            'section_list' =>$section,
-            'list_result'  => $res]);
-    }
 
      /**
      * Display a listing of the resource.
@@ -187,7 +150,7 @@ class ClassSetupController extends Controller
                         
             if($result){      
                 DB::commit();
-                return redirect(route('class_setup.index'))->with('success','Class Setup Created Successfully!');
+                return redirect(url('admin/class_setup/list'))->with('success','Class Setup Created Successfully!');
             }else{
                 return redirect()->back()->with('danger','Class Setup Created Fail !');
             }
@@ -265,7 +228,7 @@ class ClassSetupController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(route('class_setup.index'))->with('success','Class Setup Updated Successfully!');
+                return redirect(url('admin/class_setup/list'))->with('success','Class Setup Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Class Setup Updated Fail !');
             }
@@ -295,7 +258,7 @@ class ClassSetupController extends Controller
                 if($res){
                     DB::commit();
                     //To return list
-                    return redirect(route('class_setup.index'))->with('success','Class Deleted Successfully!');
+                    return redirect(url('admin/class_setup/list'))->with('success','Class Deleted Successfully!');
                 }
             }else{
                 return redirect()->back()->with('error','There is no result with this class.');

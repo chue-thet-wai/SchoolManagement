@@ -23,7 +23,7 @@
                 <h4><b>Create Class Setup</b></h4>
             </div>
             <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{route('class_setup.index')}}" id="form-header-btn"> Back</a>
+                <a class="btn btn-sm btn-primary" href="{{url('admin/class_setup/list')}}" id="form-header-btn"> Back</a>
             </div>
             <div class="col-md-1"></div>
         </div>

@@ -95,7 +95,7 @@
                                     @csrf
                                     {{ method_field('DELETE') }}
                                     <button type="submit" value="delete" class="btn m-1 p-0 border-0">
-                                        <span id="boot-icon" class="bi bi-trash" style="font-size: 20px; color: rgb(58 69 207);"></span>
+                                        <span id="boot-icon" class="bi bi-trash" style="font-size: 20px; color: rgb(165, 42, 42);"></span>
                                     </button>
                                 </form>
                             </td>

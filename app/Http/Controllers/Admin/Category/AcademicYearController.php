@@ -11,16 +11,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AcademicYearController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $res = AcademicYear::paginate(10);
-        return view('admin.category.academicyr_index',['list_result' => $res]);
-    }
 
     
      /**
@@ -93,9 +83,7 @@ class AcademicYearController extends Controller
         $result=DB::table('academic_year')->insert($insertData);
         
         if($result){
-            $res = AcademicYear::paginate(10);
-            return redirect(route('academic_year.index',['list_result' => $res]))
-                            ->with('success','Academic Year Added Successfully!');
+            return redirect(url('admin/academic_year/list'))->with('success','Academic Year Added Successfully!');
         }else{
             return redirect()->back()->with('danger','Academic Year Added Fail !');
         }
@@ -158,7 +146,7 @@ class AcademicYearController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(route('academic_year.index'))->with('success','Academic Year Updated Successfully!');
+                return redirect(url('admin/academic_year/list'))->with('success','Academic Year Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Academic Year Updated Fail !');
             }
@@ -186,10 +174,7 @@ class AcademicYearController extends Controller
             
             $res = AcademicYear::where('id',$id)->delete();
             if($res){
-                $listres = DB::table('academic_year')
-                        ->whereNull('deleted_at')
-                        ->paginate(10);
-                return redirect(route('academic_year.index',['list_result' => $listres]))
+                return redirect(url('admin/academic_year/list'))
                             ->with('success','Academic Year Deleted Successfully!');
             }
         }else{

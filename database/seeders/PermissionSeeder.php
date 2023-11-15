@@ -20,8 +20,8 @@ class PermissionSeeder extends Seeder
             array(
                 'main_menu' =>"User Management",
                 "sub_menu"  =>"User",
-                "menu_route"=>"user.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/user/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"User Management",
@@ -32,56 +32,62 @@ class PermissionSeeder extends Seeder
             array(
                 'main_menu' =>"Category",
                 "sub_menu"  =>"Academic Year",
-                "menu_route"=>"academic_year.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/academic_year/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Category",
                 "sub_menu"  =>"Branch",
-                "menu_route"=>"branch.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/branch/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Category",
                 "sub_menu"  =>"Room",
-                "menu_route"=>"room.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/room/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Category",
                 "sub_menu"  =>"Grade",
-                "menu_route"=>"grade.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/grade/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Category",
                 "sub_menu"  =>"Section",
-                "menu_route"=>"section.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/section/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Category",
                 "sub_menu"  =>"Grade Level Fee",
-                "menu_route"=>"grade_level_fee.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/grade_level_fee/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Category",
                 "sub_menu"  =>"Additional Fee",
-                "menu_route"=>"additional_fee.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/additional_fee/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Category",
                 "sub_menu"  =>"Subject",
-                "menu_route"=>"subject.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/subject/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Category",
+                "sub_menu"  =>"Township",
+                "menu_route"=>"admin/township/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Create Information",
                 "sub_menu"  =>"Teacher Information",
-                "menu_route"=>"teacher_info.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/teacher_info/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Create Information",
@@ -92,26 +98,26 @@ class PermissionSeeder extends Seeder
             array(
                 'main_menu' =>"Create Information",
                 "sub_menu"  =>"Class Setup",
-                "menu_route"=>"class_setup.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/class_setup/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Create Information",
                 "sub_menu"  =>"Driver Information",
-                "menu_route"=>"driver_info.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/driver_info/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Create Information",
                 "sub_menu"  =>"Schedule",
-                "menu_route"=>"schedule.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/schedule/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Create Information",
                 "sub_menu"  =>"Activity",
-                "menu_route"=>"activity.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/activity/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Registration",
@@ -122,26 +128,26 @@ class PermissionSeeder extends Seeder
             array(
                 'main_menu' =>"Registration",
                 "sub_menu"  =>"Waiting List Registration",
-                "menu_route"=>"waitinglist_reg.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/waitinglist_reg/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Registration",
                 "sub_menu"  =>"Cancel Registration",
-                "menu_route"=>"cancel_reg.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/cancel_reg/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Registration",
                 "sub_menu"  =>"Payment Registration",
-                "menu_route"=>"payment.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/payment/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Registration",
                 "sub_menu"  =>"School Bus Track",
-                "menu_route"=>"school_bus_track.index",
-                "type"      =>"route"
+                "menu_route"=>"admin/school_bus_track/list",
+                "type"      =>"url"
             ),
             array(
                 'main_menu' =>"Registration",
@@ -207,6 +213,12 @@ class PermissionSeeder extends Seeder
                 'main_menu' =>"Library",
                 "sub_menu"  =>"Book Rent",
                 "menu_route"=>"admin/book_rent/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Expense",
+                "sub_menu"  =>"Expense",
+                "menu_route"=>"admin/expense/list",
                 "type"      =>"url"
             ),
             array(

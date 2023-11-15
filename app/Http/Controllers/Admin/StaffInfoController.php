@@ -27,14 +27,33 @@ class StaffInfoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function staffInfoList(Request $request)
     {
         $res = StaffInfo::leftJoin("users", "users.user_id", "=", "staff_info.user_id")
-                ->select('staff_info.*')
-                ->paginate(10);
+                ->select('staff_info.*');
+        if ($request['action'] == 'search') {
+            if (request()->has('staffinfo_name') && request()->input('staffinfo_name') != '') {
+                $res->where('staff_info.name','Like', '%' . request()->input('staffinfo_name') . '%');
+            }
+            if (request()->has('staffinfo_email') && request()->input('staffinfo_email') != '') {
+                $res->where('staff_info.email', request()->input('staffinfo_email'));
+            }
+            if (request()->has('staffinfo_contactno') && request()->input('staffinfo_contactno') != '') {
+                $res->where('staff_info.contact_numner', request()->input('staffinfo_contactno'));
+            }
+        }else {
+            request()->merge([
+                'staffinfo_name'      => null,
+                'staffinfo_email'     => null,
+                'staffinfo_contactno' => null
+            ]);
+        }    
+        $res = $res->paginate(20);
+
         $department_list    = $this->userRepository->getDepartment();
         return view('admin.user.index',['department_list'=>$department_list,'list_result' => $res]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -120,7 +139,7 @@ class StaffInfoController extends Controller
                       
             if($result){
                 $image->move(public_path('assets/user_images'),$image_name);   
-                return redirect(route('user.index'))->with('success','User Information Created Successfully!');
+                return redirect(url('admin/user/list'))->with('success','User Information Created Successfully!');
             }else{
                 return redirect()->back()->with('danger','User Information Created Fail !');
             }
@@ -237,7 +256,7 @@ class StaffInfoController extends Controller
                 if ($image_name != "") {
                     $image->move(public_path('assets/user_images'),$image_name);  
                 }                 
-                return redirect(route('user.index'))->with('success','User Information Updated Successfully!');
+                return redirect(url('admin/user/list'))->with('success','User Information Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','User Information Updated Fail !');
             }
@@ -274,7 +293,7 @@ class StaffInfoController extends Controller
             }
             DB::commit();
             //To return list
-            return redirect(route('user.index'))->with('success','User Information Deleted Successfully!');
+            return redirect(url('admin/user/list'))->with('success','User Information Deleted Successfully!');
 
         }catch(\Exception $e){
             DB::rollback();

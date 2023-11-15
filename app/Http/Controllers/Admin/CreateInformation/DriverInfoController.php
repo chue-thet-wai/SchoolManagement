@@ -18,16 +18,7 @@ class DriverInfoController extends Controller
     {
         $this->createInfoRepository = $createInfoRepository;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $res = DriverInfo::paginate(10);
-        return view('admin.createinformation.driverinfo.index',['list_result' => $res]);
-    }
+    
 
     /**
      * Display a listing of the resource.
@@ -131,7 +122,7 @@ class DriverInfoController extends Controller
                     $licence->move(public_path('assets/driver_licences'),$licence_name);   
                 }               
                 DB::commit();
-                return redirect(route('driver_info.index'))->with('success','Driver Information Created Successfully!');
+                return redirect(url('admin/driver_info/list'))->with('success','Driver Information Created Successfully!');
             }else{
                 return redirect()->back()->with('danger','Driver Information Created Fail !');
             }
@@ -239,7 +230,7 @@ class DriverInfoController extends Controller
                     $licence->move(public_path('assets/driver_licences'),$licence_name);  
                 }  
                 DB::commit();               
-                return redirect(route('driver_info.index'))->with('success','Driver Information Updated Successfully!');
+                return redirect(url('admin/driver_info/list'))->with('success','Driver Information Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Driver Information Updated Fail !');
             }
@@ -283,7 +274,7 @@ class DriverInfoController extends Controller
             }
             DB::commit();
             //To return list
-            return redirect(route('driver_info.index'))->with('success','Driver Information Deleted Successfully!');
+            return redirect(url('admin/driver_info/list'))->with('success','Driver Information Deleted Successfully!');
 
         }catch(\Exception $e){
             DB::rollback();

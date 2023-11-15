@@ -15,8 +15,6 @@
 
 <section class="card">
     <div class="card-body">
-        <br />
-        
         <div class="row g-4">
             <div class="col-md-11" style='color:#012970;'>
                 <h4><b>School Bus Track List</b></h4>
@@ -26,6 +24,36 @@
             </div>
         </div>
         <br />
+        <form class="row g-4" method="POST" action="{{ url('admin/school_bus_track/list') }}" enctype="multipart/form-data">
+			@csrf
+			<div class='row g-4'>
+				<div class="form-group col-md-3">
+					<label for="schoolbustrack_trackno"><b>Track Number</b></label>
+					<div class="col-sm-10">
+						<input type="text" name="schoolbustrack_trackno" class="form-control" value="{{ request()->input('schoolbustrack_trackno') }}">
+					</div>
+				</div>
+				<div class="form-group col-md-3">
+					<label for="schoolbustrack_driverid"><b>Driver ID</b></label>
+					<div class="col-sm-10">
+						<input type="text" name="schoolbustrack_driverid" class="form-control" value="{{ request()->input('schoolbustrack_driverid') }}">
+					</div>
+				</div>
+			</div>			
+			<div class='row p-3'>
+				<div class="form-group col-sm-1 p-2">
+					<div class="d-grid mt-2">
+						<button type="submit" name="action" value="search" class="btn btn-sm btn-primary">Search</button>
+					</div>
+				</div>
+				<div class="form-group col-sm-1 p-2">
+					<div class="d-grid mt-2">
+						<button type="submit" name="action" value="reset" class="btn btn-sm btn-primary">Reset</button>
+					</div>
+				</div>					
+			</div>
+		</form>
+		<br />
         <div class="row g-4 m-2" style="display: flex;overflow-x: auto;">
             <table cellpadding="0" cellspacing="0" class="datatable table table-striped table-bordered">
                 <thead>
@@ -60,7 +88,7 @@
                                     @csrf
                                     {{ method_field('DELETE') }}
                                     <button type="submit" value="delete" class="btn m-1 p-0 border-0">
-                                        <span id="boot-icon" class="bi bi-trash" style="font-size: 20px; color: rgb(58 69 207);"></span>
+                                        <span id="boot-icon" class="bi bi-trash" style="font-size: 20px; color: rgb(165, 42, 42);"></span>
                                     </button>
                                 </form>
                             </td>

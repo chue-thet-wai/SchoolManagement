@@ -26,7 +26,7 @@
             @endif
             </div>
             <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{route('grade.index')}}" id="form-header-btn"> Back</a>
+                <a class="btn btn-sm btn-primary" href="{{url('admin/grade/list')}}" id="form-header-btn"> Back</a>
             </div>
             <div class="col-md-1"></div>
         </div>

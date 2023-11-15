@@ -24,9 +24,28 @@ class WaitingListRegController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function waitingRegList(Request $request)
     {
-        $res = WaitingRegistration::paginate(10);
+        $res = WaitingRegistration::select('waiting_registration.*');
+        if ($request['action'] == 'search') {
+            if (request()->has('waitinglist_name') && request()->input('waitinglist_name') != '') {
+                $res->where('waiting_registration.name','Like', '%' . request()->input('waitinglist_name') . '%');
+            }
+            if (request()->has('waitinglist_email') && request()->input('waitinglist_email') != '') {
+                $res->where('waiting_registration.email', request()->input('waitinglist_email'));
+            }
+            if (request()->has('waitinglist_phone') && request()->input('waitinglist_phone') != '') {
+                $res->where('waiting_registration.phone', request()->input('waitinglist_phone'));
+            }
+        }else {
+            request()->merge([
+                'waitinglist_name'    => null,
+                'waitinglist_email'   => null,
+                'waitinglist_phone'   => null
+            ]);
+        }  
+        
+        $res=$res->paginate(20);
 
         $academic_list = $this->categoryRepository->getAcademicYear();
         $academic=[];
@@ -107,7 +126,7 @@ class WaitingListRegController extends Controller
                         
             if($result){            
                 DB::commit();
-                return redirect(route('waitinglist_reg.index'))->with('success','Waiting List Registration Created Successfully!');
+                return redirect(url('admin/waitinglist_reg/list'))->with('success','Waiting List Registration Created Successfully!');
             }else{
                 return redirect()->back()->with('danger','Waiting List Registration Created Fail !');
             }
@@ -186,7 +205,7 @@ class WaitingListRegController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(route('waitinglist_reg.index'))->with('success','Waiting List Registration Updated Successfully!');
+                return redirect(url('admin/waitinglist_reg/list'))->with('success','Waiting List Registration Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Waiting List Registration Updated Fail !');
             }
@@ -218,7 +237,7 @@ class WaitingListRegController extends Controller
             }
             DB::commit();
             //To return list
-            return redirect(route('waitinglist_reg.index'))->with('success','Waiting List Registration Deleted Successfully!');
+            return redirect(url('admin/waitinglist_reg/list'))->with('success','Waiting List Registration Deleted Successfully!');
 
         }catch(\Exception $e){
             DB::rollback();

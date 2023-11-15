@@ -25,9 +25,23 @@ class CancelListRegController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function cancelList(Request $request)
     {
-        $res = CancelRegistration::paginate(10);
+        $res = CancelRegistration::select('cancel_registration.*');
+        if ($request['action'] == 'search') {
+            if (request()->has('cancel_studentid') && request()->input('cancel_studentid') != '') {
+                $res->where('student_id',request()->input('cancel_studentid'));
+            }
+            if (request()->has('cancel_regno') && request()->input('cancel_regno') != '') {
+                $res->where('registration_no', request()->input('cancel_regno'));
+            }
+        }else {
+            request()->merge([
+                'cancel_studentid'      => null,
+                'cancel_regno'          => null
+            ]);
+        } 
+        $res=$res->paginate(20); 
 
         $grade_list    = $this->categoryRepository->getGrade();
         $grade=[];
@@ -98,7 +112,7 @@ class CancelListRegController extends Controller
                         
             if($result){            
                 DB::commit();
-                return redirect(route('cancel_reg.index'))->with('success','Cancel Registration Created Successfully!');
+                return redirect(url('admin/cancel_reg/list'))->with('success','Cancel Registration Created Successfully!');
             }else{
                 return redirect()->back()->with('danger','Cancel Registration Created Fail !');
             }
@@ -185,7 +199,7 @@ class CancelListRegController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(route('cancel_reg.index'))->with('success','Cancel Registration Updated Successfully!');
+                return redirect(url('admin/cancel_reg/list'))->with('success','Cancel Registration Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Cancel Registration Updated Fail !');
             }
@@ -217,7 +231,7 @@ class CancelListRegController extends Controller
             }
             DB::commit();
             //To return list
-            return redirect(route('cancel_reg.index'))->with('success','Cancel Registration Deleted Successfully!');
+            return redirect(url('admin/cancel_reg/list'))->with('success','Cancel Registration Deleted Successfully!');
 
         }catch(\Exception $e){
             DB::rollback();

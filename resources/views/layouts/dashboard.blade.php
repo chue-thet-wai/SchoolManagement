@@ -118,39 +118,54 @@
                 "Wallet"             => "bi bi-wallet-fill",
                 "Shop"               => "bi bi-shop",
                 "Library"            => "bi bi-journals",
+                "Expense"            => "bi bi-cash-coin",
                 "Reporting"          => "bi bi-view-list",
               ];
+            $menu_child_notexist = array('Expense');
 
             foreach ($dashboard as $main_menu => $sub_menu) {
               $targetNavName = '#'.str_replace(' ', '', $main_menu).'-nav';
               $navId         =  str_replace(' ', '', $main_menu).'-nav';
               @endphp
-              <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="{{$targetNavName}}" data-bs-toggle="collapse" href="#">
-                  <i class="{{$icon_array[$main_menu]}}"></i><span>{{$main_menu}}</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="{{$navId}}" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                  @php 
-                    foreach ($sub_menu as $menu) { 
-                  @endphp
-                        @if ($menu['type'] == 'route')
-                          <li>
-                            <a href="{{route($menu['menu_route'])}}">
-                              <span>{{$menu['sub_menu']}}</span>
-                            </a>
-                          </li>
-                        @else 
-                          <li>
-                            <a href="{{ url($menu['menu_route']) }}">
-                              <span>{{$menu['sub_menu']}}</span>
-                            </a>
-                          </li>
-                        @endif
-                  @php
-                    }
-                  @endphp
-                </ul>
-              </li>
+              @if (!in_array($main_menu, $menu_child_notexist)) 
+                <li class="nav-item">
+                  <a class="nav-link collapsed" data-bs-target="{{$targetNavName}}" data-bs-toggle="collapse" href="#">
+                    <i class="{{$icon_array[$main_menu]}}"></i><span>{{$main_menu}}</span><i class="bi bi-chevron-down ms-auto"></i>
+                  </a>
+                  <ul id="{{$navId}}" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    @php 
+                      foreach ($sub_menu as $menu) { 
+                    @endphp
+                          @if ($menu['type'] == 'route')
+                            <li>
+                              <a href="{{route($menu['menu_route'])}}">
+                                <span>{{$menu['sub_menu']}}</span>
+                              </a>
+                            </li>
+                          @else 
+                            <li>
+                              <a href="{{ url($menu['menu_route']) }}">
+                                <span>{{$menu['sub_menu']}}</span>
+                              </a>
+                            </li>
+                          @endif
+                    @php
+                      }
+                    @endphp
+                  </ul>
+                </li>
+              @else
+                <li class="nav-item">
+                  @if ($sub_menu[0]['type'] == 'route')
+                  <a class="nav-link collapsed" href="{{route($sub_menu[0]['menu_route'])}}"> 
+                  @else
+                  <a class="nav-link collapsed" href="{{ url($sub_menu[0]['menu_route']) }}">
+                  @endif
+                    <i class="{{$icon_array[$main_menu]}}"></i>
+                    <span>{{$main_menu}}</span>
+                  </a>
+                </li>
+              @endif
        @php } @endphp
 
       <!--<li class="nav-heading">Pages</li>-->

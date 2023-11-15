@@ -18,40 +18,6 @@ class GradeLevelFeeController extends Controller
     {
         $this->categoryRepository = $categoryRepository;
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $res = GradeLevelFee::paginate(20);
-
-        $academic_list_data = $this->categoryRepository->getAcademicYear();
-        $academic_list=[];
-        foreach($academic_list_data as $a) {
-            $academic_list[$a->id] = $a->name;
-        } 
-
-        $branch_list_data   = $this->categoryRepository->getBranch();
-        $branch_list=[];
-        foreach($branch_list_data as $b) {
-            $branch_list[$b->id] = $b->name;
-        } 
-
-        $grade_list_data    = $this->categoryRepository->getGrade();
-        $grade_list=[];
-        foreach($grade_list_data as $g) {
-            $grade_list[$g->id] = $g->name;
-        } 
-        return view('admin.category.gradelevelfee_index',[
-            'academic_list'=>$academic_list,
-            'grade_list'  =>$grade_list,
-            'branch_list' =>$branch_list,
-            'list_result' => $res
-        ]);
-    }
 
      /**
      * Display a listing of the resource.
@@ -167,8 +133,7 @@ class GradeLevelFeeController extends Controller
         $result=GradeLevelFee::insert($insertData);
         
         if($result){
-            $res = GradeLevelFee::paginate(10);
-            return redirect(route('grade_level_fee.index',['list_result' => $res]))
+            return redirect(url('admin/grade_level_fee/list'))
                             ->with('success','Grade Level Fee Added Successfully!');
         }else{
             return redirect()->back()->with('danger','Grade Level Fee Added Fail !');
@@ -254,7 +219,7 @@ class GradeLevelFeeController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(route('grade_level_fee.index'))->with('success','Grade Level Fee Updated Successfully!');
+                return redirect(url('admin/grade_level_fee/list'))->with('success','Grade Level Fee Updated Successfully!');
             }else{
                 return redirect()->back()->with('danger','Grade Level Fee Updated Fail !');
             }
@@ -282,7 +247,7 @@ class GradeLevelFeeController extends Controller
             if($res){
                 $listres = GradeLevelFee::paginate(10);
 
-                return redirect(route('grade_level_fee.index',['list_result' => $listres]))
+                return redirect(url('admin/grade_level_fee/list'))
                             ->with('success','Grade Level Fee Deleted Successfully!');
             }
         }else{
