@@ -1,63 +1,10 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<script>
-    function getRegistrationData(){
-        var regNo = $("#registration_no").val();
-        $.ajax({
-           type:'POST',
-           url:'/admin/payment/paymentreg_search',
-           data:{
-                _token :'<?php echo csrf_token() ?>',
-                registration_no  : regNo
-            },
-           
-            success:function(data){
-                if (data.msg == 'found') {
-                    $("#registration_msg").html('Registration data found!.');
-                    $("#grade_level").val(data.grade_level);
-                    $("#grade_level_fee").val(data.grade_level_fee);
-                } else {
-                    $("#registration_msg").html('Registration data not found!.');
-                    $("#grade_level").val('');
-                    $("#grade_level_fee").val('');
-                }  
-                changeTotalAmount();           
-            }
-        });
-    }
-    function changeTotalAmount() {
-        var totalAmt = 0;
-        //Add grade level fee
-        if ($("#grade_level_fee").val() !=''){
-            totalAmt += parseFloat($("#grade_level_fee").val());
-        } 
-        
-        //Add additional fee
-        var arr = $('.addfee_Checkbox:checked').map(function(){
-            return this.value;
-        }).get();
-        if (arr.length != 0) {
-            for (let i = 0; i < arr.length; i++) {
-                var fee = arr[i];
-                var ret = fee.split("|");
-                totalAmt += parseFloat(ret[1]);
-            }
-        }
-        $("#total_amount").val(totalAmt);
-
-        var netAmt = totalAmt;
-        //Calculate Discount
-        if ($("#discount_percent").val() !=''){
-            var dis = parseFloat($("#discount_percent").val());
-            var disAmt  = totalAmt * (dis/100);
-            netAmt     -= disAmt;
-        } 
-        $("#net_total").val(netAmt);
-    }
-</script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="{{ asset('js/payment.js') }}"></script>
 <div class="pagetitle">
-    <h1>Update Payment Registration</h1>
+    <h1>Payment Registration</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
@@ -75,16 +22,15 @@
         <div class="row g-4">
             <div class="col-md-1"></div>
             <div class="col-md-9" style='color:#012970;'>
-                <h4><b>Update Payment Registration</b></h4>
+                <h4><b>Update Invoice</b></h4>
             </div>
-            <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{url('admin/payment/list')}}" id="form-header-btn"> Back</a>
+            <div class="col-md-2">
+                <a class="btn btn-sm btn-primary" href="{{url('admin/payment/list')}}" id="form-header-btn"><i class="bi bi-skip-backward-fill"></i> Back</a>
             </div>
-            <div class="col-md-1"></div>
         </div>
 
         <br />
-        <form method="POST" action="{{route('payment.update',$result[0]->payment_id)}}" enctype="multipart/form-data">
+        <form method="POST" action="{{route('payment.update',$result[0]->invoice_id)}}" enctype="multipart/form-data">
             @csrf
             <br />
             {{method_field('PUT')}}
@@ -96,11 +42,12 @@
                         <div class='row'>
                             <label for="registration_no"><b>Registration Number<span style="color:brown">*</span></b></label>
                             <div class="col-sm-10">
-                                <input type="text" id="registration_no" name="registration_no" value="{{$result[0]->registration_no}}" class="form-control" required>
+                                <input type="text" id="reg_no" name="reg_no" value="{{$result[0]->registration_no}}" class="form-control" required disabled>
+                                <input type="hidden" id="registration_no" name="registration_no" value="{{$result[0]->registration_no}}" />
                             </div>
-                            <div class="col-md-2">
-                                <button type="button" name="registration_search" id="registration_search" class="btn btn-sm btn-primary mt-1" onclick="getRegistrationData()">Search</button>
-                            </div>
+                            <!--<div class="col-md-2">
+                                <button type="button" name="registration_search" id="registration_search" class="btn btn-sm btn-primary mt-1" >Search</button>
+                            </div>-->
                         </div>
                         <div class="row">
                             <span name="registration_msg" id="registration_msg"></span>
@@ -119,15 +66,11 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <br />
-            <div class="row g-4">
-                <div class="col-md-1"></div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label for="pay_date"><b>Pay Date</b><span style="color:brown">*</span></label>
+                        <label for="grade_level_fee"><b>Grade Level Fee</b></label>
                         <div class="col-sm-10">
-                            <input type="date" id="pay_date" name="pay_date" value="{{date('Y-m-d',strtotime($result[0]->pay_date))}}" class="form-control" required>
+                            <input type="text" id="grade_level_fee" name="grade_level_fee" value="{{$result[0]->grade_level_fee}}" class="form-control" readonly>
                         </div>
                     </div>
                 </div>
@@ -162,6 +105,7 @@
                         <label for="pay_from_period"><b>Pay Period (From)</b><span style="color:brown">*</span></label>
                         <div class="col-sm-10">
                             <input type="date" id="pay_from_period" name="pay_from_period" value="{{date('Y-m-d',strtotime($result[0]->pay_from_period))}}" class="form-control" required>
+                            <input type="hidden" id="academic_start" name="academic_start" value="{{$academic_start}}" class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -170,6 +114,7 @@
                         <label for="pay_to_period"><b>Pay Period (To)</b><span style="color:brown">*</span></label>
                         <div class="col-sm-10">
                             <input type="date" id="pay_to_period" name="pay_to_period" value="{{date('Y-m-d',strtotime($result[0]->pay_to_period))}}" class="form-control" required>
+                            <input type="hidden" id="academic_end" name="academic_end" value="{{$academic_end}}" class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -177,23 +122,11 @@
             <br /> 
             <div class="row g-4">
                 <div class="col-md-1"></div>
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <label for="grade_level_fee"><b>Grade Level Fee</b></label>
-                        <div class="col-sm-10">
-                            <input type="text" id="grade_level_fee" name="grade_level_fee" value="{{$result[0]->grade_level_fee}}" class="form-control" readonly>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br />   
-            <div class="row g-4">
-                <div class="col-md-1"></div>
                 <fieldset class="form-group col-md-9 border m-3 p-3">
                     <legend for="reg_type" class="float-none w-auto" style='font-size:1.2em;'><b>Additional Fee</b></legend>
                     <div class="col-sm-10">
                         @foreach($addition_fee_list as $fee)
-                            <input type="checkbox" name="additionalFee[]" class="addfee_Checkbox" value="{{$fee->id .'|'. $fee->additional_amount}}" onclick="changeTotalAmount()" 
+                            <input type="checkbox" name="additionalFee[]" class="addfee_Checkbox" value="{{$fee->id .'|'. $fee->additional_amount}}"  
                             @if (in_array($fee->id,$payment_additional_fee))
                                 checked
                             @endif
@@ -214,15 +147,11 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <br />   
-            <div class="row g-4">
-                <div class="col-md-1"></div>
                 <div class="col-md-5">
                     <div class="form-group">
                         <label for="discount_percent"><b>Discount (%)</b></label>
                         <div class="col-sm-10">
-                            <input type="number" id="discount_percent" name="discount_percent" value="{{$result[0]->discount_percent}}" onchange="changeTotalAmount()" class="form-control">
+                            <input type="number" id="discount_percent" name="discount_percent" value="{{$result[0]->discount_percent}}" class="form-control">
                         </div>
                     </div>
                 </div>

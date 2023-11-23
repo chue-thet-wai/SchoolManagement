@@ -24,10 +24,10 @@ class ExportPayment implements FromCollection, WithHeadings
     public function headings(): array
     {
         return [
-            'Payment Id',
+            'Invoice Id',
             'Registration No',
             'Name',
-            'Pay Date',
+            'Paid Date',
             'Payment Type',
             'Total Amount',
             'Discount Percent',

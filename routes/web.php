@@ -66,6 +66,12 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
     Route::resource('activity','CreateInformation\ActivityController', ['only' => ['create','store','edit', 'update', 'destroy']]); 
     Route::match(['get', 'post'],'activity/list','CreateInformation\ActivityController@ActivityList');
 
+    Route::resource('event','CreateInformation\EventController', ['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'event/list','CreateInformation\EventController@EventList');
+
+    Route::resource('homework','CreateInformation\HomeworkController', ['only' => ['create','store','edit', 'update', 'destroy']]); 
+    Route::match(['get', 'post'],'homework/list','CreateInformation\HomeworkController@HomeworkList');
+
 
     //for Registration
     Route::resource('student_reg','Registration\StudentRegistrationController'); 
@@ -84,6 +90,8 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
 
     Route::post('/cancel_reg/registration_search','Registration\RegistrationSearchController@studentRegistrationSearch');
     Route::post('/payment/paymentreg_search','Registration\RegistrationSearchController@paymentRegistrationSearch');
+    Route::post('/payment/get_class_data','Registration\PaymentRegController@getClasswithBranch');
+    Route::post('/payment/paid','Registration\PaymentRegController@paidInvoice');
 
     Route::resource('school_bus_track','Registration\SchoolBusTrackRegController',['only' => ['create','store','edit', 'update', 'destroy']]); 
     Route::match(['get', 'post'],'school_bus_track/list','Registration\SchoolBusTrackRegController@schoolBusTracktList');

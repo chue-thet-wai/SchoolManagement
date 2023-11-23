@@ -37,7 +37,7 @@
 					</div>
 				</div>
 				<div class="form-group col-md-3">
-					<label for="payment_paymentId"><b>Payment ID</b></label>
+					<label for="payment_paymentId"><b>Invoice ID</b></label>
 					<div class="col-sm-10">
 						<input type="text" name="payment_paymentId" class="form-control" value="{{ request()->input('payment_paymentId') }}">
 					</div>
@@ -79,51 +79,53 @@
 			</div>
 		</form>
 		<br />
-		<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
-			<thead>
-				<tr>
-					<th>No</th>
-                    <th>Payment ID</th>
-					<th>Registration No</th>	
-                    <th>Name</th>					
-					<th>Pay Date</th>
-					<th>Payment Type</th>
-					<th>Total Amount</th>
-                    <th>Discount Percent</th>
-                    <th>Net Total</th>
-				</tr>
-			</thead>
-			<tbody>
-				@if(!empty($list_result) && $list_result->count())
-					@php $i=1;@endphp
-					@foreach($list_result as $res)
+		<div class="row g-4 m-2" style="display: flex;overflow-x: auto;">
+			<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
+				<thead>
 					<tr>
-						<td>@php echo $i;$i++; @endphp</td>
-                        <td>{{$res->payment_id}}</td>
-						<td>{{$res->registration_no}}</td>	
-                        <td>{{$res->name}}</td>					
-						@if ($res->pay_date != null) 
-							<td>{{date('Y-m-d',strtotime($res->pay_date))}}</td>
-						@else 
-							<td></td>
-						@endif
-						@if ($res->payment_type == 0) 
-							<td>{{$payment_types[2]}}</td>
-						@else
-							<td>{{$payment_types[$res->payment_type]}}</td>
-						@endif
-						<td>{{$res->total_amount}}</td>
-                        <td>{{$res->discount_percent}}</td>
-                        <td>{{$res->net_total}}</td>
+						<th>No</th>
+						<th>Invoice ID</th>
+						<th>Registration No</th>	
+						<th>Name</th>					
+						<th>Pay Date</th>
+						<th>Payment Type</th>
+						<th>Total Amount</th>
+						<th>Discount Percent</th>
+						<th>Net Total</th>
 					</tr>
-					@endforeach
-				@else
-				<tr>
-					<td colspan="8">There are no data.</td>
-				</tr>
-				@endif
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					@if(!empty($list_result) && $list_result->count())
+						@php $i=1;@endphp
+						@foreach($list_result as $res)
+						<tr>
+							<td>@php echo $i;$i++; @endphp</td>
+							<td>{{$res->invoice_id}}</td>
+							<td>{{$res->registration_no}}</td>	
+							<td>{{$res->name}}</td>					
+							@if ($res->paid_date != null) 
+								<td>{{date('Y-m-d',strtotime($res->paid_date))}}</td>
+							@else 
+								<td></td>
+							@endif
+							@if ($res->payment_type == 0) 
+								<td>{{$payment_types[2]}}</td>
+							@else
+								<td>{{$payment_types[$res->payment_type]}}</td>
+							@endif
+							<td>{{$res->total_amount}}</td>
+							<td>{{$res->discount_percent}}</td>
+							<td>{{$res->net_total}}</td>
+						</tr>
+						@endforeach
+					@else
+					<tr>
+						<td colspan="8">There are no data.</td>
+					</tr>
+					@endif
+				</tbody>
+			</table>
+		</div>
 		<div class="d-flex">
             {!! $list_result->links() !!}
         </div>

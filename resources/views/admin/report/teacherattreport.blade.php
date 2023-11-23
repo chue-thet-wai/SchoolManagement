@@ -64,42 +64,42 @@
 			</div>
 		</form>
 		<br />
-		<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
-			<thead>
-				<tr>
-					<th>No</th>
-					<th>User Id</th>
-					<th>Name</th>
-					<th>Date</th>
-					<th>Attendance</th>
-					<th>Remark</th>
-				</tr>
-			</thead>
-			<tbody>
-				@if(!empty($list_result) && $list_result->count())
-					@php $i=1;@endphp
-					@foreach($list_result as $res)
+		<div class="row g-4 m-2" style="display: flex;overflow-x: auto;">
+			<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
+				<thead>
 					<tr>
-						<td>@php echo $i;$i++; @endphp</td>
-						<td>{{$res->user_id}}</td>
-						<td>{{$res->name}}</td>
-						<td>{{date('Y-m-d',strtotime($res->attendance_date))}}</td>
-						<td>{{ $attendance[$res->attendance_status]}}</td>
-						<td>{{$res->remark}}</td>
+						<th>No</th>
+						<th>User Id</th>
+						<th>Name</th>
+						<th>Date</th>
+						<th>Attendance</th>
+						<th>Remark</th>
 					</tr>
-					@endforeach
-				@else
-				<tr>
-					<td colspan="6">There are no data.</td>
-				</tr>
-				@endif
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					@if(!empty($list_result) && $list_result->count())
+						@php $i=1;@endphp
+						@foreach($list_result as $res)
+						<tr>
+							<td>@php echo $i;$i++; @endphp</td>
+							<td>{{$res->user_id}}</td>
+							<td>{{$res->name}}</td>
+							<td>{{date('Y-m-d',strtotime($res->attendance_date))}}</td>
+							<td>{{ $attendance[$res->attendance_status]}}</td>
+							<td>{{$res->remark}}</td>
+						</tr>
+						@endforeach
+					@else
+					<tr>
+						<td colspan="6">There are no data.</td>
+					</tr>
+					@endif
+				</tbody>
+			</table>
+		</div>
 		<div class="d-flex">
             {!! $list_result->links() !!}
         </div>
-	</div>
-	</div>
 	</div>
 </section>
 

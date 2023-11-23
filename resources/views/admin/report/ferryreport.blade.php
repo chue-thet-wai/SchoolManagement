@@ -64,43 +64,45 @@
 			</div>
 		</form>
 		<br />
-		<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
-			<thead>
-				<tr>
-					<th>No</th>
-					<th>Track No</th>
-					<th>Driver ID</th>
-					<th>Name</th>
-					<th>Phone</th>
-					<th>Car Type</th>
-					<th>Car No</th>
-                    <th>School Time</th>
-                    <th>School Period</th>
-				</tr>
-			</thead>
-			<tbody>
-				@if(!empty($list_result) && $list_result->count())
-					@php $i=1;@endphp
-					@foreach($list_result as $res)
+		<div class="row g-4 m-2" style="display: flex;overflow-x: auto;">
+			<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
+				<thead>
 					<tr>
-						<td>@php echo $i;$i++; @endphp</td>
-						<td>{{$res->track_no}}</td>
-						<td>{{$res->driver_id}}</td>
-						<td>{{$res->name}}</td>
-                        <td>{{$res->phone}}</td>
-                        <td>{{$res->car_type}}</td>
-                        <td>{{$res->car_no}}</td>
-                        <td>{{$res->school_from_time}}-{{$res->school_to_time}}</td>
-                        <td>{{$res->school_from_period}}-{{$res->school_to_period}}</td>					
+						<th>No</th>
+						<th>Track No</th>
+						<th>Driver ID</th>
+						<th>Name</th>
+						<th>Phone</th>
+						<th>Car Type</th>
+						<th>Car No</th>
+						<th>School Time</th>
+						<th>School Period</th>
 					</tr>
-					@endforeach
-				@else
-				<tr>
-					<td colspan="9">There are no data.</td>
-				</tr>
-				@endif
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					@if(!empty($list_result) && $list_result->count())
+						@php $i=1;@endphp
+						@foreach($list_result as $res)
+						<tr>
+							<td>@php echo $i;$i++; @endphp</td>
+							<td>{{$res->track_no}}</td>
+							<td>{{$res->driver_id}}</td>
+							<td>{{$res->name}}</td>
+							<td>{{$res->phone}}</td>
+							<td>{{$res->car_type}}</td>
+							<td>{{$res->car_no}}</td>
+							<td>{{$res->school_from_time}}-{{$res->school_to_time}}</td>
+							<td>{{$res->school_from_period}}-{{$res->school_to_period}}</td>					
+						</tr>
+						@endforeach
+					@else
+					<tr>
+						<td colspan="9">There are no data.</td>
+					</tr>
+					@endif
+				</tbody>
+			</table>
+		</div>
 		<div class="d-flex">
             {!! $list_result->links() !!}
         </div>

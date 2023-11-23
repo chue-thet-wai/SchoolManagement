@@ -22,10 +22,9 @@
             <div class="col-md-9" style='color:#012970;'>
                 <h4><b>Create Exam Marks</b></h4>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-2">
                 <a class="btn btn-sm btn-primary" href="{{url('admin/exam_marks/list')}}" id="form-header-btn"> Back</a>
             </div>
-            <div class="col-md-1"></div>
         </div>
 
         <br />

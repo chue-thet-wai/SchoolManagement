@@ -116,7 +116,7 @@ class FoodOrderController extends Controller
             $res=DB::table('food_order')->insert($insertOrder);
 
             DB::commit();
-            return redirect(url('admin/menu/list'))->with('success','Food Order Created Successfully!');
+            return redirect(url('admin/food_order/list'))->with('success','Food Order Created Successfully!');
 
         }catch(\Exception $e){
             DB::rollback();

@@ -73,11 +73,11 @@ class WaitingListRegController extends Controller
     {
         $academic_list = $this->categoryRepository->getAcademicYear();
         $grade_list    = $this->categoryRepository->getGrade();
-        $waiting_number= WaitingRegistration::count();
+        //$waiting_number= WaitingRegistration::count();
         return view('admin.registration.waitingreg.create',[
             'academic_list'=>$academic_list,
             'grade_list'   =>$grade_list,
-            'waiting_number'=>($waiting_number+1),
+           // 'waiting_number'=>($waiting_number+1),
         ]);
     }
 
@@ -110,12 +110,15 @@ class WaitingListRegController extends Controller
              
         DB::beginTransaction();
         try{
+            //To get the waiting number
+            $waiting_number= WaitingRegistration::where('grade_id',$request->grade_id)->max('waiting_number');
             $insertData = array(
                 'name'              =>$request->name,
                 'phone'             =>$request->phone,
                 'email'             =>$request->email,
                 'grade_id'          =>$request->grade_id,
                 'academic_year_id'  =>$request->academic_year_id,
+                'waiting_number'    =>$waiting_number + 1,
                 'enquiry_date'      =>$request->enquiry_date,
                 'created_by'        =>$login_id,
                 'updated_by'        =>$login_id,
@@ -162,12 +165,12 @@ class WaitingListRegController extends Controller
         $grade_list    = $this->categoryRepository->getGrade();
         $academic_list = $this->categoryRepository->getAcademicYear();
 
-        $waiting_number= WaitingRegistration::where('id','<=',$id)->count();
+        //$waiting_number= WaitingRegistration::where('id','<=',$id)->count();
         return view('admin.registration.waitingreg.update',[
             'result'=>$res, 
             'grade_list'     =>$grade_list,
             'academic_list'  =>$academic_list,
-            'waiting_number' =>$waiting_number
+            //'waiting_number' =>$waiting_number
         ]);
     }
 

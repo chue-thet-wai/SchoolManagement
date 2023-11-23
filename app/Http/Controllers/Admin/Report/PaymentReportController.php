@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin\Report;
 
 use App\Exports\ExportPayment;
 use App\Http\Controllers\Controller;
-use App\Models\PaymentRegistration;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
@@ -22,14 +22,15 @@ class PaymentReportController extends Controller
             '2'  => 'Monthly',
             '1'  => 'Yearly'
         );  
-        $res = PaymentRegistration::leftjoin('student_registration','student_registration.registration_no','payment_registration.registration_no')
+        $res = Payment::leftjoin('invoice','invoice.invoice_id','payment.invoice_id')
+                ->leftjoin('student_registration','student_registration.registration_no','payment.registration_no')
                 ->leftJoin('student_info','student_info.student_id','=','student_registration.student_id');
         if ($request['action'] == 'search') {
             if (request()->has('payment_regno') && request()->input('payment_regno') != '') {
-                $res->where('payment_registration.registration_no', request()->input('payment_regno'));
+                $res->where('payment.registration_no', request()->input('payment_regno'));
             }
             if (request()->has('payment_paymentId') && request()->input('payment_paymentId') != '') {
-                $res->where('payment_id', request()->input('payment_paymentId'));
+                $res->where('payment.invoice_id', request()->input('payment_paymentId'));
             }
             if (request()->has('payment_name') && request()->input('payment_name') != '') {
                 $res->where('name', 'Like', '%' . request()->input('payment_name') . '%');
@@ -44,7 +45,7 @@ class PaymentReportController extends Controller
         } else if ($request['action'] == 'export') {
 
             if (request()->has('payment_regno') && request()->input('payment_regno') != '') {
-                $res->where('payment_registration.registration_no', request()->input('payment_regno'));
+                $res->where('payment.registration_no', request()->input('payment_regno'));
             }
             if (request()->has('payment_paymentId') && request()->input('payment_paymentId') != '') {
                 $res->where('payment_id', request()->input('payment_paymentId'));
@@ -60,19 +61,19 @@ class PaymentReportController extends Controller
                 }               
             }
 
-            $res->select('payment_registration.*','student_info.name');
+            $res->select('payment.*','invoice.*','student_info.name');
             $paymentRes = $res->get();
 
             $paymentData = [];
             foreach ($paymentRes as $res) {
-                $resArr['payment_id']     = $res->payment_id;
+                $resArr['invoice_id']     = $res->invoice_id;
                 $resArr['registration_no']= $res->registration_no;
                 $resArr['name']           = $res->name;
 
-                if ($res->pay_date != '') {
-                    $resArr['pay_date'] = date('Y-m-d',strtotime($res->pay_date));
+                if ($res->paid_date != '') {
+                    $resArr['paid_date'] = date('Y-m-d',strtotime($res->paid_date));
                 } else {
-                    $resArr['pay_date'] = $res->pay_date;
+                    $resArr['paid_date'] = $res->paid_date;
                 }
                 if ($res->payment_type == 0) {
                     $resArr['payment_type']      = $paymentType[2];
@@ -95,7 +96,7 @@ class PaymentReportController extends Controller
             ]);
         }  
            
-        $res->select('payment_registration.*','student_info.name');
+        $res->select('payment.*','invoice.*','student_info.name');
         $res = $res->paginate(20);
         return view('admin.report.paymentreport',['list_result' => $res,'payment_types'=> $paymentType]);
     }

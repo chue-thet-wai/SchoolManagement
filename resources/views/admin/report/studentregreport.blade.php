@@ -64,56 +64,56 @@
 			</div>
 		</form>
 		<br />
-		<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
-			<thead>
-				<tr>
-					<th>No</th>
-					<th>Registration No</th>
-					<th>Student ID</th>
-					<th>Name</th>
-					<th>Old Class</th>
-					<th>New Class</th>
-					<th>Registration Date</th>
-				</tr>
-			</thead>
-			<tbody>
-				@if(!empty($list_result) && $list_result->count())
-					@php $i=1;@endphp
-					@foreach($list_result as $res)
+		<div class="row g-4 m-2" style="display: flex;overflow-x: auto;">
+			<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
+				<thead>
 					<tr>
-						<td>@php echo $i;$i++; @endphp</td>
-						<td>{{$res->registration_no}}</td>
-						<td>{{$res->student_id}}</td>
-						<td>{{$res->name}}</td>
-						@if (array_key_exists($res->old_class_id,$class_list))
-							<td>{{ $class_list[$res->old_class_id] }}</td>
-						@else 
-							<td></td>
-						@endif
-						@if (array_key_exists($res->new_class_id,$class_list)) 
-							<td>{{ $class_list[$res->new_class_id] }}</td>
-						@else 
-							<td></td>
-						@endif
-						@if ($res->registration_date != null) 
-							<td>{{date('Y-m-d',strtotime($res->registration_date))}}</td>
-						@else 
-							<td></td>
-						@endif
+						<th>No</th>
+						<th>Registration No</th>
+						<th>Student ID</th>
+						<th>Name</th>
+						<th>Old Class</th>
+						<th>New Class</th>
+						<th>Registration Date</th>
 					</tr>
-					@endforeach
-				@else
-				<tr>
-					<td colspan="7">There are no data.</td>
-				</tr>
-				@endif
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					@if(!empty($list_result) && $list_result->count())
+						@php $i=1;@endphp
+						@foreach($list_result as $res)
+						<tr>
+							<td>@php echo $i;$i++; @endphp</td>
+							<td>{{$res->registration_no}}</td>
+							<td>{{$res->student_id}}</td>
+							<td>{{$res->name}}</td>
+							@if (array_key_exists($res->old_class_id,$class_list))
+								<td>{{ $class_list[$res->old_class_id] }}</td>
+							@else 
+								<td></td>
+							@endif
+							@if (array_key_exists($res->new_class_id,$class_list)) 
+								<td>{{ $class_list[$res->new_class_id] }}</td>
+							@else 
+								<td></td>
+							@endif
+							@if ($res->registration_date != null) 
+								<td>{{date('Y-m-d',strtotime($res->registration_date))}}</td>
+							@else 
+								<td></td>
+							@endif
+						</tr>
+						@endforeach
+					@else
+					<tr>
+						<td colspan="7">There are no data.</td>
+					</tr>
+					@endif
+				</tbody>
+			</table>
+		</div>
 		<div class="d-flex">
             {!! $list_result->links() !!}
         </div>
-	</div>
-	</div>
 	</div>
 </section>
 

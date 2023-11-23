@@ -21,10 +21,9 @@
             <div class="col-md-9" style='color:#012970;'>
                 <h4><b>Update Book Rent</b></h4>
             </div>
-            <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{ url('admin/book_rent/list') }}" id="form-header-btn"> Back</a>
+            <div class="col-md-2">
+                <a class="btn btn-sm btn-primary" href="{{ url('admin/book_rent/list') }}" id="form-header-btn"><i class="bi bi-skip-backward-fill"></i> Back</a>
             </div>
-            <div class="col-md-1"></div>
         </div>
 
         <br />

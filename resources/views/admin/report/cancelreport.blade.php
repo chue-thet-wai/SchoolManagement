@@ -64,41 +64,43 @@
 			</div>
 		</form>
 		<br />
-		<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
-			<thead>
-				<tr>
-					<th>No</th>
-					<th>Registration No</th>
-					<th>Student ID</th>
-					<th>Name</th>
-					<th>Cancel Date</th>
-					<th>Refund Amount</th>
-				</tr>
-			</thead>
-			<tbody>
-				@if(!empty($list_result) && $list_result->count())
-					@php $i=1;@endphp
-					@foreach($list_result as $res)
+		<div class="row g-4 m-2" style="display: flex;overflow-x: auto;">
+			<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
+				<thead>
 					<tr>
-						<td>@php echo $i;$i++; @endphp</td>
-						<td>{{$res->registration_no}}</td>
-						<td>{{$res->student_id}}</td>
-						<td>{{$res->name}}</td>
-						@if ($res->cancel_date != null) 
-							<td>{{date('Y-m-d',strtotime($res->cancel_date))}}</td>
-						@else 
-							<td></td>
-						@endif
-						<td>{{$res->refund_amount}}</td>
+						<th>No</th>
+						<th>Registration No</th>
+						<th>Student ID</th>
+						<th>Name</th>
+						<th>Cancel Date</th>
+						<th>Refund Amount</th>
 					</tr>
-					@endforeach
-				@else
-				<tr>
-					<td colspan="5">There are no data.</td>
-				</tr>
-				@endif
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					@if(!empty($list_result) && $list_result->count())
+						@php $i=1;@endphp
+						@foreach($list_result as $res)
+						<tr>
+							<td>@php echo $i;$i++; @endphp</td>
+							<td>{{$res->registration_no}}</td>
+							<td>{{$res->student_id}}</td>
+							<td>{{$res->name}}</td>
+							@if ($res->cancel_date != null) 
+								<td>{{date('Y-m-d',strtotime($res->cancel_date))}}</td>
+							@else 
+								<td></td>
+							@endif
+							<td>{{$res->refund_amount}}</td>
+						</tr>
+						@endforeach
+					@else
+					<tr>
+						<td colspan="5">There are no data.</td>
+					</tr>
+					@endif
+				</tbody>
+			</table>
+		</div>
 		<div class="d-flex">
             {!! $list_result->links() !!}
         </div>

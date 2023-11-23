@@ -120,6 +120,18 @@ class PermissionSeeder extends Seeder
                 "type"      =>"url"
             ),
             array(
+                'main_menu' =>"Create Information",
+                "sub_menu"  =>"Event",
+                "menu_route"=>"admin/event/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Create Information",
+                "sub_menu"  =>"Homework",
+                "menu_route"=>"admin/homework/list",
+                "type"      =>"url"
+            ),
+            array(
                 'main_menu' =>"Registration",
                 "sub_menu"  =>"Student Registration",
                 "menu_route"=>"student_reg.index",

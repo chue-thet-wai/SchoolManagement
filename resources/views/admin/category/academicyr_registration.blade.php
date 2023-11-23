@@ -25,10 +25,9 @@
                 <h4><b>Update Academic Year</b></h4>
             @endif
             </div>
-            <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{url('admin/academic_year/list')}}" id="form-header-btn"> Back</a>
+            <div class="col-md-2">
+                <a class="btn btn-sm btn-primary" href="{{url('admin/academic_year/list')}}" id="form-header-btn"><i class="bi bi-skip-backward-fill"></i> Back</a>
             </div>
-            <div class="col-md-1"></div>
         </div>
 
         <br />

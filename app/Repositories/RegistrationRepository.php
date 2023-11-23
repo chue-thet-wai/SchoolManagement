@@ -41,7 +41,7 @@ class RegistrationRepository implements RegistrationRepositoryInterface
 
     }
 
-    public function generatePaymentID() 
+    public function generatePaymentInvoiceID() 
     {
         $found = true;  
         $characters = '1234567890';
@@ -52,7 +52,7 @@ class RegistrationRepository implements RegistrationRepositoryInterface
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         while ($found) {
-            $result = DB::table('payment_registration')->select('payment_id')->where('payment_id',$randomString)->first();    
+            $result = DB::table('invoice')->select('invoice_id')->where('invoice_id',$randomString)->first();    
             if ($result) {
                 $found=true;
             }else{

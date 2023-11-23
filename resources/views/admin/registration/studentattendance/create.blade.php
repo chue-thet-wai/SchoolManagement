@@ -132,6 +132,10 @@
                                 </td>
                             </tr>
                             @endforeach
+                        @else
+                            <tr>
+                                <td colspan="5">There are no data.</td>
+                            </tr>
                         @endif
                     </tbody>
                 </table>

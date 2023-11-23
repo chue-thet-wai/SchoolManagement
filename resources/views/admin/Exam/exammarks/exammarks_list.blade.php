@@ -18,11 +18,11 @@
         <br />
        
         <div class="row g-4">
-            <div class="col-md-11" style='color:#012970;'>
+            <div class="col-md-10" style='color:#012970;'>
                 <h4><b>Exam Marks List</b></h4>
             </div>
-            <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{url('admin/exam_marks/create')}}" id="form-header-btn"> Create</a>
+            <div class="col-md-2">
+                <a class="btn btn-sm btn-primary" href="{{url('admin/exam_marks/create')}}" id="form-header-btn"><span class="bi bi-plus"></span> Create</a>
             </div>
         </div>
         <br />
@@ -53,11 +53,26 @@
                 <div class="form-group col-md-3">
 					<label for="class_id"><b>Class</b></label>
 					<div class="col-sm-10">
-                        <select class="form-select" id="examterms_classid" name="examterms_classid">
+                        <select class="form-select" id="exammarks_classid" name="exammarks_classid">
                             <option value=''>--Select--</option>
                             @foreach($classes as $key => $value)
                             <option value="{{$key}}" 
-                            @if (request()->input('examterms_classid') == $key)
+                            @if (request()->input('exammarks_classid') == $key)
+                                selected
+                            @endif
+                            >{{$value}}</option>
+                            @endforeach
+                        </select>
+					</div>
+				</div>
+                <div class="form-group col-md-3">
+					<label for="class_id"><b>Grade</b></label>
+					<div class="col-sm-10">
+                        <select class="form-select" id="exammarks_gradeid" name="exammarks_gradeid">
+                            <option value=''>--Select--</option>
+                            @foreach($grade_list as $key => $value)
+                            <option value="{{$key}}" 
+                            @if (request()->input('exammarks_gradeid') == $key)
                                 selected
                             @endif
                             >{{$value}}</option>

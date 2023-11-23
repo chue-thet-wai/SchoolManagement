@@ -22,10 +22,9 @@
             <div class="col-md-9" style='color:#012970;'>
                 <h4><b>Update Waiting List Registration</b></h4>
             </div>
-            <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{url('admin/waitinglist_reg/list')}}" id="form-header-btn"> Back</a>
+            <div class="col-md-2">
+                <a class="btn btn-sm btn-primary" href="{{url('admin/waitinglist_reg/list')}}" id="form-header-btn"><i class="bi bi-skip-backward-fill"></i> Back</a>
             </div>
-            <div class="col-md-1"></div>
         </div>
 
         <br />
@@ -121,24 +120,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <br />
-            <div class="row g-4">
-                <div class="col-md-1"></div>
-                <div class="form-group col-md-10">
-                    <div class="row col-md-10">
-                        <div class='col-sm-4'>
-                            <label for="waiting_number"><b>Waiting Student Number </b></label>
-                        </div>
-                        <div class='col-sm-1'>
-                            :
-                        </div>
-                        <div class='col-sm-2'>
-                            <span id='waiting_number'>{{$waiting_number}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-1"></div>
             </div>
             <br />
             <div class="row g-4">

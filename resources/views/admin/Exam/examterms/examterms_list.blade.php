@@ -18,11 +18,11 @@
         <br />
        
         <div class="row g-4">
-            <div class="col-md-11" style='color:#012970;'>
+            <div class="col-md-10" style='color:#012970;'>
                 <h4><b>Exam Terms List</b></h4>
             </div>
-            <div class="col-md-1">
-                <a class="btn btn-sm btn-primary" href="{{url('admin/exam_terms/create')}}" id="form-header-btn"> Create</a>
+            <div class="col-md-2">
+                <a class="btn btn-sm btn-primary" href="{{url('admin/exam_terms/create')}}" id="form-header-btn"><span class="bi bi-plus"></span> Create</a>
             </div>
         </div>
         <br />

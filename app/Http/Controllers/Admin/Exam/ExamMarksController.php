@@ -30,7 +30,8 @@ class ExamMarksController extends Controller
      */
     public function examMarksList(Request $request)
     {
-        $res = ExamMarks::select('exam_marks.*');
+        $res = ExamMarks::select('exam_marks.*')
+                ->leftjoin('class_setup','exam_marks.class_id','=','class_setup.id');
         if ($request['action'] == 'search') {
             if (request()->has('exammarks_studentid') && request()->input('exammarks_studentid') != '') {
                 $res->where('student_id', request()->input('exammarks_studentid'));
@@ -39,13 +40,17 @@ class ExamMarksController extends Controller
                 $res->where('exam_terms_id', request()->input('exammarks_examterms'));
             }
             if (request()->has('exammarks_classid') && request()->input('exammarks_classid') != '') {
-                $res->where('class_id', request()->input('exammarks_classid'));
+                $res->where('exam_marks.class_id', request()->input('exammarks_classid'));
+            }
+            if (request()->has('exammarks_gradeid') && request()->input('exammarks_gradeid') != '') {
+                $res->where('class_setup.grade_id', request()->input('exammarks_gradeid'));
             }
         }else {
             request()->merge([
                 'exammarks_studentid'      => null,
                 'exammarks_examterms' => null,
                 'exammarks_classid'    => null,
+                'exammarks_gradeid'    => null,
             ]);
         }       
         $res = $res->paginate(20);
@@ -54,6 +59,12 @@ class ExamMarksController extends Controller
         $subjects=[];
         foreach($subject_list as $a) {
             $subjects[$a->id] = $a->name;
+        }
+
+        $grade_list = $this->categoryRepository->getGrade();
+        $grades=[];
+        foreach($grade_list as $a) {
+            $grades[$a->id] = $a->name;
         }
 
         $examterms_list = $this->getExamTerms();
@@ -68,8 +79,13 @@ class ExamMarksController extends Controller
             $classes[$a->id] = $a->name;
         }
 
-        return view('admin.exam.exammarks.exammarks_list',['list_result' => $res,'subjects' => $subjects,
-        'examterms' => $examterms, 'classes' => $classes]);
+        return view('admin.exam.exammarks.exammarks_list',[
+            'list_result' => $res,
+            'subjects' => $subjects,
+            'examterms' => $examterms, 
+            'classes' => $classes,
+            'grade_list' => $grades
+        ]);
     }
 
     /**
