@@ -69,6 +69,18 @@
             <br />
             <div class="row g-4">
                 <div class="col-md-1"></div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label for="note"><b>Note</b></label>
+                        <div class="col-sm-10">
+                            <textarea name="note" class="form-control">{{$result[0]->note}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row g-4">
+                <div class="col-md-1"></div>
                 <div class="form-group col-md-2">
                     <div class="d-grid mt-4">
                         <input type="submit" value="Update" class="btn btn-primary">

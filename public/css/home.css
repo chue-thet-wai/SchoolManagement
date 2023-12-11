@@ -1,0 +1,128 @@
+@import url(https://fonts.googleapis.com/css?family=Muli:400, 300);
+body { margin-top: 3%; }
+
+.calendar, .calendar_weekdays, .calendar_content {
+    max-width: 350px;
+}
+.calendar {
+    margin: auto;
+    font-family:'Muli', sans-serif;
+    font-weight: 400;
+}
+.calendar_content, .calendar_weekdays, .calendar_header {
+    position: relative;
+    overflow: hidden;
+}
+.calendar_weekdays div {
+    display:inline-block;
+    vertical-align:top;
+}
+.calendar_weekdays div, .calendar_content div {
+    width: 14.28571%;
+    overflow: hidden;
+    text-align: center;
+    background-color: transparent;
+    color: #000000;
+    font-size: 14px;
+    padding:5px;
+}
+.calendar_content div {
+    border: 1px solid transparent;
+    float: left;
+}
+.calendar_content div:hover {
+    border: 1px solid #dcdcdc;
+    cursor: default;
+}
+.calendar_content div.blank:hover {
+    cursor: default;
+    border: 1px solid transparent;
+}
+.calendar_content div.past-date {
+    color: #b3b3b3;
+}
+.calendar_content div.today {
+    font-weight: bold;
+    font-size: 14px;
+    color: #87b633;
+    border: 1px solid #dcdcdc;
+}
+.calendar_content div.selected {
+    background-color: #f0f0f0;
+}
+.calendar_header {
+    width: 100%;
+    text-align: center;
+}
+.calendar_header h2 {
+    padding: 0 10px;
+    font-family:'Muli', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #000000;
+    float:left;
+    width:70%;
+    margin: 0 0 10px;
+}
+button.switch-month {
+    background-color: transparent;
+    padding: 0;
+    outline: none;
+    border: none;
+    color: #000000;
+    float: left;
+    width:15%;
+    transition: color .2s;
+}
+button.switch-month:hover {
+    color: #87b633;
+}
+
+.calendar_weekdays div{
+    font-weight: 600;
+}
+.event-date{
+    border-radius: 20px;
+    background: #6cb2eb;
+    width: fit-content;
+    padding: 0% 2% 0% 2%;
+    font-size: 0.8em;
+    font-weight: 600;
+}
+.event-description{
+    font-weight: 600;
+    font-size: 0.8em;
+    padding: 5px;
+}
+
+/* dashboard table */
+.custom-table{
+    background:#e1d8d8;
+    border-radius:5px;
+}
+.custom-table th{
+    border-bottom:1px solid #000;
+}
+.custom-table td{
+    border:none;
+}
+.custom-table .first-column,
+.custom-table .middle-column{
+    border-right:1px solid #000;
+   
+}
+.custom-table .first-column{
+    width:30%;
+}
+.custom-table .middle-column,
+.custom-table .last-column{
+    width:10%;
+}
+.custom-table .colval-border
+{
+    background: #ffffff;
+    border: 1px solid #000;
+    border-radius: 5px;
+    text-align: center;
+}
+/* dashboard table */

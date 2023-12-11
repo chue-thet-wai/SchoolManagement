@@ -68,10 +68,10 @@
                         @foreach($list_result as $res)
                         <tr>
                             <td>@php echo $i;$i++; @endphp</td>
-                            <td>{{ $book_list[$res->book_id] }}</td>
+                            <td>{{ $res->book_title }}</td>
                             <td>{{$res->student_id}}</td>
-                            <td>{{ $res->rent_date }}</td>
-                            <td>{{ $res->return_date }}</td>
+                            <td>{{ date('Y-m-d',strtotime($res->rent_date)) }}</td>
+                            <td>{{ date('Y-m-d',strtotime($res->return_date)) }}</td>
                             <td>{{ $res->actual_return_date }}</td>
                             <td class="center">
                                 <a href="{{ url('admin/book_rent/edit/'.$res->id) }}">

@@ -105,6 +105,7 @@
                         <th>Class</th>
                         <th>Subject</th>
                         <th>Mark</th>
+                        <th>Grade</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -119,6 +120,7 @@
                             <td>{{ $classes[$res->class_id] }}</td>
                             <td>{{ $subjects[$res->subject_id] }}</td>
                             <td>{{ $res->mark }}</td>
+                            <td>@if(array_key_exists($res->id,$exam_rules)) {{$exam_rules[$res->id]}} @else {{""}} @endif</td>
                             <td class="center">
                                 <a href="{{ url('admin/exam_marks/edit/'.$res->id) }}">
                                     <button type="submit" value="edit" class="btn m-1 p-0 border-0">

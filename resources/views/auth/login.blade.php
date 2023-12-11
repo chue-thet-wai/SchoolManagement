@@ -1,27 +1,39 @@
 @extends('layouts.app')
 
 @section('content')
+<link href="{{ asset('css/login.css') }}" rel="stylesheet">
+
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="card">
                     <!--<div class="card-header">{{ __('Login') }}</div>-->
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
-                            <div class="mb-4 row">
-                                <img src="{{ asset('school_logo.png') }}" alt="Your Logo">
+                            <div class="mb-2 row">
+                                <div class="col-12 mx-auto text-center" id="login-image">
+                                    <img src="{{ asset('techyschool_logo.png') }}" alt="Your Logo">
+                                </div>
                             </div>
                             <div class="mb-2 row">
-                                <div class="col-md-2"></div>
-                                <label for="email" class="col-md-4">
-                                    {{ __('E-Mail Address') }} :
+                                <div class="col-12 mx-auto text-center" id="login-title">
+                                    <h4><strong>School Management System</strong></h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3"></div>
+                                <label for="email" class="col-md-4 ms-md-4">
+                                    {{ __('E-Mail Address') }}
                                 </label>
                             </div>
-                            <div class="mb-3 row">
-                                <div class="col-md-2"></div>
-                                <div class="col-md-8">
+                            <div class="mb-2 row">
+                                <div class="col-md-3"></div>
+                                <div class="col-md-5 ms-md-4 input-with-image">
+                                    <div class="image-section">
+                                        <img src="{{ asset('email.png') }}" alt="Your Image">
+                                    </div>
                                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
                                         name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
@@ -33,15 +45,18 @@
                                 </div>
                             </div>
 
-                            <div class="mb-2 row">
-                                <div class="col-md-2"></div>
-                                <label for="password" class="col-md-4">
-                                    {{ __('Password') }} :
+                            <div class="row">
+                                <div class="col-md-3"></div>
+                                <label for="password" class="col-md-4 ms-md-4">
+                                    {{ __('Password') }}
                                 </label>
                             </div>
-                            <div class="mb-3 row">
-                                <div class="col-md-2"></div>
-                                <div class="col-md-8">
+                            <div class="mb-2 row">
+                                <div class="col-md-3"></div>
+                                <div class="col-md-5 ms-md-4 input-with-image">
+                                    <div class="image-section">
+                                        <img src="{{ asset('password.png') }}" alt="Your Image">
+                                    </div>
                                     <input id="password" type="password"
                                         class="form-control @error('password') is-invalid @enderror" name="password"
                                         required autocomplete="current-password">
@@ -54,29 +69,31 @@
                                 </div>
                             </div>
 
-                            <!--<div class="mb-3 row">
-                                <div class="col-md-6 offset-md-4">
-                                    <div class="form-check">
+                            <div class="mb-2 row remember-forgot">
+                                <div class="col-md-3 offset-md-3">
+                                    <div class="form-check ms-md-3">
                                         <input class="form-check-input" type="checkbox" name="remember" id="remember"
                                             {{ old('remember') ? 'checked' : '' }}>
                                         <label class="form-check-label" for="remember">
-                                            {{ __('Remember Me') }}
+                                            {{ __('Keep me signed in') }}
                                         </label>
                                     </div>
                                 </div>
-                            </div>-->
-                            <br />
-                            <div class="mb-5 row">
-                                <div class="col-md-8 offset-md-2">
-                                    <button type="submit" class="btn btn-primary" style="color: white;padding: 2% 7% 2% 7%;width:100%;">
-                                        {{ __('Login') }}
+                                <div class="col-md-4" style="margin-left: -3%;">
+                                    <div class="form-check">
+                                        @if (Route::has('password.request'))
+                                            <a class="btn btn-link forgot-link" href="{{ route('password.request') }}">
+                                                {{ __('Forgot Your Password?') }}
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <div class="col-md-2 mx-auto">
+                                    <button type="submit" class="sing-in px-md-3 py-md-1">
+                                        {{ __('Sign In') }}
                                     </button>
-
-                                    <!--@if (Route::has('password.request'))
-                                        <a class="btn btn-link" href="{{ route('password.request') }}">
-                                            {{ __('Forgot Your Password?') }}
-                                        </a>
-                                    @endif-->
                                 </div>
                             </div>
                         </form>

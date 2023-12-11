@@ -70,9 +70,9 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <div class='row'>
-                                        <label for="registration_no"><b>Registration Number<span style="color:brown">*</span></b></label>
+                                        <label for="student_id"><b>Student ID<span style="color:brown">*</span></b></label>
                                         <div class="col-sm-10">
-                                            <input type="text" id="registration_no" name="registration_no" class="form-control">
+                                            <input type="text" id="student_id" name="student_id" class="form-control">
                                         </div>
                                         <div class="col-md-2">
                                             <button type="button" name="registration_search" id="registration_search" class="btn btn-sm btn-primary mt-1">Search</button>

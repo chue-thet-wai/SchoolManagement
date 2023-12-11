@@ -78,6 +78,7 @@ class ExpenseController extends Controller
                 'title'             =>$request->title,
                 'expense_date'      =>$request->expense_date,
                 'amount'            =>$request->amount,
+                'note'              =>$request->note,
                 'created_by'        =>$login_id,
                 'updated_by'        =>$login_id,
                 'created_at'        =>$nowDate,
@@ -135,6 +136,7 @@ class ExpenseController extends Controller
                 'title'             =>$request->title,
                 'expense_date'      =>$request->expense_date,
                 'amount'            =>$request->amount,
+                'note'              =>$request->note,
                 'updated_by'        =>$login_id,
                 'updated_at'        =>$nowDate
 

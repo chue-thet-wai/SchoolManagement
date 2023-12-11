@@ -119,6 +119,9 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
 
     Route::get('/reporting/student_attendance_report','Report\StudentAttendanceReportController@studentAttendanceReport'); 
     Route::post('/reporting/student_attendance_report','Report\StudentAttendanceReportController@studentAttendanceReport');  
+
+    Route::get('/reporting/expense_report','Report\ExpenseReportController@expenseReport'); 
+    Route::post('/reporting/expense_report','Report\ExpenseReportController@expenseReport');  
    
     //for exam
     Route::prefix('exam_terms')->group(function () {
@@ -139,6 +142,16 @@ Route::group(['prefix'=>'admin','namespace'=>'App\Http\Controllers\Admin','middl
         Route::get('edit/{id}','Exam\ExamMarksController@examMarksEdit'); 
         Route::post('update/{id}','Exam\ExamMarksController@examMarksUpdate'); 
         Route::delete('delete/{id}','Exam\ExamMarksController@examMarksDelete');
+    }); 
+
+    Route::prefix('exam_rules')->group(function () {
+        Route::get('list','Exam\ExamRulesController@examRulesList');
+        Route::post('list','Exam\ExamRulesController@examRulesList');
+        Route::get('create','Exam\ExamRulesController@examRulesCreate'); 
+        Route::post('save','Exam\ExamRulesController@examRulesSave'); 
+        Route::get('edit/{id}','Exam\ExamRulesController@examRulesEdit'); 
+        Route::post('update/{id}','Exam\ExamRulesController@examRulesUpdate'); 
+        Route::delete('delete/{id}','Exam\ExamRulesController@examRulesDelete');
     }); 
 
     //for wallet

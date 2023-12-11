@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('payment_additional_fee', function (Blueprint $table) {
-            $table->renameColumn('payment_id', 'invoice_id')->commend('invoice_id in invoice table');
+            $table->renameColumn('payment_id', 'invoice_id')->comment('invoice_id in invoice table');
         });
     }
 

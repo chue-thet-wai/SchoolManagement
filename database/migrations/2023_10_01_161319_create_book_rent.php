@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('book_rent', function (Blueprint $table) {
             $table->id();
-            $table->integer('book_id')->comment('id in book_register table');
+            $table->string('book_title');
             $table->integer('student_id')->comment('id for student_info table');
             $table->timestamp('rent_date')->nullable();
             $table->timestamp('return_date')->nullable();

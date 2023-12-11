@@ -129,8 +129,6 @@
             {!! $list_result->links() !!}
         </div>
 	</div>
-	</div>
-	</div>
 </section>
 
 @endsection

@@ -67,58 +67,58 @@
 			</div>
 		</form>
 		<br />
-		<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
-			<thead>
-				<tr>
-					<th>No</th>
-					<th>Name</th>
-					<th>Amount</th>
-					<th>Grade</th>
-					<th>Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				@if(!empty($list_result) && $list_result->count())
-					@php $i=1;@endphp
-					@foreach($list_result as $res)
+		<div class="row g-4 m-2" style="display: flex;overflow-x: auto;">
+			<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
+				<thead>
 					<tr>
-						<td>@php echo $i;$i++; @endphp</td>
-						<td>{{$res->name}}</td>
-						<td>{{$res->additional_amount}}</td>
-						@if ($res->grade_id != null) 
-							<td>{{$grade_list[$res->grade_id]}}</td>
-						@else 
-							<td></td>
-						@endif
-						
-						<td class="center">
-							<a href="{{route('additional_fee.edit',$res->id)}}">
-								<button type="submit" value="edit" class="btn m-1 p-0 border-0">
-									<span id="boot-icon" class="bi bi-pencil-square" style="font-size: 20px; color:rgb(58 69 207);"></span>
-								</button>                            
-							</a>
-							<form method="post" action="{{route('additional_fee.destroy',$res->id)}}" style="display: inline;">
-								@csrf
-								{{ method_field('DELETE') }}
-								<button type="submit" value="delete" class="btn m-0 p-0 border-0">
-									<span id="boot-icon" class="bi bi-trash" style="font-size: 20px; color: rgb(165, 42, 42);"></span>
-								</button>
-							</form>
-						</td>
+						<th>No</th>
+						<th>Name</th>
+						<th>Amount</th>
+						<th>Grade</th>
+						<th>Action</th>
 					</tr>
-					@endforeach
-				@else
-				<tr>
-					<td colspan="5">There are no data.</td>
-				</tr>
-				@endif
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					@if(!empty($list_result) && $list_result->count())
+						@php $i=1;@endphp
+						@foreach($list_result as $res)
+						<tr>
+							<td>@php echo $i;$i++; @endphp</td>
+							<td>{{$res->name}}</td>
+							<td>{{$res->additional_amount}}</td>
+							@if ($res->grade_id != null) 
+								<td>{{$grade_list[$res->grade_id]}}</td>
+							@else 
+								<td></td>
+							@endif
+							
+							<td class="center">
+								<a href="{{route('additional_fee.edit',$res->id)}}">
+									<button type="submit" value="edit" class="btn m-1 p-0 border-0">
+										<span id="boot-icon" class="bi bi-pencil-square" style="font-size: 20px; color:rgb(58 69 207);"></span>
+									</button>                            
+								</a>
+								<form method="post" action="{{route('additional_fee.destroy',$res->id)}}" style="display: inline;">
+									@csrf
+									{{ method_field('DELETE') }}
+									<button type="submit" value="delete" class="btn m-0 p-0 border-0">
+										<span id="boot-icon" class="bi bi-trash" style="font-size: 20px; color: rgb(165, 42, 42);"></span>
+									</button>
+								</form>
+							</td>
+						</tr>
+						@endforeach
+					@else
+					<tr>
+						<td colspan="5">There are no data.</td>
+					</tr>
+					@endif
+				</tbody>
+			</table>
+		</div>
 		<div class="d-flex">
             {!! $list_result->links() !!}
         </div>
-	</div>
-	</div>
 	</div>
 </section>
 

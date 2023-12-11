@@ -32,14 +32,14 @@ class PaymentRegController extends Controller
      */
     public function paymentList(Request $request)
     {
-        $res = Invoice::select('invoice.*')
+        $res = Invoice::select('invoice.*','payment.paid_date as paid_date')
                 ->leftjoin('payment','payment.invoice_id','=','invoice.invoice_id');
         if ($request['action'] == 'search') {
             if (request()->has('payment_invoiceid') && request()->input('payment_invoiceid') != '') {
                 $res->where('invoice.invoice_id',request()->input('payment_invoiceid'));
             }
             if (request()->has('payment_regno') && request()->input('payment_regno') != '') {
-                $res->where('invoice.registration_no', request()->input('payment_regno'));
+                $res->where('invoice.student_id', request()->input('payment_regno'));
             }
         }else {
             request()->merge([
@@ -123,28 +123,28 @@ class PaymentRegController extends Controller
                 'class_id'             =>'required',
             ]); 
             $class_id = explode("/", $request->class_id);
-            $student_res = StudentRegistration::select("registration_no")
+            $student_res = StudentRegistration::select("student_id")
                             ->where('new_class_id',$class_id[0])
                             ->get()->toArray();
             
-            $regno_list = array_column($student_res,'registration_no');
+            $regno_list = array_column($student_res,'student_id');
         
         } else {
             $request->validate([
-                'registration_no'            =>'required',
+                'student_id'            =>'required',
             ]); 
-            $studentRegSearch = StudentRegistration::where('registration_no',$request->registration_no)->first();
+            $studentRegSearch = StudentRegistration::where('student_id',$request->student_id)->first();
             if (empty($studentRegSearch)) {
                 return redirect()->back()->with('danger','Registration ID not found!');
             } else {
-                $checkInvoice= Invoice::where('registration_no',$request->registration_no)
+                $checkInvoice= Invoice::where('student_id',$request->student_id)
                                     ->where('pay_to_period','>=',$request->pay_from_period)
                                     ->get()->toArray(); 
                 if (!empty($checkInvoice)) {
                     return redirect()->back()->with('danger','Invoice already Created for Pay Period (From)!');
                 }
                         
-                array_push($regno_list,$request->registration_no);
+                array_push($regno_list,$request->student_id);
             }   
         }
 
@@ -160,7 +160,7 @@ class PaymentRegController extends Controller
             
             for ($j=0;$j<count($regno_list);$j++) {
                 //check invoice already created or not for pay_from_period
-                $checkInvoice= Invoice::where('registration_no',$regno_list[$j])
+                $checkInvoice= Invoice::where('student_id',$regno_list[$j])
                                     ->where('pay_to_period','>=',$request->pay_from_period)
                                     ->get()->toArray(); 
                 if (empty($checkInvoice)) {
@@ -185,7 +185,7 @@ class PaymentRegController extends Controller
 
                     $insertData[] = array(
                         'invoice_id'        =>$invoiceID,
-                        'registration_no'   =>$regno_list[$j],
+                        'student_id'        =>$regno_list[$j],
                         'payment_type'      =>$request->payment_type,
                         'pay_from_period'   =>$request->pay_from_period,
                         'pay_to_period'     =>$request->pay_to_period,
@@ -243,7 +243,7 @@ class PaymentRegController extends Controller
         $nowDate  = date('Y-m-d H:i:s', time());
         $res = [];
         $paymentAddFeeArr = array();
-        $res = Invoice::leftjoin('student_registration','student_registration.registration_no','=','invoice.registration_no')
+        $res = Invoice::leftjoin('student_registration','student_registration.student_id','=','invoice.student_id')
                 ->leftjoin('class_setup','class_setup.id','=','student_registration.new_class_id')
                 ->leftjoin('grade','grade.id','=','class_setup.grade_id')
                 ->where('invoice.invoice_id',$id)
@@ -297,9 +297,9 @@ class PaymentRegController extends Controller
         $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
-            'registration_no'            =>'required',
+            'student_id'            =>'required',
         ]); 
-        $studentRegSearch = Invoice::where('registration_no',$request->registration_no)->first();
+        $studentRegSearch = Invoice::where('student_id',$request->student_id)->first();
         if (empty($studentRegSearch)) {
             return redirect()->back()->with('danger','Registration ID not found!');
         }
@@ -338,7 +338,7 @@ class PaymentRegController extends Controller
             
             $updateData = array(
                 'invoice_id'        =>$id,
-                'registration_no'   =>$request->registration_no,
+                'student_id'        =>$request->student_id,
                 'payment_type'      =>$request->payment_type,
                 'pay_from_period'   =>$request->pay_from_period,
                 'pay_to_period'     =>$request->pay_to_period,
@@ -414,7 +414,7 @@ class PaymentRegController extends Controller
             
             $paidData = array(
                 'invoice_id'        =>$request->paid_invoiceid,
-                'registration_no'   =>$request->paid_registrationno,
+                'student_id'        =>$request->paid_student_id,
                 'paid_date'         =>$request->paid_paiddate,
                 'paid_type'         =>$request->paid_paidtype,
                 'remark'            =>$request->paid_remark,

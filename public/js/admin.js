@@ -28,7 +28,20 @@ const previewImage = (event) => {
          * Show the element by changing the display value to "block".
          */
         imagePreviewElement.style.display = "block";
+
+        const imageCancel = document.querySelector("#cancel-image");
+        imageCancel.style.display = "block";
     }
+};
+
+const calcelPreviewImage = (event) => {
+
+  document.getElementById('file-upload').value = '';
+    document.getElementById('preview-selected-image').src = '';
+    const imagePreviewElement = document.querySelector("#preview-selected-image");
+    imagePreviewElement.src = '';
+    imagePreviewElement.style.display = "none";
+  
 };
 
 //////////////////////////////////////////////////////////

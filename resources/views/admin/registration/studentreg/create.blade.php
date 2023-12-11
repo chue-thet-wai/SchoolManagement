@@ -76,6 +76,12 @@
             }
         });
      }
+    function cancelPreview() {
+        $('#file-upload').val('');
+        $('#preview-selected-image').attr('src', '');
+        $('#preview-selected-image').hide();
+        $('#cancel-image').hide();
+    }
 </script>
 
 <div class="pagetitle">
@@ -215,6 +221,7 @@
                                 <div class="image-preview-container" style='width:100%;'>
                                     <div class="preview">
                                         <img id="preview-selected-image" style='height:140px;' />
+                                        <div class="cancel-image" id="cancel-image" onclick="cancelPreview()" style="display:none;">&#10006;</div>
                                     </div>
                                     <label for="file-upload">Upload Image</label>
                                     <input type="file" id="file-upload" name='student_profile' accept="image/*" onchange="previewImage(event);" />
@@ -739,6 +746,27 @@
         </form>
     </div>
 </section>
+<style>
+    .image-preview-container {
+      position: relative;
+    }
 
+    #preview-selected-image {
+      height: 140px;
+      position: relative;
+    }
+
+    .cancel-image {
+      position: absolute;
+      top: 0;
+      right: 0;
+      cursor: pointer;
+      color: white;
+      font-size: 20px;
+      background-color: #8338ec;
+      padding: 5px;
+      border-top-right-radius: 5px;
+    }
+  </style>
 
 @endsection

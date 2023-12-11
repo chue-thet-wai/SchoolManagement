@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->timestamp('expense_date')->nullable();
             $table->string('amount')->nullable();
+            $table->string('note')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->softDeletes(); 

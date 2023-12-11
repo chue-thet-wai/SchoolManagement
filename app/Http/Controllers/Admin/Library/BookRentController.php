@@ -79,7 +79,7 @@ class BookRentController extends Controller
         $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
-            'book_id'            =>'required',
+            'book_title'        =>'required',
             'student_id'        =>'required',
             'rent_date'          =>'required',
             'return_date'        =>'required'
@@ -88,7 +88,7 @@ class BookRentController extends Controller
         DB::beginTransaction();
         try{
             $insertData = array(
-                'book_id'             =>$request->book_id,
+                'book_title'          =>$request->book_title,
                 'student_id'          =>$request->student_id,
                 'rent_date'           =>$request->rent_date,
                 'return_date'         =>$request->return_date,
@@ -146,7 +146,7 @@ class BookRentController extends Controller
         $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
-            'book_id'            =>'required',
+            'book_title'         =>'required',
             'student_id'         =>'required',
             'rent_date'          =>'required',
             'return_date'        =>'required'
@@ -155,7 +155,7 @@ class BookRentController extends Controller
         DB::beginTransaction();
         try{
             $updateData   = array(
-                'book_id'             =>$request->book_id,
+                'book_title'          =>$request->book_title,
                 'student_id'          =>$request->student_id,
                 'rent_date'           =>$request->rent_date,
                 'return_date'         =>$request->return_date,

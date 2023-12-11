@@ -33,31 +33,33 @@
         </form>
 		<br />
 		<br />
-		<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
-			<thead>
-				<tr>
-					<th>No</th>
-					<th>Code</th>
-                    <th>Name</th>
-				</tr>
-			</thead>
-			<tbody>
-				@if(!empty($list_result) && $list_result->count())
-					@php $i=1;@endphp
-					@foreach($list_result as $res)
+		<div class="row g-4 m-2" style="display: flex;overflow-x: auto;">
+			<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
+				<thead>
 					<tr>
-						<td>@php echo $i;$i++; @endphp</td>
-						<td>{{$res->code}}</td>
-                        <td>{{$res->name}}</td>
+						<th>No</th>
+						<th>Code</th>
+						<th>Name</th>
 					</tr>
-					@endforeach
-				@else
-				<tr>
-					<td colspan="5">There are no data.</td>
-				</tr>
-				@endif
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					@if(!empty($list_result) && $list_result->count())
+						@php $i=1;@endphp
+						@foreach($list_result as $res)
+						<tr>
+							<td>@php echo $i;$i++; @endphp</td>
+							<td>{{$res->code}}</td>
+							<td>{{$res->name}}</td>
+						</tr>
+						@endforeach
+					@else
+					<tr>
+						<td colspan="5">There are no data.</td>
+					</tr>
+					@endif
+				</tbody>
+			</table>
+		</div>
 		<div class="d-flex">
             {!! $list_result->links() !!}
         </div>

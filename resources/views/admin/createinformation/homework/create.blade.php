@@ -32,13 +32,21 @@
             <br />
             <div class="row g-4">
                 <div class="col-md-1"></div>
-                <div class="col-md-10">
+                <div class="col-md-5">
                     <div class="form-group">
                         <label for="title"><b>Title</b></label>
-                        <div class="col-sm-11">
+                        <div class="col-sm-10">
                             <input type="text" name="title" class="form-control" required>
                         </div>
                     </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label for="homework_file"><b>File</b></label>
+                        <div class="col-sm-10">
+                            <input type="file" class="form-control" id="homework_file" name='homework_file' />  
+                        </div>
+                    </div> 
                 </div>
             </div>
             <br />

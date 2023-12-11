@@ -75,7 +75,7 @@ class StudentRegistrationController extends Controller
         if ($request->registration_type == 1) { //new student
             $request->validate([
                 'registration_type' =>'required',
-                'student_profile'   =>'mimes:jpeg,jpg,png | max:1000',
+                'student_profile'   => 'mimes:jpeg,jpg,png',
                 'name'              => 'required',
                 'name_mm'           => 'required',
                 'religion'          => 'required',

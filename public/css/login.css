@@ -1,0 +1,62 @@
+.card{
+    background:#d9d9d9;
+    color:#000;
+}
+#password,
+#email {
+    background:#d9d9d9;
+    border:1px solid #000;
+    border-radius:0px;
+}
+.remember-forgot{
+    font-size:0.8em;
+}
+.forgot-link{
+    color: #000000;
+    font-size: 1em;
+    margin-top: -3%;"
+}
+.sing-in{
+    background: #d9d9d9;
+    font-weight: 800;
+    border: 1px solid #000;
+}
+#login-image img{
+    width:120px;
+    height:120px;
+}
+.input-with-image {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-image input {
+    padding-left: 15%;
+}
+
+.input-with-image img {
+    position: relative;
+    /* left: 15%; */
+    top: 50%;
+    transform: translateY(-50%);
+    height: 22px;
+    width: auto;
+}
+label {
+    font-weight: bold;
+}
+.image-section {
+    background-color: #80e0e8;
+    /* display: block; */
+    text-align: center;
+    /* align-items: center; */
+    width: 10%;
+    position: absolute;
+    border: 1px solid #000;
+    height: 100%;
+}
+.text-center {
+    text-align: center !important;
+    letter-spacing: 1px;
+}

@@ -1,6 +1,30 @@
 @extends('layouts.dashboard')
 
 @section('content')
+<script>
+    window.onload = getStudentData;
+    function getStudentData(){
+        var stID = $("#student_id").val();
+        $.ajax({
+           type:'POST',
+           url:'/admin/student_registration/student_search',
+           data:{
+                _token :'<?php echo csrf_token() ?>',
+                student_id  : stID
+            },
+           
+           success:function(data){
+                if (data.msg == 'found') {
+                    $("#student_name").val(data.name);
+                    $('#student_search_result').html('Student data found !');
+                } else {
+                    $("#student_name").val('');
+                    $('#student_search_result').html('Student data not found !');
+                }             
+            }
+        });
+    }
+</script>
 <div class="pagetitle">
     <h1>Book Rent</h1>
     <nav>
@@ -36,18 +60,28 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label for="book_name"><b>Books<span style="color:brown">*</span></b></label>
+                        <label for="book_category"><b>Studnet</I><span style="color:brown">*</span></b></label>
                         <div class="col-sm-10">
-                            <select class="form-select" id="book_name" name="book_id" >
-                                <option  value="99">--Select Books--</option>
-                                @foreach($book_list as $a)
-                                    <option  value="{{$a->id}}"
-                                    @if ($result[0]->book_id == $a->id)
+                            <!--<select class="form-select" id="book_category" name="student_id" >
+                                <option  value="99">--Select Student--</option>
+                                @foreach($student_list as $a)
+                                <option  value="{{$a->student_id}}"
+                                    @if ($result[0]->student_id == $a->id)
                                         selected
                                     @endif
-                                    >{{$a->title}}</option>
+                                    >{{$a->name}}</option>
                                 @endforeach
-                            </select>
+                            </select>-->
+                            <div class="row">
+                                <div class='col-sm-10'>
+                                    <input type="text" id="student_id" value="{{$result[0]->student_id}}" name="student_id" class="form-control">
+                                    <br />
+                                    <span id="student_search_result"></span>
+                                </div>
+                                <div class='col-sm-2'>
+                                    <button type="button" name="student_search" id="student_search" class="btn btn-sm btn-primary" onclick="getStudentData()">Search</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -57,18 +91,31 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label for="book_category"><b>Studnet</I><span style="color:brown">*</span></b></label>
+                        <label for="book_category"><b>Studnet Name</b></label>
                         <div class="col-sm-10">
-                            <select class="form-select" id="book_category" name="student_id" >
-                                <option  value="99">--Select Student--</option>
-                                @foreach($student_list as $a)
-                                <option  value="{{$a->student_id}}"
-                                    @if ($result[0]->student_id == $a->id)
+                            <input type="text" name="student_name" id="student_name" class="form-control" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row g-4">
+                <div class="col-md-1"></div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label for="book_name"><b>Book Title<span style="color:brown">*</span></b></label>
+                        <div class="col-sm-10">
+                            <!--<select class="form-select" id="book_name" name="book_id" >
+                                <option  value="99">--Select Books--</option>
+                                @foreach($book_list as $a)
+                                    <option  value="{{$a->id}}"
+                                    @if ($result[0]->book_id == $a->id)
                                         selected
                                     @endif
-                                    >{{$a->name}}</option>
+                                    >{{$a->title}}</option>
                                 @endforeach
-                            </select>
+                            </select>-->
+                            <input type="text" name="book_title" value="{{$result[0]->book_title}}" class="form-control" required>
                         </div>
                     </div>
                 </div>

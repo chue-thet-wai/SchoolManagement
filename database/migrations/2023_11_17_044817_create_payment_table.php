@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('payment', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_id');
-            $table->string('registration_no');
+            $table->string('student_no');
             $table->timestamp('paid_date')->nullable();
             $table->tinyInteger('paid_type')->default(0)->comment('1:cash;2:bank');
             $table->string('bank_type')->nullable();

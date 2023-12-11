@@ -126,6 +126,16 @@ class HomeworkController extends Controller
             $errmsg = implode(',',$errmsg);
             return redirect()->back()->with('danger','Please select '.$errmsg.'!');
         }
+
+        $latestId = Homework::latest()->value('id');
+
+        if($request->hasFile('homework_file')){
+            $homeworkfile=$request->file('homework_file');
+            $extension = $homeworkfile->extension();
+            $homeworkfile_name = (intval($latestId) + 1). "_" . time() . "." . $extension;
+        }else{
+            $homeworkfile_name="";
+        }    
                 
         DB::beginTransaction();
         try{
@@ -134,6 +144,7 @@ class HomeworkController extends Controller
                 'class_id'           =>$request->class_id,
                 'academic_year_id'   =>$request->academic_year_id,
                 'subject_id'         =>$request->subject_id,
+                'homework_file'      =>$homeworkfile_name,
                 'due_date'           =>$request->due_date,
                 'description'        =>$request->description,
                 'remark'             =>$request->remark,
@@ -144,7 +155,10 @@ class HomeworkController extends Controller
             );
             $result=Homework::insert($insertData);
                         
-            if($result){      
+            if($result){  
+                if ($homeworkfile_name != "") {
+                    $homeworkfile->move(public_path('assets/homework_files'),$homeworkfile_name);   
+                }      
                 DB::commit();
                 return redirect(url('admin/homework/list'))->with('success','Homework Created Successfully!');
             }else{
@@ -218,6 +232,18 @@ class HomeworkController extends Controller
         if ($request->subject == '99') {
             array_push($errmsg,'Subject');
         } 
+
+        if($request->hasFile('homework_file')){
+
+            $previous_homeworkfile=$request->previous_homeworkfile;
+            @unlink(public_path('/assets/homework_files/'. $previous_homeworkfile));
+
+            $homeworkfile=$request->file('homework_file');
+            $extension = $homeworkfile->extension();
+            $homeworkfile_name = $id. "_" . time() . "." . $extension;
+        }else{
+            $homeworkfile_name="";
+        } 
         
         if (!empty($errmsg)) {
             $errmsg = implode(',',$errmsg);
@@ -238,10 +264,15 @@ class HomeworkController extends Controller
                 'updated_at'         =>$nowDate
 
             );
-            
+            if ($homeworkfile_name != "") {
+                $updateData['homework_file'] = $homeworkfile_name;
+            }
             $result=Homework::where('id',$id)->update($updateData);
                       
             if($result){
+                if ($homeworkfile_name != "") {
+                    $homeworkfile->move(public_path('assets/homework_files'),$homeworkfile_name);  
+                }  
                 DB::commit();               
                 return redirect(url('admin/homework/list'))->with('success','Homework Updated Successfully!');
             }else{
@@ -271,6 +302,10 @@ class HomeworkController extends Controller
                 
                 $res = Homework::where('id',$id)->delete();
                 if($res){
+                    $file=$checkData['homework_file'];
+                    if($file != ''){
+                        @unlink(public_path('/assets/homework_files/'. $file));
+                    } 
                     DB::commit();
                     //To return list
                     return redirect(url('admin/homework/list'))->with('success','Homework Deleted Successfully!');

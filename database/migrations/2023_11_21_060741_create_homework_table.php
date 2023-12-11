@@ -19,6 +19,7 @@ return new class extends Migration
             $table->tinyInteger('academic_year_id');
             $table->tinyInteger('subject_id');
             $table->string('title');
+            $table->string('homework_file')->nullable();
             $table->string('description');
             $table->timestamp('due_date')->nullable();
             $table->string('remark');

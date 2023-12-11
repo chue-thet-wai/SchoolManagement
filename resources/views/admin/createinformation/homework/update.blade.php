@@ -34,11 +34,33 @@
             {{method_field('PUT')}}
             <div class="row g-4">
                 <div class="col-md-1"></div>
-                <div class="col-md-10">
+                <div class="col-md-5">
                     <div class="form-group">
                         <label for="title"><b>Title</b></label>
-                        <div class="col-sm-11">
+                        <div class="col-sm-10">
                             <input type="text" name="title" class="form-control" value="{{$result[0]->title}}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label for="homework_file"><b>File</b></label>
+                        <div class="col-sm-10">
+                            <input type="file" class="form-control" id="homework_file" name='homework_file' />  
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <br /><div class="row g-4">
+                <div class="col-md-1"></div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label for="title"><b>Previous Upload File</b></label>
+                        <div class="col-sm-10">
+                            <a class="btn btn-labeled btn-info" href="{{asset('assets/homework_files/'.$result[0]->homework_file)}}" download> 
+                                <span id="boot-icon" class="bi bi-download" style="font-size: 20px; color: rgb(58 69 207); margin:2px;"></span>{{$result[0]->homework_file}}
+                            </a>
+                            <input type="hidden" id="previous_homework_file" name="previous_homework_file" value="{{$result[0]->homework_file}}">
                         </div>
                     </div>
                 </div>

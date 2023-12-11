@@ -186,6 +186,12 @@ class PermissionSeeder extends Seeder
                 "type"      =>"url"
             ),
             array(
+                'main_menu' =>"Exam",
+                "sub_menu"  =>"Exam Rules",
+                "menu_route"=>"admin/exam_rules/list",
+                "type"      =>"url"
+            ),
+            array(
                 'main_menu' =>"Wallet",
                 "sub_menu"  =>"Cash Counter",
                 "menu_route"=>"admin/cash_counter/list",
@@ -267,6 +273,12 @@ class PermissionSeeder extends Seeder
                 'main_menu' =>"Reporting",
                 "sub_menu"  =>"Student Attendance Report",
                 "menu_route"=>"admin/reporting/student_attendance_report",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Reporting",
+                "sub_menu"  =>"Expense Report",
+                "menu_route"=>"admin/reporting/expense_report",
                 "type"      =>"url"
             ),
             

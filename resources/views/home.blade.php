@@ -1,156 +1,194 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<div class="pagetitle">
-	<h1>Dashboard</h1>
-	<nav>
-		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
-			<li class="breadcrumb-item active">Dashboard</li>
-		</ol>
-	</nav>
-	@include('layouts.error')
-</div><!-- End Page Title -->
-<br />
+<link href="{{ asset('css/home.css') }}" rel="stylesheet">
+<script src="{{ asset('js/home.js') }}" defer></script>
 
 <div class="container">
-    <h5><b>@php echo 'Today - ' .date("Y/m/d"); @endphp</b></h5>
     <div class="row justify-content-center">
-        <div class="col-md-12">
-            <!--event start-->
-            <div class="row p-1">
-                <div class="accordion" id="accordionExample">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                 <label><i class="bi bi-star-fill" style="color:#3490dc;"></i> Current and Coming Soon Events</label>
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                            <div class="accordion-body event-container">
-                                <ul class="cards">
-                                    @if(!empty($event_list) && $event_list->count())
-                                        @php $i=1;@endphp
-                                        @foreach($event_list as $res)
-                                            <li class="card">
-                                                <div>
-                                                    <div class="card-title">{{$res->title}}</div>
-                                                    <div class="card-content">                                                
-                                                        <p>{{$res->description}}</p>
-                                                    </div>
-                                                </div>
-                                                <div class="card-link-wrapper">
-                                                    <div class="event-grade"><p style="font-size:0.6rem;"><b>Grade &nbsp;:</b> {{$grade[$res->grade_id]}}</p></div>
-                                                    <div class="event-date"><p style="font-size:0.6rem;margin-top:-5%;"><b>Date &nbsp;&nbsp;&nbsp;:</b> {{date('Y-m-d',strtotime($res->event_from_date))}} ~ {{date('Y-m-d',strtotime($res->event_to_date))}} </p></div>
-                                                </div>
-                                            </li>
-                                        @endforeach
-                                    @else 
-                                        <p> There is no event yet ! </p>
-                                    @endif
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div><!-- End Event--> 
-            <br />
+        <div class="col-md-6" id="dashboard-left">
             <div class="row">
-                <div class="col-xxl-4 col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title p-0">Students</h5>
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-people"></i>
-                                </div>
-                                <div class="ps-4 count"><b>{{$student_count}}</b></div>
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- End Student Card -->
-
-                <div class="col-xxl-4 col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title p-0">Teachers</h5>
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-people"></i>
-                                </div>
-                                <div class="ps-4 count"><b>{{$teacher_count}}</b></div>
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- End Teacher Card -->
-                <div class="col-xxl-4 col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title p-0">Drivers</h5>
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-people"></i>
-                                </div>
-                                <div class="ps-4 count"><b>{{$driver_count}}</b></div>
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- End Driver Card -->
+                <div class="col-md-6" id="total-student">
+                    <table class="table custom-table">
+                        <thead>
+                            <tr>
+                                <th class="first-column" scope="col">Total Student</th>
+                                <th class="last-column" scope="col"><div class="colval-border">150</div></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Grade (I)</div></td>
+                                <td class="last-column"><div class="colval-border">10</div></td>
+                            </tr>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Grade (II)</div></td>
+                                <td class="last-column"><div class="colval-border">20</div></td>
+                            </tr>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Grade (III)</div></td>
+                                <td class="last-column"><div class="colval-border">30</div></td>
+                            </tr>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Grade (IV)</div></td>
+                                <td class="last-column"><div class="colval-border">40</div></td>
+                            </tr>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Grade (V)</div></td>
+                                <td class="last-column"><div class="colval-border">50</div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6" id="exam-result">
+                <table class="table custom-table">
+                        <thead>
+                            <tr>
+                                <th class="first-column" scope="col">Grade</th>
+                                <th class="middle-column" scope="col">Pass</th>
+                                <th class="last-column" scope="col">Fail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Grade (I)</div></td>
+                                <td class="middle-column"><div class="colval-border">10</div></td>
+                                <td class="last-column"><div class="colval-border">10</div></td>
+                            </tr>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Grade (II)</div></td>
+                                <td class="middle-column"><div class="colval-border">10</div></td>
+                                <td class="last-column"><div class="colval-border">20</div></td>
+                            </tr>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Grade (III)</div></td>
+                                <td class="middle-column"><div class="colval-border">10</div></td>
+                                <td class="last-column"><div class="colval-border">30</div></td>
+                            </tr>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Grade (IV)</div></td>
+                                <td class="middle-column"><div class="colval-border">10</div></td>
+                                <td class="last-column"><div class="colval-border">40</div></td>
+                            </tr>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Grade (V)</div></td>
+                                <td class="middle-column"><div class="colval-border">10</div></td>
+                                <td class="last-column"><div class="colval-border">50</div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="row">
-                <div class="col-xxl-4 col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title p-0">Income</h5>
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-cash-stack"></i>
-                                </div>
-                                <div class="ps-4 count"><b>{{$income}}</b></div>
+                <div class="col-md-6" id="waiting-student">
+                    <table class="table custom-table">
+                        <thead>
+                            <tr>
+                                <th class="first-column" scope="col">Total Waiting List</th>
+                                <th class="last-column" scope="col"><div class="colval-border">150</div></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Grade (I)</div></td>
+                                <td class="last-column"><div class="colval-border">10</div></td>
+                            </tr>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Grade (II)</div></td>
+                                <td class="last-column"><div class="colval-border">20</div></td>
+                            </tr>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Grade (III)</div></td>
+                                <td class="last-column"><div class="colval-border">30</div></td>
+                            </tr>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Grade (IV)</div></td>
+                                <td class="last-column"><div class="colval-border">40</div></td>
+                            </tr>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Grade (V)</div></td>
+                                <td class="last-column"><div class="colval-border">50</div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6" id="exam-result">
+                    <table class="table custom-table">
+                        <thead>
+                            <tr>
+                                <th class="first-column" scope="col">Payment</th>
+                                <th class="last-column" scope="col">
+                                    <select class="form-control" id="monthSelect" name="month">
+                                        <option value="00">Month</option>
+                                        <option value="01">January</option>
+                                        <option value="02">February</option>
+                                        <option value="03">March</option>
+                                        <option value="04">April</option>
+                                        <option value="05">May</option>
+                                        <option value="06">June</option>
+                                        <option value="07">July</option>
+                                        <option value="08">August</option>
+                                        <option value="09">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">School Fee</div></td>
+                                <td class="last-column"><div class="colval-border">10</div></td>
+                            </tr>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Book Fee</div></td>
+                                <td class="last-column"><div class="colval-border">20</div></td>
+                            </tr>
+                            <tr>
+                                <td class="first-column"><div class="colval-border">Registration Fee</div></td>
+                                <td class="last-column"><div class="colval-border">30</div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>            
+        </div>
+        <div class="col-md-6" id="dashboard-right">
+            <div class="row ms-2">
+                <div class="card" style="background:#e9ecef;">
+                    <div class="card-header" style="background:#e9ecef;"><strong>Event Calendar</strong></div>
+                    <div class="card-body">
+                        <div class="calendar calendar-first" id="calendar_first">
+                            <div class="calendar_header">
+                                <button class="switch-month switch-left"> <i class="bi bi-caret-left-fill"></i></button>
+                                <h2></h2>
+                                <button class="switch-month switch-right"> <i class="bi bi-caret-right-fill"></i></button>
                             </div>
-                        </div>
-                    </div>
-                </div><!-- End Income Card -->
-
-                <div class="col-xxl-4 col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title p-0">Expense</h5>
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-cash-coin"></i>
+                            <div class="calendar_weekdays"></div>
+                            <div class="calendar_content"></div>
+                        </div>   
+                    </div> 
+                </div>                    
+            </div>
+            <div class="row ms-2">
+                <div class="event-list">
+                    @if(!empty($event_list) && $event_list->count())
+                        @php $i=1;@endphp
+                        @foreach($event_list as $res)
+                            <div>
+                                <div class="event-date">{{date('d M,Y',strtotime($res->event_from_date))}}</div>
+                                <div class="event-description">                                                
+                                    <p>{{$res->description}}</p>
                                 </div>
-                                <div class="ps-4 count"><b>{{$expense}}</b></div>
                             </div>
-                        </div>
-                    </div>
-                </div><!-- End Expense Card -->
+                        @endforeach
+                    @else 
+                        <p> There is no event yet ! </p>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-.card-icon {
-    font-size: 30px;
-    line-height: 0;
-    width: 64px;
-    height: 64px;
-    flex-shrink: 0;
-    flex-grow: 0;
-    color: #b3b315;
-    background-color: #f3ebeb;
-}
-.rounded-circle {
-    border-radius: 50%!important;
-}
-.align-items-center {
-    align-items: center!important;
-}
-.count {
-    font-size: 20px;
-    color: #012970;
-    font-weight: 600;
-</style>
-
 @endsection

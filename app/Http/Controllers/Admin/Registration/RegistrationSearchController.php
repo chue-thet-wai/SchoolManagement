@@ -121,7 +121,7 @@ class RegistrationSearchController extends Controller
         $studentRegSearch = StudentRegistration::leftjoin('class_setup','class_setup.id','=','student_registration.new_class_id')
                         ->leftjoin('grade_level_fee','grade_level_fee.grade_id','=','class_setup.grade_id')
                         ->leftjoin('grade','grade.id','=','grade_level_fee.grade_id')
-                        ->where('student_registration.registration_no',$request->registration_no)
+                        ->where('student_registration.student_id',$request->student_id)
                         ->select('student_registration.*',
                         'grade_level_fee.grade_level_amount as grade_level_amount',
                         'grade.name as grade_level'

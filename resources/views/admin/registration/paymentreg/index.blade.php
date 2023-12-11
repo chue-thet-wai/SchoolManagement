@@ -40,7 +40,7 @@
 					</div>
 				</div>
 				<div class="form-group col-md-3">
-					<label for="payment_regno"><b>Registraion No.</b></label>
+					<label for="payment_regno"><b>Student ID</b></label>
 					<div class="col-sm-10">
 						<input type="text" name="payment_regno" class="form-control" value="{{ request()->input('payment_regno') }}">
 					</div>
@@ -66,7 +66,7 @@
                     <tr>
                         <th>No</th>
                         <th>Invoice ID</th>
-                        <th>Registration No</th>
+                        <th>Student ID</th>
                         <th>Pay Date</th>
                         <th>Payment Type</th>
                         <th>Total Amount</th>
@@ -83,8 +83,8 @@
                         <tr>
                             <td>@php echo $i;$i++; @endphp</td>
                             <td>{{ $res->invoice_id }}</td>
-                            <td>{{ $res->registration_no }}</td>
-                            <td> @if ($res->paid_date != "") {{date('Y-m-d',strtotime($res->paid_date))}} @endif </td>
+                            <td>{{ $res->student_id }}</td>
+                            <td> @if ($res->paid_date != "") {{date('Y-m-d',strtotime($res->paid_date))}} @else {{''}} @endif </td>
                             <td>{{ $payment_type[$res->payment_type] }}</td>
                             <td>{{ $res->total_amount }}</td>
                             <td>{{ $res->discount_percent }}</td>
@@ -137,7 +137,7 @@
                                                     <div class="form-group col-md-10">
                                                         <label for="paid_registrationno"><b>Registraion No.</b></label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" name="paid_registrationno" class="form-control" value="{{ $res->registration_no }}" readonly>
+                                                            <input type="text" name="paid_studentid" class="form-control" value="{{ $res->student_id }}" readonly>
                                                         </div>
                                                     </div>
                                                 </div>

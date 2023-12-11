@@ -1,23 +1,23 @@
 $(document).ready(function() {
     // Handle click event for an element with the ID "myButton"
     $("#registration_search").click(function() {
-        var regNo = $("#registration_no").val();
+        var studentNo = $("#student_id").val();
         var token    = $("#token").val();
         $.ajax({
         type:'POST',
         url:'/admin/payment/paymentreg_search',
         data:{
                 _token : token,
-                registration_no  : regNo
+                student_id  : studentNo
             },
         
             success:function(data){
                 if (data.msg == 'found') {
-                    $("#registration_msg").html('Registration data found!.');
+                    $("#registration_msg").html('Student data found!.');
                     $("#grade_level").val(data.grade_level);
                     $("#grade_level_fee").val(data.grade_level_fee);
                 } else {
-                    $("#registration_msg").html('Registration data not found!.');
+                    $("#registration_msg").html('Student data not found!.');
                     $("#grade_level").val('');
                     $("#grade_level_fee").val('');
                 }  
@@ -115,7 +115,7 @@ $(document).ready(function() {
     });
 
     function originValue() {
-        $("#registration_no").val('');
+        $("#student_id").val('');
         $("#grade_level").val('');
         $("#branch_id").val('');
         $("#class_id").val('')

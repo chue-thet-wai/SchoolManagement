@@ -9,6 +9,7 @@ use App\Interfaces\RegistrationRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ExamMarks;
 use App\Models\ExamTerms;
+use App\Models\ExamRules;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -79,12 +80,15 @@ class ExamMarksController extends Controller
             $classes[$a->id] = $a->name;
         }
 
+        $examrules_list = $this->getExamRules($res);
+
         return view('admin.exam.exammarks.exammarks_list',[
             'list_result' => $res,
             'subjects' => $subjects,
             'examterms' => $examterms, 
             'classes' => $classes,
-            'grade_list' => $grades
+            'grade_list' => $grades,
+            'exam_rules' => $examrules_list
         ]);
     }
 
@@ -291,5 +295,19 @@ class ExamMarksController extends Controller
     public function getExamTerms() {
         $examterms_list = ExamTerms::all();      
         return $examterms_list;
+    }
+
+    public function getExamRules($res) {
+        $examRules = ExamRules::all();
+        $examMarkRule = [];
+        foreach ($res as $m) {
+            $exam_mark = $m->mark;
+            foreach ($examRules as $rule) {
+                if ($rule->mark_range_from <= $exam_mark && $exam_mark <= $rule->mark_range_to) {
+                    $examMarkRule[$m->id] = $rule->title;
+                }
+            }
+        }
+        return $examMarkRule;
     }
 }
