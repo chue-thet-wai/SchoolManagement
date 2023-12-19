@@ -16,7 +16,7 @@
 <section class="card">
 	<div class="card-body">
 		<div class="row g-4">
-            <div class="col-md-10" style='color:#012970;'>
+            <div class="col-md-10 content-title">
                 <h4><b>Grade Level Fee List</b></h4>
             </div>
             <div class="col-md-2">
@@ -96,6 +96,7 @@
 						<th>Amount</th>
 						<th>Branch</th>
 						<th>Academic Year</th>
+						<th>Fee Type</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -109,6 +110,7 @@
 							<td>{{$res->grade_level_amount}}</td>
 							<td>{{$branch_list[$res->branch_id]}}</td>
 							<td>{{$academic_list[$res->academic_year_id]}}</td>
+							<td>{{$fee_type[$res->fee_type]}}</td>
 							<td class="center">
 								<a href="{{route('grade_level_fee.edit',$res->id)}}">
 									<button type="submit" value="edit" class="btn m-1 p-0 border-0">
@@ -127,7 +129,7 @@
 						@endforeach
 					@else
 					<tr>
-						<td colspan="6">There are no data.</td>
+						<td colspan="8">There are no data.</td>
 					</tr>
 					@endif
 				</tbody>

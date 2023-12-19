@@ -185,10 +185,7 @@ class RoleandPermissionController extends Controller
                 $oldPermissionId = array_column($chkRolePermission,'permission_id');
                 
                 $addPermission = array_diff($checkPermission,$oldPermissionId);
-                log::info($addPermission);
                 $delPermission = array_diff($oldPermissionId,$checkPermission);
-                log::info('delpermission');
-                log::info($delPermission);
 
                 //delete permission
                 if (!empty($delPermission)) {

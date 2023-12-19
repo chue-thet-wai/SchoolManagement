@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('teacher_info', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
-            $table->integer('grade_id')->default(0)->comment('id for grade table and 0 is no grade');
+            //$table->integer('grade_id')->default(0)->comment('id for grade table and 0 is no grade');
             $table->string('name');
             $table->string('name_mm');
             $table->string('login_name');
@@ -36,7 +36,7 @@ return new class extends Migration
             $table->string('year_attended')->nullable();
             $table->string('qualification_desc')->nullable();
             $table->string('job_title')->nullable();
-            $table->string('employer')->nullable();
+            $table->string('company_name')->nullable();
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();
             $table->string('university')->nullable();

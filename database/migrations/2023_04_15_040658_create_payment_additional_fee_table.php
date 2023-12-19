@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('payment_additional_fee', function (Blueprint $table) {
             $table->id();
-            $table->string('payment_id')->comment('id for payment_registration table');
+            $table->string('invoice_id')->comment('invoice_id in invoice table');
             $table->string('additional_fee_id')->comment('id for additional_fee table');
             $table->float('additional_amount')->default(0.0);
             $table->string('created_by')->nullable();

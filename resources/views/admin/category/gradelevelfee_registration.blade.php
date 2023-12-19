@@ -18,7 +18,7 @@
         <br />
         <div class="row g-4">
             <div class="col-md-1"></div>
-            <div class="col-md-9" style='color:#012970;'>
+            <div class="col-md-9 content-title">
             @if ($action == 'Add')
                 <h4><b>Create Grade Level Fee</b></h4>
             @else
@@ -95,6 +95,22 @@
                             <label for=""><b>Amount<span style="color:brown">*</span></b></label>
                             <div class="col-sm-10">
                                 <input type="number" name="amount" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row g-4">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for=""><b>Fee Type</b></label>
+                            <div class="col-sm-10">
+                                <select class="form-select" id="fee_type" name="fee_type" >
+                                    @foreach($fee_type as $key => $value)
+                                        <option  value="{{$key}}">{{$value}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -188,6 +204,26 @@
                             <label for=""><b>Amount<span style="color:brown">*</span></b></label>
                             <div class="col-sm-10">
                                 <input type="number" name="amount" value="{{$result[0]->grade_level_amount}}" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row g-4">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for=""><b>Fee Type</b></label>
+                            <div class="col-sm-10">
+                                <select class="form-select" id="fee_type" name="fee_type" >
+                                    @foreach($fee_type as $key => $value)
+                                        <option  value="{{$key}}" 
+                                        @if ($result[0]->fee_type == $key)
+                                            selected
+                                        @endif
+                                        >{{$value}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>

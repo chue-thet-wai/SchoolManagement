@@ -18,7 +18,7 @@
         <br />
         <div class="row g-4">
             <div class="col-md-1"></div>
-            <div class="col-md-9" style='color:#012970;'>
+            <div class="col-md-9 content-title">
             @if ($action == 'Add')
                 <h4><b>Create Grade</b></h4>
             @else

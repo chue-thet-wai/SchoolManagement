@@ -17,7 +17,7 @@
 
 	<div class="card-body">
 		<div class="row g-4">
-            <div class="col-md-10" style='color:#012970;'>
+            <div class="col-md-10 content-title">
                 <h4><b>Grade</b></h4>
             </div>
             <div class="col-md-2">

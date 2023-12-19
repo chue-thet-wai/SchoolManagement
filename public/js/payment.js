@@ -16,10 +16,35 @@ $(document).ready(function() {
                     $("#registration_msg").html('Student data found!.');
                     $("#grade_level").val(data.grade_level);
                     $("#grade_level_fee").val(data.grade_level_fee);
+                    if (data.fee_type == '1') {
+                        $('#onetime').prop('checked', true);
+                        $('input[name="payment_type"]').prop('disabled', true);
+                        $('#payment_type_choose').val($('input[name="payment_type"]:checked').val());
+
+                    } else {
+                        $('#monthly').prop('checked', true);
+                        $('input[name="payment_type"]').prop('disabled', false);
+                        $('#payment_type_choose').val($('input[name="payment_type"]:checked').val());
+                    }
+                    $('#pay_from_period').attr('min', data.academic_year_start);
+                    $('#pay_from_period').attr('max', data.academic_year_end);
+                    $('#pay_to_period').attr('min', data.academic_year_start);
+                    $('#pay_to_period').attr('max', data.academic_year_end);
+                    $('#academic_start').val(data.academic_year_start);
+                    $('#academic_end').val(data.academic_year_end);
                 } else {
                     $("#registration_msg").html('Student data not found!.');
                     $("#grade_level").val('');
                     $("#grade_level_fee").val('');
+                    $('#monthly').prop('checked', false);
+                    $('input[name="payment_type"]').prop('disabled', false);
+                    $('#payment_type_choose').val($('input[name="payment_type"]:checked').val());
+                    $('#pay_from_period').removeAttr('min');
+                    $('#pay_from_period').removeAttr('max');
+                    $('#pay_to_period').removeAttr('min');
+                    $('#pay_to_period').removeAttr('max');
+                    $('#academic_start').val('');
+                    $('#academic_end').val('');
                 }  
                 changeTotalAmount();           
             }
@@ -44,8 +69,16 @@ $(document).ready(function() {
                     $("#class_id").empty();
                     $("#class_id").append("<option value=''>--Select--</option>");
                     class_data.forEach(function(element) {
-                        var optionVal = element.class_id+"/"+element.grade_level_amount+"/"+element.grade_level;
+                        var optionVal =
+                                element.class_id + "/" +
+                                element.grade_level_amount + "/" +
+                                element.fee_type + "/" +
+                                formatDate(new Date(element.academic_year_start)) + "/" +
+                                formatDate(new Date(element.academic_year_end))+ "/" +
+                                element.grade_level;
+                        
                         $("#class_id").append("<option value="+optionVal+">"+element.class_name+"</option>");
+                        
                     });
                     $("#grade_level").val('');
                     $("#grade_level_fee").val('');
@@ -82,6 +115,7 @@ $(document).ready(function() {
             $("#pay_from_period").val(null);
             $("#pay_to_period").val(null);
         }
+        $('#payment_type_choose').val($('input[name="payment_type"]:checked').val());
         changeTotalAmount();
     });
 
@@ -92,11 +126,30 @@ $(document).ready(function() {
             $("#grade_level_fee").val(''); 
         } else {
             var classIDStr = classID.split('/');
-            var amount = classIDStr[1];
-            var grade  = classIDStr[2];
+            var amount   = classIDStr[1];
+            var feetype  = classIDStr[2];
+            var astart   = classIDStr[3];
+            var aend     = classIDStr[4];
+            var grade    = classIDStr[5];
+
             
             $("#grade_level").val(grade);
             $("#grade_level_fee").val(amount); 
+            if (feetype == '1') {
+                $('#onetime').prop('checked', true);
+                $('input[name="payment_type"]').prop('disabled', true);
+                $('#payment_type_choose').val($('input[name="payment_type"]:checked').val());
+            } else {
+                $('#monthly').prop('checked', true);
+                $('input[name="payment_type"]').prop('disabled', false);
+                $('#payment_type_choose').val($('input[name="payment_type"]:checked').val());
+            }
+            $('#pay_from_period').attr('min', astart);
+            $('#pay_from_period').attr('max', aend);
+            $('#pay_to_period').attr('min', astart);
+            $('#pay_to_period').attr('max',aend);
+            $('#academic_start').val(astart);
+            $('#academic_end').val(aend);
         } 
         changeTotalAmount();       
     });
@@ -124,11 +177,13 @@ $(document).ready(function() {
         $("#pay_from_period").val(null);
         $("#pay_to_period").val(null);
         $('input[name="payment_type"]').filter('[value="0"]').prop('checked', true);
+        $('#payment_type_choose').val($('input[name="payment_type"]:checked').val());
         $('.addfee_Checkbox').prop('checked', false);
 
         $("#discount_percent").val('');
         $("#total_amount").val('');
         $("#net_total").val('');
+        $('input[name="payment_type"]').prop('disabled', false);
     }
 
     function changeTotalAmount() {
@@ -138,15 +193,21 @@ $(document).ready(function() {
         var pay_to_period = $("#pay_to_period").val();
     
         var calMonth =0;
+        var paymentType = $('input[name="payment_type"]:checked').val();
+        
         if (pay_from_period && pay_to_period) {
-            // Parse the date strings to Date objects
-            var fromDate = new Date(pay_from_period);
-            var toDate = new Date(pay_to_period);
-    
-            // Calculate the difference in months
-            var monthDifference = (toDate.getFullYear() - fromDate.getFullYear()) * 12 + toDate.getMonth() - fromDate.getMonth();
-            
-            calMonth = monthDifference + 1;  
+            if (paymentType == 2) {
+                calMonth = 1;
+            } else {
+                // Parse the date strings to Date objects
+                var fromDate = new Date(pay_from_period);
+                var toDate = new Date(pay_to_period);
+        
+                // Calculate the difference in months
+                var monthDifference = (toDate.getFullYear() - fromDate.getFullYear()) * 12 + toDate.getMonth() - fromDate.getMonth();
+                
+                calMonth = monthDifference + 1; 
+            } 
         }   
     
         //Add grade level fee
@@ -175,6 +236,13 @@ $(document).ready(function() {
             netAmt     -= disAmt;
         } 
         $("#net_total").val(netAmt);
+    }
+
+    function formatDate(date) {
+        var year = date.getFullYear();
+        var month = ('0' + (date.getMonth() + 1)).slice(-2);
+        var day = ('0' + date.getDate()).slice(-2);
+        return year + '-' + month + '-' + day;
     }
 
 });

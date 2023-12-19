@@ -65,12 +65,17 @@
                     $("#student_reg_dob").html(data.date_of_birth);
                     $("#student_reg_fathername").html(data.father_name);
                     $("#student_reg_mothername").html(data.mother_name);
+                    $('#old_class').val(data.old_class_id);
+                    $("#new_class option[value='" + data.old_class_id + "']").hide();
                     $('#student_reg_info').show();
                 } else {
+                    var oldClsId = $('#old_class').val();
+                    $("#new_class option[value='" + oldClsId + "']").show();
                     $("#student_reg_name").html('');
                     $("#student_reg_dob").html('');
                     $("#student_reg_fathername").html('');
                     $("#student_reg_mothername").html('');
+                    $('#old_class').val('');
                     $('#student_reg_info').hide();
                 }             
             }
@@ -102,7 +107,7 @@
 
         <div class="row g-4">
             <div class="col-md-1"></div>
-            <div class="col-md-9" style='color:#012970;'>
+            <div class="col-md-9 content-title">
                 <h4><b>Student Registration</b></h4>
             </div>
             <div class="col-md-2">
@@ -115,6 +120,7 @@
             @csrf
             <br />
             <input type="hidden" name="registration_type" class="form-control" value="{{$register_type}}" required>
+            <input type="hidden" name="waiting_id" class="form-control" value="{{$waiting_id}}" required>
             @if ($register_type == 1)
             <div class="row g-4">
                 <div class="col-md-1"></div>
@@ -135,7 +141,7 @@
                             <div class="form-group col-md-5">
                                 <label for="name"><b>Name<span style="color:brown">*</span></b></label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="name" class="form-control" required>
+                                    <input type="text" name="name" value="{{$waiting_name}}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="form-group col-md-5">
@@ -630,7 +636,7 @@
                                 <label for="old_class_select"><b>Old Class</b></label>
                             </div>
                             <div class='col-sm-8'>
-                                <select class="form-select" id="old_class" name="old_class">
+                                <select class="form-select" id="old_class" name="old_class" disabled>
                                     <option value="99">select class</option>
                                     @foreach($class as $c)
                                     <option value="{{$c->id}}">{{$c->name}}</option>

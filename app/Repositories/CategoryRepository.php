@@ -10,32 +10,31 @@ use App\Models\Room;
 use App\Models\Section;
 use App\Models\Subject;
 
-class CategoryRepository implements CategoryRepositoryInterface 
+class CategoryRepository implements CategoryRepositoryInterface
 {
-    public function getAcademicYear() 
+    public function getAcademicYear()
     {
         return AcademicYear::all();
     }
 
-    public function getGrade() 
+    public function getGrade()
     {
         return Grade::all();
     }
-    public function getBranch() 
+    public function getBranch()
     {
         return Branch::all();
     }
-    public function getRoom() 
+    public function getRoom()
     {
         return Room::all();
     }
-    public function getSection() 
+    public function getSection()
     {
         return Section::all();
     }
-    public function getSubject() 
+    public function getSubject()
     {
-        return Subject::all();
+        return Subject::with('grade', 'grade:id,name')->get();
     }
-   
 }

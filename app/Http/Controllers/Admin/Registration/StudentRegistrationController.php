@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\Interfaces\RegistrationRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\StudentInfo;
+use App\Models\WaitingRegistration;
 use App\Models\StudentRegistration;
 use App\Models\TeacherInfo;
 use App\Interfaces\CategoryRepositoryInterface;
@@ -47,6 +48,15 @@ class StudentRegistrationController extends Controller
         $request->validate([
             'reg_type'        =>'required',
         ]); 
+        $waiting_name = '';
+        $waitingId = '';
+        if (isset($request->waiting_id)) {
+            $waitingInfo = WaitingRegistration::where('id',$request->waiting_id)->first();
+            if (!empty($waitingInfo)) {
+                $waiting_name = $waitingInfo->name;
+            }
+            $waitingId = $request->waiting_id;
+        }
 
         $register_type = $request->reg_type;
         $gender   = $this->userRepository->getGender(); 
@@ -57,7 +67,9 @@ class StudentRegistrationController extends Controller
             'register_type'=>$register_type,
             'gender'       =>$gender,
             'township'     =>$township,
-            'class'        =>$class
+            'class'        =>$class,
+            'waiting_name' =>$waiting_name,
+            'waiting_id'   =>$waitingId
         ]);
     }
 
@@ -185,7 +197,14 @@ class StudentRegistrationController extends Controller
                     }
                     if ($biography != "") {
                         $biography->move(public_path('assets/student_biography'),$biography_name);   
-                    }               
+                    }  
+                    //change waiting status
+                    if ($request->waiting_id !='')  {
+                        // Retrieve the model instance
+                        $waiting = WaitingRegistration::findOrFail($request->waiting_id);
+                        // Update the status (replace 'status' with your actual status field)
+                        $waiting->update(['status' => '2']);
+                    }           
                     DB::commit();
                     return redirect(route('student_reg.index'))->with('success','Student Registration Created Successfully!');
                 }else{

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Interfaces\CategoryRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ExamTerms;
+use App\Models\Grade;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -103,15 +104,31 @@ class ExamTermsController extends Controller
                 
         DB::beginTransaction();
         try{
-            $insertData = array(
-                'name'              =>$request->name,
-                'grade_id'          =>$request->grade_id,
-                'academic_year_id'  =>$request->academic_year_id,
-                'created_by'        =>$login_id,
-                'updated_by'        =>$login_id,
-                'created_at'        =>$nowDate,
-                'updated_at'        =>$nowDate
-            );
+            if ($request->grade_id=='0') {
+                $grades = Grade::get('id');
+                foreach ($grades as $grade) {
+                    $insertData[] = array(
+                        'name'              =>$request->name,
+                        'grade_id'          =>$grade['id'],
+                        'academic_year_id'  =>$request->academic_year_id,
+                        'created_by'        =>$login_id,
+                        'updated_by'        =>$login_id,
+                        'created_at'        =>$nowDate,
+                        'updated_at'        =>$nowDate
+                    );
+                }
+            } else {
+                $insertData = array(
+                    'name'              =>$request->name,
+                    'grade_id'          =>$request->grade_id,
+                    'academic_year_id'  =>$request->academic_year_id,
+                    'created_by'        =>$login_id,
+                    'updated_by'        =>$login_id,
+                    'created_at'        =>$nowDate,
+                    'updated_at'        =>$nowDate
+                );
+            }
+            
             $result=ExamTerms::insert($insertData);
                         
             if($result){      

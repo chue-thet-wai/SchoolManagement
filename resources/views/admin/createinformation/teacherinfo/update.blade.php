@@ -22,7 +22,7 @@
         
         <div class="row g-4">
             <div class="col-md-1"></div>
-            <div class="col-md-9" style='color:#012970;'>
+            <div class="col-md-9 content-title">
                 <h4><b>Update Teacher Information</b></h4>
             </div>
             <div class="col-md-2">
@@ -78,7 +78,7 @@
                     </div>
                 </div>
                 <div class="form-group col-md-5">
-                    <label for="contact_no"><b>Contact No</b></label>
+                    <label for="contact_no"><b>Contact No</b><span style="color:brown">*</span></label>
                     <div class="col-sm-10">
                         <input type="text" name="contact_no" class="form-control" value="{{$result[0]->contact_number}}" required>
                     </div>
@@ -94,8 +94,8 @@
                         <input type="text" name="position" class="form-control" value="{{$result[0]->position}}" required>
                     </div>
                 </div>
-                <div class="form-group col-md-5">
-                    <label for=""><b>Grade</b></label>
+                <!--<div class="form-group col-md-5">
+                    <label for=""><b>Grade</b><span style="color:brown">*</span></label>
                     <div class="col-sm-10">
                         <select class="form-select" id="grade_id" name="grade_id" >
                             <option value="99">select grade</option>
@@ -110,7 +110,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-1"></div>
+                <div class="col-md-1"></div>-->
             </div>
             <br />
             <div class="row g-4">
@@ -122,7 +122,7 @@
                     </div>
                 </div>
                 <div class="form-group col-md-5">
-                    <label for=""><b>Gender</b></label>
+                    <label for=""><b>Gender</b><span style="color:brown">*</span></label>
                     <div class="col-sm-10">
                         <select class="form-select" id="gender" name="gender">
                             @foreach($gender as $key => $value)
@@ -216,9 +216,9 @@
                             </div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="employer"><b>Employer</b></label>
+                            <label for="company_name"><b>Company Name</b></label>
                             <div class="col-sm-10">
-                                <input type="number" name="employer" class="form-control" value="{{$result[0]->employer}}">
+                                <input type="text" name="company_name" class="form-control" value="{{$result[0]->company_name}}">
                             </div>
                         </div>
                     </div>

@@ -18,7 +18,7 @@
         <br />
         
         <div class="row g-4">
-            <div class="col-md-11" style='color:#012970;'>
+            <div class="col-md-11 content-title">
                 <h4><b>Student Information List</b></h4>
             </div>
         </div>

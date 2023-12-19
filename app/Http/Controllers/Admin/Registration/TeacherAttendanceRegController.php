@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Registration;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Interfaces\RegistrationRepositoryInterface;
+use App\Interfaces\CreateInfoRepositoryInterface;
 use App\Models\TeacherInfo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,10 +14,12 @@ use Illuminate\Support\Facades\Log;
 class TeacherAttendanceRegController extends Controller
 {
     private RegistrationRepositoryInterface $regRepository;
+    private CreateInfoRepositoryInterface $createInfoRepository;
 
-    public function __construct(RegistrationRepositoryInterface $regRepository) 
+    public function __construct(RegistrationRepositoryInterface $regRepository,CreateInfoRepositoryInterface $createInfoRepository) 
     {
         $this->regRepository     = $regRepository;
+        $this->createInfoRepository = $createInfoRepository;
     }
 
     /**
@@ -33,9 +36,17 @@ class TeacherAttendanceRegController extends Controller
         foreach ($teacherlist as $t) {
             $teacherList[$t->user_id] = $t->name;
         }
+
+        $class_list = $this->createInfoRepository->getClassSetup();
+        $classList['0']='All';
+        foreach ($class_list as $t) {
+            $classList[$t->id] = $t->name;
+        }
         
         return view('admin.registration.teacherattendance.index',[
-                'teacher_list'=> $teacherList
+                'teacher_list'=> $teacherList,
+                'class_list'=> $classList
+
             ]);        
     }
 
@@ -60,18 +71,31 @@ class TeacherAttendanceRegController extends Controller
 
         $res = TeacherInfo::where('resign_status','1');
         if ($request->attendance_teacher != 1) {
-            $res->where('user_id', $request->attendance_teacher);
+            $res=$res->where('user_id', $request->attendance_teacher);
+        } 
+        if ($request->attendance_teacherclass != '0') {
+            $res=$res->join('teacher_class','teacher_class.teacher_id','teacher_info.user_id');
+            $res=$res->where('teacher_class.class_id',$request->attendance_teacherclass);
         } 
         $res=$res->select('teacher_info.*')->get();
 
         $attendance = array(
+            '2'=>'Leave',
             '1'=>'Present',
             '0'=>'Absent'
         );
+
+        $class_list = $this->createInfoRepository->getClassSetup();
+        $classList['0']='All';
+        foreach ($class_list as $t) {
+            $classList[$t->id] = $t->name;
+        }
         
         return view('admin.registration.teacherattendance.create',[
             'list_result'=> $res,
-            'teacher_list'=> $teacherList,
+            'teacher_list'      => $teacherList,
+            'class_list'        => $classList,
+            'selected_class'    => $request->attendance_teacherclass,
             'selected_teacher'  => $request->attendance_teacher,
             'date_time'         => $request->attendance_teacherdate,
             'attendance'        => $attendance

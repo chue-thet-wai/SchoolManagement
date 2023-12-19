@@ -57,15 +57,20 @@ class RegistrationSearchController extends Controller
 
     public function studentSearch(Request $request)
     {
-        
         $studentSearch = StudentInfo::where('student_id',$request->student_id)->first();
         if (!empty($studentSearch)) {
+            $oldStudentReg = StudentRegistration::where('student_id',$request->student_id)->latest('id')->first();
+            $oldClassId = '';
+            if (!empty($oldStudentReg)) {
+                $oldClassId = $oldStudentReg->new_class_id;
+            }            
             return response()->json(array(
                 'msg'             => 'found',
                 'name'            => $studentSearch->name,
                 'date_of_birth'   => $studentSearch->date_of_birth,
-                'father_name'      => $studentSearch->father_name,
-                'mother_name'     => $studentSearch->mother_name
+                'father_name'     => $studentSearch->father_name,
+                'mother_name'     => $studentSearch->mother_name,
+                'old_class_id'    => $oldClassId
             ), 200);
         } else {
             return response()->json(array(
@@ -121,17 +126,22 @@ class RegistrationSearchController extends Controller
         $studentRegSearch = StudentRegistration::leftjoin('class_setup','class_setup.id','=','student_registration.new_class_id')
                         ->leftjoin('grade_level_fee','grade_level_fee.grade_id','=','class_setup.grade_id')
                         ->leftjoin('grade','grade.id','=','grade_level_fee.grade_id')
+                        ->leftjoin('academic_year','academic_year.id','=','class_setup.academic_year_id')
                         ->where('student_registration.student_id',$request->student_id)
                         ->select('student_registration.*',
                         'grade_level_fee.grade_level_amount as grade_level_amount',
-                        'grade.name as grade_level'
+                        'grade.name as grade_level','grade_level_fee.fee_type as fee_type',
+                        'academic_year.start_date as academic_year_start','academic_year.end_date as academic_year_end'
                         )->first();
 
         if (!empty($studentRegSearch)) {
             return response()->json(array(
                 'msg'             => 'found',
                 'grade_level'     => $studentRegSearch->grade_level,
-                'grade_level_fee' => $studentRegSearch->grade_level_amount
+                'grade_level_fee' => $studentRegSearch->grade_level_amount,
+                'fee_type'        => $studentRegSearch->fee_type,
+                'academic_year_start' => date('Y-m-d',strtotime($studentRegSearch->academic_year_start)),
+                'academic_year_end'   => date('Y-m-d',strtotime($studentRegSearch->academic_year_end))
             ), 200);
         } else {
             return response()->json(array(

@@ -1,25 +1,27 @@
 .card{
-    background:#d9d9d9;
-    color:#000;
+    background:#ffffff;
+    color:#0F4D19;
 }
 #password,
 #email {
-    background:#d9d9d9;
-    border:1px solid #000;
+    background:#ffffff;
+    border:1px solid #0F4D19;
     border-radius:0px;
 }
 .remember-forgot{
     font-size:0.8em;
+    color:#000000;
 }
 .forgot-link{
     color: #000000;
     font-size: 1em;
-    margin-top: -3%;"
+    margin-top: -3%;
 }
 .sing-in{
-    background: #d9d9d9;
+    background: #0F4D19;
+    color:#ffffff;
     font-weight: 800;
-    border: 1px solid #000;
+    border: 1px solid #0F4D19;
 }
 #login-image img{
     width:120px;
@@ -47,13 +49,13 @@ label {
     font-weight: bold;
 }
 .image-section {
-    background-color: #80e0e8;
+    background-color: #2b7a4a;
     /* display: block; */
     text-align: center;
     /* align-items: center; */
     width: 10%;
     position: absolute;
-    border: 1px solid #000;
+    border: 1px solid #0F4D19;
     height: 100%;
 }
 .text-center {

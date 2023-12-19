@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('grade_id')->comment('id for grade table');
             $table->integer('academic_year_id')->comment('id from academic_year table');
             $table->timestamp('enquiry_date')->nullable();
+            $table->integer('status')->default(1)->comment('1:Waiting,2:Registered,3:Canceled');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->softDeletes();

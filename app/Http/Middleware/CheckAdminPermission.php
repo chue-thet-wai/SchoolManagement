@@ -19,15 +19,23 @@ class CheckAdminPermission
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next)
+    public function handle($request, Closure $next)
     {
         $route = Route::getRoutes()->match($request);
         $currentroute = $route->getName();
-        $currentroute = explode('.', $currentroute);
-        $main_route = $currentroute[0];
+        if ($currentroute == '') {
+            $main_route = $request->path();
+        } else {
+            $currentroute = explode('.', $currentroute);
+            $main_route = $currentroute[0];
+        }   
+    
+        if ($main_route=="admin/logout") {
+            Auth::logout();
+            return redirect('/');
+        }
 
         $permission = Permission::where('menu_route','LIKE',"%$main_route%")->first();
-       
         if (Auth::user() &&  !empty($permission)) {
             $permission_id = $permission->id;
             $role_id = Auth::user()->role;
@@ -37,12 +45,13 @@ class CheckAdminPermission
                                 ->where('permission_id',$permission_id)
                                 ->whereNull('deleted_at')
                                 ->first();
-            
             if (!empty($chkRolePermission)) {
                 return $next($request);
+            } else {
+                return redirect('/')->with('error','You have not admin access');
             }
+        } else if (Auth::user() && empty($permission)) {
+            return $next($request);
         }
-
-       return redirect('/')->with('error','You have not admin access');
     }
 }

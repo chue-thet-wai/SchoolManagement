@@ -149,7 +149,7 @@
 }
 .count {
     font-size: 20px;
-    color: #012970;
+    color: #0f4d19;
     font-weight: 600;
 </style>
 

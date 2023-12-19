@@ -64,10 +64,13 @@ class GradeLevelFeeController extends Controller
             $grade_list[$g->id] = $g->name;
         } 
 
+        $feeType = $this->feeType();
+
         return view('admin.category.gradelevelfee_index',[
             'academic_list'=>$academic_list,
             'grade_list'  =>$grade_list,
             'branch_list' =>$branch_list,
+            'fee_type'    =>$feeType,
             'list_result' => $res
         ]);
     }
@@ -82,11 +85,13 @@ class GradeLevelFeeController extends Controller
         $academic_list = $this->categoryRepository->getAcademicYear();
         $grade_list    = $this->categoryRepository->getGrade();
         $branch_list   = $this->categoryRepository->getBranch();
+        $feeType = $this->feeType();
 
         return view('admin.category.gradelevelfee_registration',[
             'academic_list'=>$academic_list,
             'grade_list'  =>$grade_list,
             'branch_list' =>$branch_list,
+            'fee_type'    => $feeType,
             'action'=>'Add'
         ]);
     }
@@ -124,6 +129,7 @@ class GradeLevelFeeController extends Controller
             'grade_id'            =>$request->grade_id,
             'branch_id'           =>$request->branch_id,
             'grade_level_amount'  =>$request->amount,
+            'fee_type'            =>$request->fee_type,
             'created_by'          =>$login_id,
             'updated_by'          =>$login_id,
             'created_at'          =>$nowDate,
@@ -162,6 +168,7 @@ class GradeLevelFeeController extends Controller
         $academic_list = $this->categoryRepository->getAcademicYear();
         $grade_list    = $this->categoryRepository->getGrade();
         $branch_list   = $this->categoryRepository->getBranch();
+        $feeType       = $this->feeType();
 
         $update_res    = GradeLevelFee::where('id',$id)->get();
 
@@ -169,6 +176,7 @@ class GradeLevelFeeController extends Controller
             'academic_list'=>$academic_list,
             'grade_list'  =>$grade_list,
             'branch_list' =>$branch_list,
+            'fee_type'    => $feeType,
             'result'      => $update_res,
             'action'      => 'Update'
         ]);
@@ -211,6 +219,7 @@ class GradeLevelFeeController extends Controller
                 'grade_id'            =>$request->grade_id,
                 'branch_id'           =>$request->branch_id,
                 'grade_level_amount'  =>$request->amount,
+                'fee_type'            =>$request->fee_type,
                 'updated_by'          =>$login_id,
                 'updated_at'          =>$nowDate
             );
@@ -253,5 +262,12 @@ class GradeLevelFeeController extends Controller
         }else{
             return redirect()->back()->with('error','There is no result with this grade level fee.');
         }
+    }
+
+    public function feeType() {
+        return [
+            '0'=>'Monthly',
+            '1'=>'One Time'
+        ];
     }
 }

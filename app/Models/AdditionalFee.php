@@ -11,4 +11,10 @@ class AdditionalFee extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'additional_fee';
+
+
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class);
+    }
 }

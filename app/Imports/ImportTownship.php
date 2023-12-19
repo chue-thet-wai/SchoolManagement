@@ -30,7 +30,10 @@ class ImportTownship implements ToModel, WithHeadingRow
             'created_at'     => $nowDate,
             'updated_at'     => $nowDate 
         ]);
-        $result=Township::insert($data);
+        $checkTownship = Township::where('code',$row['code'])->first();
+        if (empty($checkTownship)) {
+            $result=Township::insert($data);
+        }
 
     }
 }

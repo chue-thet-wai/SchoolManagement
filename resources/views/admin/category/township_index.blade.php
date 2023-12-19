@@ -16,7 +16,7 @@
 <section class="card">
 
 	<div class="card-body">
-		<h5 style='color:#012970;'><b>Upload Township</b></h5>
+		<h5 class='content-title'><b>Upload Township</b></h5>
 		<br />
         <form action="{{ url('admin/township/import') }}" method="POST" enctype="multipart/form-data">
             @csrf

@@ -25,7 +25,7 @@ class ExportPayment implements FromCollection, WithHeadings
     {
         return [
             'Invoice Id',
-            'Registration No',
+            'Student ID',
             'Name',
             'Paid Date',
             'Payment Type',

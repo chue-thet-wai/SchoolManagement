@@ -23,11 +23,11 @@ class PaymentReportController extends Controller
             '1'  => 'Yearly'
         );  
         $res = Payment::leftjoin('invoice','invoice.invoice_id','payment.invoice_id')
-                ->leftjoin('student_registration','student_registration.registration_no','payment.registration_no')
+                ->leftjoin('student_registration','student_registration.student_id','payment.student_id')
                 ->leftJoin('student_info','student_info.student_id','=','student_registration.student_id');
         if ($request['action'] == 'search') {
-            if (request()->has('payment_regno') && request()->input('payment_regno') != '') {
-                $res->where('payment.registration_no', request()->input('payment_regno'));
+            if (request()->has('payment_studentid') && request()->input('payment_studentid') != '') {
+                $res->where('payment.student_id', request()->input('payment_studentid'));
             }
             if (request()->has('payment_paymentId') && request()->input('payment_paymentId') != '') {
                 $res->where('payment.invoice_id', request()->input('payment_paymentId'));
@@ -44,8 +44,8 @@ class PaymentReportController extends Controller
             }
         } else if ($request['action'] == 'export') {
 
-            if (request()->has('payment_regno') && request()->input('payment_regno') != '') {
-                $res->where('payment.registration_no', request()->input('payment_regno'));
+            if (request()->has('payment_studentid') && request()->input('payment_studentid') != '') {
+                $res->where('payment.student_id', request()->input('payment_studentid'));
             }
             if (request()->has('payment_paymentId') && request()->input('payment_paymentId') != '') {
                 $res->where('payment_id', request()->input('payment_paymentId'));
@@ -67,7 +67,7 @@ class PaymentReportController extends Controller
             $paymentData = [];
             foreach ($paymentRes as $res) {
                 $resArr['invoice_id']     = $res->invoice_id;
-                $resArr['registration_no']= $res->registration_no;
+                $resArr['student_id']     = $res->student_id;
                 $resArr['name']           = $res->name;
 
                 if ($res->paid_date != '') {
@@ -90,7 +90,7 @@ class PaymentReportController extends Controller
             return Excel::download(new ExportPayment($paymentData), 'payment_export.csv');
         } else {
             request()->merge([
-                'payment_regno' => null,
+                'payment_studentid' => null,
                 'payment_paymentId' => null,
                 'payment_name'      => null,
             ]);

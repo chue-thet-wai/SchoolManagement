@@ -3,6 +3,23 @@
 @section('content')
 <link href="{{ asset('css/home.css') }}" rel="stylesheet">
 <script src="{{ asset('js/home.js') }}" defer></script>
+<style>
+    #total-student,
+    #exam-result,
+    #waiting-student,
+    #payment-result
+    {
+        width: 250px; 
+        overflow-y: auto
+        margin-bottom:10px;
+    }
+    .custom-table{
+        height:250px;
+    }
+    .custom-table tr {
+        height:40px;
+    }
+</style>
 
 <div class="container">
     <div class="row justify-content-center">
@@ -13,30 +30,16 @@
                         <thead>
                             <tr>
                                 <th class="first-column" scope="col">Total Student</th>
-                                <th class="last-column" scope="col"><div class="colval-border">150</div></th>
+                                <th class="last-column" scope="col"><div class="colval-border">{{$student_totalcount}}</div></th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($student_count as $student)
                             <tr>
-                                <td class="first-column"><div class="colval-border">Grade (I)</div></td>
-                                <td class="last-column"><div class="colval-border">10</div></td>
+                                <td class="first-column"><div class="colval-border">{{$class_grade[$student['class_id']]}}</div></td>
+                                <td class="last-column"><div class="colval-border">{{$student['count']}}</div></td>
                             </tr>
-                            <tr>
-                                <td class="first-column"><div class="colval-border">Grade (II)</div></td>
-                                <td class="last-column"><div class="colval-border">20</div></td>
-                            </tr>
-                            <tr>
-                                <td class="first-column"><div class="colval-border">Grade (III)</div></td>
-                                <td class="last-column"><div class="colval-border">30</div></td>
-                            </tr>
-                            <tr>
-                                <td class="first-column"><div class="colval-border">Grade (IV)</div></td>
-                                <td class="last-column"><div class="colval-border">40</div></td>
-                            </tr>
-                            <tr>
-                                <td class="first-column"><div class="colval-border">Grade (V)</div></td>
-                                <td class="last-column"><div class="colval-border">50</div></td>
-                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -50,31 +53,13 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($exam_count as $exam)
                             <tr>
-                                <td class="first-column"><div class="colval-border">Grade (I)</div></td>
-                                <td class="middle-column"><div class="colval-border">10</div></td>
-                                <td class="last-column"><div class="colval-border">10</div></td>
+                                <td class="first-column"><div class="colval-border">{{$class_grade[$exam['class_id']]}}</div></td>
+                                <td class="middle-column"><div class="colval-border">{{$exam['pass']}}</div></td>
+                                <td class="last-column"><div class="colval-border">{{$exam['fail']}}</div></td>
                             </tr>
-                            <tr>
-                                <td class="first-column"><div class="colval-border">Grade (II)</div></td>
-                                <td class="middle-column"><div class="colval-border">10</div></td>
-                                <td class="last-column"><div class="colval-border">20</div></td>
-                            </tr>
-                            <tr>
-                                <td class="first-column"><div class="colval-border">Grade (III)</div></td>
-                                <td class="middle-column"><div class="colval-border">10</div></td>
-                                <td class="last-column"><div class="colval-border">30</div></td>
-                            </tr>
-                            <tr>
-                                <td class="first-column"><div class="colval-border">Grade (IV)</div></td>
-                                <td class="middle-column"><div class="colval-border">10</div></td>
-                                <td class="last-column"><div class="colval-border">40</div></td>
-                            </tr>
-                            <tr>
-                                <td class="first-column"><div class="colval-border">Grade (V)</div></td>
-                                <td class="middle-column"><div class="colval-border">10</div></td>
-                                <td class="last-column"><div class="colval-border">50</div></td>
-                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -85,34 +70,20 @@
                         <thead>
                             <tr>
                                 <th class="first-column" scope="col">Total Waiting List</th>
-                                <th class="last-column" scope="col"><div class="colval-border">150</div></th>
+                                <th class="last-column" scope="col"><div class="colval-border">{{$waiting_totalcount}}</div></th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($waiting_count as $waiting)
                             <tr>
-                                <td class="first-column"><div class="colval-border">Grade (I)</div></td>
-                                <td class="last-column"><div class="colval-border">10</div></td>
+                                <td class="first-column"><div class="colval-border">{{$waiting['grade_name']}}</div></td>
+                                <td class="last-column"><div class="colval-border">{{$waiting['count']}}</div></td>
                             </tr>
-                            <tr>
-                                <td class="first-column"><div class="colval-border">Grade (II)</div></td>
-                                <td class="last-column"><div class="colval-border">20</div></td>
-                            </tr>
-                            <tr>
-                                <td class="first-column"><div class="colval-border">Grade (III)</div></td>
-                                <td class="last-column"><div class="colval-border">30</div></td>
-                            </tr>
-                            <tr>
-                                <td class="first-column"><div class="colval-border">Grade (IV)</div></td>
-                                <td class="last-column"><div class="colval-border">40</div></td>
-                            </tr>
-                            <tr>
-                                <td class="first-column"><div class="colval-border">Grade (V)</div></td>
-                                <td class="last-column"><div class="colval-border">50</div></td>
-                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
-                <div class="col-md-6" id="exam-result">
+                <div class="col-md-6" id="payment-result">
                     <table class="table custom-table">
                         <thead>
                             <tr>

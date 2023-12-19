@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('grade_id')->comment('id for grade table');
             $table->integer('branch_id')->comment('id for branch table');
             $table->float('grade_level_amount')->default(0.0);
+            $table->integer('fee_type')->default(0)->comment('0:Monthly,1:OneTime');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->softDeletes();

@@ -14,6 +14,7 @@ class TeacherAttendanceReportController extends Controller
     {
 
         $attendance = array(
+            '2'=>'Leave',
             '1'=>'Present',
             '0'=>'Absent'
         );

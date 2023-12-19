@@ -25,7 +25,7 @@
                             <div class="row">
                                 <div class="col-md-3"></div>
                                 <label for="email" class="col-md-4 ms-md-4">
-                                    {{ __('E-Mail Address') }}
+                                    <strong>{{ __('E-Mail Address') }}</strong>
                                 </label>
                             </div>
                             <div class="mb-2 row">
@@ -48,7 +48,7 @@
                             <div class="row">
                                 <div class="col-md-3"></div>
                                 <label for="password" class="col-md-4 ms-md-4">
-                                    {{ __('Password') }}
+                                    <strong>{{ __('Password') }}</strong>
                                 </label>
                             </div>
                             <div class="mb-2 row">
@@ -91,7 +91,7 @@
                             </div>
                             <div class="mb-3 row">
                                 <div class="col-md-2 mx-auto">
-                                    <button type="submit" class="sing-in px-md-3 py-md-1">
+                                    <button type="submit" class="sing-in px-md-4 py-md-1">
                                         {{ __('Sign In') }}
                                     </button>
                                 </div>

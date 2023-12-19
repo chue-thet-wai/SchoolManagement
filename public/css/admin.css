@@ -52,7 +52,7 @@ input[type=number] {
   width: 100%;
   height: 45px;
   text-align: center;
-  background: #8338ec;
+  background: #2b7a4a;
   color: #fff;
   font-size: 15px;
   text-transform: Uppercase;
@@ -146,8 +146,8 @@ display: none;
   gap: 20px;
 }
 #studentRegForm .form-footer button{
-  background-color: #3490dc;
-  border: 1px solid #3490dc !important;
+  background-color: #0F4D19;
+  border: 1px solid #0F4D19 !important;
   color: #ffffff;
   border: none;
   padding: 13px 30px;

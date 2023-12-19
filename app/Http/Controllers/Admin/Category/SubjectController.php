@@ -14,7 +14,7 @@ class SubjectController extends Controller
 {
     private CategoryRepositoryInterface $categoryRepository;
 
-    public function __construct(CategoryRepositoryInterface $categoryRepository) 
+    public function __construct(CategoryRepositoryInterface $categoryRepository)
     {
         $this->categoryRepository = $categoryRepository;
     }
@@ -25,30 +25,30 @@ class SubjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function SubjectList(Request $request)
-    {  
+    {
         $res = Subject::select('subject.*');
         if ($request['action'] == 'search') {
             if (request()->has('subject_name') && request()->input('subject_name') != '') {
-                $res->where('name','Like', '%' . request()->input('subject_name') . '%');
+                $res->where('name', 'Like', '%' . request()->input('subject_name') . '%');
             }
             if (request()->has('subject_grade_id') && request()->input('subject_grade_id') != '') {
                 $res->where('grade_id', request()->input('subject_grade_id'));
             }
-        }else {
+        } else {
             request()->merge([
                 'subject_name'         => null,
                 'subject_grade_id'     => null,
             ]);
-        }     
-        $res = $res->paginate(20);  
-      
+        }
+        $res = $res->paginate(20);
+
         $grade_list_data = $this->categoryRepository->getGrade();
-        $grade_list=[];
-        foreach($grade_list_data as $g) {
+        $grade_list = [];
+        foreach ($grade_list_data as $g) {
             $grade_list[$g->id] = $g->name;
-        } 
-        return view('admin.category.subject_index',[
-            'grade_list'  =>$grade_list,
+        }
+        return view('admin.category.subject_index', [
+            'grade_list'  => $grade_list,
             'list_result' => $res
         ]);
     }
@@ -61,8 +61,8 @@ class SubjectController extends Controller
     public function create()
     {
         $grade_list = $this->categoryRepository->getGrade();
-        return view('admin.category.subject_registration',[
-            'grade_list'  =>$grade_list,
+        return view('admin.category.subject_registration', [
+            'grade_list'  => $grade_list,
             'action'      => 'Add'
         ]);
     }
@@ -79,30 +79,34 @@ class SubjectController extends Controller
         $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
-            'name'      =>'required|min:3',
+            'name'      => 'required|min:3',
+            'grade_id'  => 'required|array'
         ]);
 
-        if ($request->grade_id == '99') {
-            return redirect()->back()->with('danger','Please select grade !');
+        // if ($request->grade_id == '99') {
+        //     return redirect()->back()->with('danger', 'Please select grade !');
+        // }
+        $insertData = [];
+        foreach ($request->grade_id as $grade) {
+            $data = [
+                'name'           => $request->name,
+                'grade_id'       => $grade,
+                'created_by'     => $login_id,
+                'updated_by'     => $login_id,
+                'created_at'     => $nowDate,
+                'updated_at'     => $nowDate
+            ];
+            array_push($insertData, $data);
         }
-        
-        $insertData = array(
-            'name'           =>$request->name,
-            'grade_id'       =>$request->grade_id,
-            'created_by'     =>$login_id,
-            'updated_by'     =>$login_id,
-            'created_at'     =>$nowDate,
-            'updated_at'     =>$nowDate
-        );
 
-        $result=Subject::insert($insertData);
-        
-        if($result){
+        $result = Subject::insert($insertData);
+
+        if ($result) {
             $res = Subject::paginate(10);
             return redirect(url('admin/subject/list'))
-                            ->with('success','Subject Added Successfully!');
-        }else{
-            return redirect()->back()->with('danger','Subject Added Fail !');
+                ->with('success', 'Subject Added Successfully!');
+        } else {
+            return redirect()->back()->with('danger', 'Subject Added Fail !');
         }
     }
 
@@ -126,9 +130,9 @@ class SubjectController extends Controller
     public function edit($id)
     {
         $grade_list = $this->categoryRepository->getGrade();
-        $update_res = Subject::where('id',$id)->get();
-        return view('admin.category.subject_registration',[
-            'grade_list'  =>$grade_list,
+        $update_res = Subject::where('id', $id)->get();
+        return view('admin.category.subject_registration', [
+            'grade_list'  => $grade_list,
             'result'      => $update_res,
             'action'      => 'Update'
         ]);
@@ -147,36 +151,35 @@ class SubjectController extends Controller
         $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
-            'name'      =>'required|min:3',
+            'name'      => 'required|min:3',
         ]);
 
         if ($request->grade_id == '99') {
-            return redirect()->back()->with('danger','Please select grade !');
+            return redirect()->back()->with('danger', 'Please select grade !');
         }
 
         DB::beginTransaction();
-        try{
+        try {
             $updateData = array(
-                'name'           =>$request->name,
-                'grade_id'       =>$request->grade_id,
-                'updated_by'     =>$login_id,
-                'updated_at'     =>$nowDate
+                'name'           => $request->name,
+                'grade_id'       => $request->grade_id,
+                'updated_by'     => $login_id,
+                'updated_at'     => $nowDate
             );
-            
-            $result=Subject::where('id',$id)->update($updateData);
-                      
-            if($result){
-                DB::commit();               
-                return redirect(url('admin/subject/list'))->with('success','Subject Updated Successfully!');
-            }else{
-                return redirect()->back()->with('danger','Subject Updated Fail !');
-            }
 
-        }catch(\Exception $e){
+            $result = Subject::where('id', $id)->update($updateData);
+
+            if ($result) {
+                DB::commit();
+                return redirect(url('admin/subject/list'))->with('success', 'Subject Updated Successfully!');
+            } else {
+                return redirect()->back()->with('danger', 'Subject Updated Fail !');
+            }
+        } catch (\Exception $e) {
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Subject Updared Fail !');
-        }  
+            return redirect()->back()->with('error', 'Subject Updared Fail !');
+        }
     }
 
     /**
@@ -187,17 +190,17 @@ class SubjectController extends Controller
      */
     public function destroy($id)
     {
-        $checkData = Subject::where('id',$id)->get()->toArray();
+        $checkData = Subject::where('id', $id)->get()->toArray();
         if (!empty($checkData)) {
-            
-            $res = Subject::where('id',$id)->delete();
-            if($res){
+
+            $res = Subject::where('id', $id)->delete();
+            if ($res) {
                 $listres = Subject::paginate(10);
                 return redirect(url('admin/subject/list'))
-                            ->with('success','Subject Deleted Successfully!');
+                    ->with('success', 'Subject Deleted Successfully!');
             }
-        }else{
-            return redirect()->back()->with('error','There is no result with this subject.');
+        } else {
+            return redirect()->back()->with('error', 'There is no result with this subject.');
         }
     }
 }

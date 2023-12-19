@@ -11,4 +11,9 @@ class Subject extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'subject';
+
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class);
+    }
 }

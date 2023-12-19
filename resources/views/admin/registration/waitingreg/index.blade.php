@@ -16,7 +16,7 @@
 <section class="card">
     <div class="card-body">
         <div class="row g-4">
-            <div class="col-md-10" style='color:#012970;'>
+            <div class="col-md-10 content-title">
                 <h4><b>Waiting List Registration List</b></h4>
             </div>
             <div class="col-md-2">
@@ -70,6 +70,7 @@
                         <th>Email</th>
                         <th>Grade</th>
                         <th>Academic Year</th>
+                        <th>Change</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -84,6 +85,22 @@
                             <td>{{ $res->email }}</td>
                             <td>{{ $grade_list[$res->grade_id] }}</td>
                             <td>{{ $academic_list[$res->academic_year_id] }}</td>
+                            <td class="center">
+                                @if ($res->status == '1')
+                                <form class="col-sm-1 d-inline" method="GET" action="{{ route('student_reg.create') }}">
+                                    @csrf
+                                    <input type="hidden" name="reg_type" value="1" />
+                                    <input type="hidden" name="waiting_id" value="{{ $res->id }}" />
+                                    <input type="submit" value="Register" class="btn btn-sm btn-primary">
+                                </form>
+                                
+                                <form class="col-sm-1 d-inline" method="GET" action="{{ route('student_reg.create') }}">
+                                    @csrf
+                                    <input type="hidden" name="waiting_id" value="{{ $res->id }}" />
+                                    <input type="submit" value="Cancel" class="btn btn-sm btn-primary">
+                                </form>
+                                @endif
+                            </td>
                             <td class="center">
                                 <a href="{{route('waitinglist_reg.edit',$res->id)}}">
                                     <button type="submit" value="delete" class="btn m-1 p-0 border-0">

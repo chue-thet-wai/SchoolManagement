@@ -58,7 +58,6 @@ class StudentAttendanceRegController extends Controller
         $request->validate([
             'attendance_studentdate'  =>'required',
         ]); 
-
         $res = StudentRegistration::join('student_info','student_info.student_id','student_registration.student_id')
                 ->join('class_setup','class_setup.id','student_registration.new_class_id');
         $res->where('class_setup.grade_id', $request->attendance_grade);
@@ -66,6 +65,7 @@ class StudentAttendanceRegController extends Controller
         $res=$res->select('student_info.*','student_registration.registration_no')->get();
 
         $attendance = array(
+            '2'=>'Leave',
             '1'=>'Present',
             '0'=>'Absent'
         );

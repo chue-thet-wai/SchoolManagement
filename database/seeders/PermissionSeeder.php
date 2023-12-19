@@ -91,6 +91,12 @@ class PermissionSeeder extends Seeder
             ),
             array(
                 'main_menu' =>"Create Information",
+                "sub_menu"  =>"Teacher Class",
+                "menu_route"=>"admin/teacher_class/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Create Information",
                 "sub_menu"  =>"Student Information",
                 "menu_route"=>"admin/student_info/list",
                 "type"      =>"url"
