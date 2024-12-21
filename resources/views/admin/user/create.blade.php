@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-5">
-                        <label for=""><b>Role</b></label>
+                        <label for=""><b>Department</b></label>
                         <div class="col-sm-10">
                             <select class="form-select" id="department_id" name="department_id">
                                 <option value="">select Department</option>

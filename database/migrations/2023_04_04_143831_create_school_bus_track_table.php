@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('school_bus_track', function (Blueprint $table) {
             $table->id();
             $table->string('track_no');
-            $table->string('driver_id');
+            $table->string('driver_id')->comment('driver id from driver_info table');
+            $table->foreign('driver_id')->references('driver_id')->on('driver_info')->onDelete('restrict');
             $table->string('car_type');
             $table->string('car_no');
             $table->string('school_from_time');

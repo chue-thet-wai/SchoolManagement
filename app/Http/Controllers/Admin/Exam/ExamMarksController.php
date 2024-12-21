@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Interfaces\CategoryRepositoryInterface;
 use App\Interfaces\RegistrationRepositoryInterface;
+use App\Models\ClassSetup;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ExamMarks;
 use App\Models\ExamTerms;
 use App\Models\ExamRules;
+use App\Models\Subject;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -170,7 +172,7 @@ class ExamMarksController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Exam Marks Created Fail !');
+            return redirect()->back()->with('danger','Exam Marks Created Fail !');
         }    
     }
 
@@ -182,18 +184,40 @@ class ExamMarksController extends Controller
      */
     public function examMarksEdit($id)
     {
-        $subjects = $this->categoryRepository->getSubject();
-        $examterms = $this->getExamTerms();
+
         $classes    = $this->regRepository->getClass();
-        $student_list    = $this->regRepository->getStudentInfo();
+        $res = ExamMarks::leftjoin('class_setup','class_setup.id','exam_marks.class_id')
+                    ->where('exam_marks.id',$id)
+                    ->select('exam_marks.*','class_setup.grade_id as grade_id')
+                    ->get();
+
+        if ($res) {
+            $studentList = DB::table('student_registration')
+                        ->join('student_info','student_info.student_id','student_registration.student_id')
+                        ->select('student_info.*')
+                        ->where('new_class_id','=',$res[0]->class_id)
+                        ->get();
+
+            $subjectList = Subject::where('subject.grade_id','=',$res[0]->grade_id)
+                            ->select('subject.*')
+                            ->get();
+            $examTermsList = ExamTerms::where('exam_terms.grade_id','=',$res[0]->grade_id)
+                            ->select('exam_terms.*')
+                            ->get();
+        } else {
+            $subjects = $this->categoryRepository->getSubject();
+            $examterms = $this->getExamTerms();
+            $student_list    = $this->regRepository->getStudentInfo();
+        }
+
     
-        $res = ExamMarks::where('id',$id)->get();
         return view('admin.exam.exammarks.exammarks_update',[
-            'subjects' => $subjects,
-            'examterms' => $examterms, 
-            'classes' => $classes,
-            'student_list'=>$student_list,
-            'result'=>$res]);
+            'subjects'    => $subjectList,
+            'examterms'   => $examTermsList, 
+            'classes'     => $classes,
+            'student_list'=>$studentList,
+            'result'      =>$res
+        ]);
     }
 
     /**
@@ -256,7 +280,7 @@ class ExamMarksController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Exam Marks Updared Fail !');
+            return redirect()->back()->with('danger','Exam Marks Updared Fail !');
         }  
     }
 
@@ -281,14 +305,14 @@ class ExamMarksController extends Controller
                     return redirect(url('admin/exam_marks/list'))->with('success','Exam Marks Deleted Successfully!');
                 }
             }else{
-                return redirect()->back()->with('error','There is no result with this exam marks.');
+                return redirect()->back()->with('danger','There is no result with this exam marks.');
             }
            
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Exam Marks Deleted Failed!');
+            return redirect()->back()->with('danger','Exam Marks Deleted Failed!');
         }
     }
 
@@ -309,5 +333,55 @@ class ExamMarksController extends Controller
             }
         }
         return $examMarkRule;
+    }
+
+    public function changeClass(Request $request) {
+        
+        $classSetup = ClassSetup::where('id',$request->class_id)->first();
+
+        if (!empty($classSetup)) {
+            $studentList = DB::table('student_registration')
+                            ->join('student_info','student_info.student_id','student_registration.student_id')
+                            ->select('student_info.*')
+                            ->where('new_class_id','=',$request->class_id)
+                            ->get();
+
+            $subjectList = Subject::where('subject.grade_id','=',$classSetup->grade_id)
+                            ->select('subject.*')
+                            ->get();
+            $examTermsList = ExamTerms::where('exam_terms.grade_id','=',$classSetup->grade_id)
+                            ->select('exam_terms.*')
+                            ->get();
+        
+            return response()->json(array(
+                'msg'                => 'found',
+                'student_data'       => $studentList,
+                'subject_data'       => $subjectList,
+                'exam_terms_data'    => $examTermsList
+            ), 200);
+        } else {
+            return response()->json(array(
+                'msg'             => 'notfound',
+            ), 200);
+        }
+    }
+
+    public function changeExamTerms(Request $request) {
+        $examTerms = ExamTerms::where('id',$request->exam_terms_id)->first();
+    
+        if (!empty($examTerms)) {
+            $subjectList = Subject::where('grade_id','=',$examTerms->grade_id)
+                            ->select('subject.*')
+                            ->get();
+        
+            return response()->json(array(
+                'msg'                => 'found',
+                'subject_data'       => $subjectList
+            ), 200);
+        } else {
+            return response()->json(array(
+                'msg'             => 'notfound',
+            ), 200);
+        }
     }
 }

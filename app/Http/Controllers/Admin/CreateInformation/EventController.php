@@ -35,7 +35,11 @@ class EventController extends Controller
                 $res->where('title', request()->input('event_title'));
             }
             if (request()->has('event_gradeid') && request()->input('event_gradeid') != '') {
-                $res->where('grade_id', request()->input('event_gradeid'));
+                if (request()->input('event_gradeid') == '0') {
+                    $res->whereNull('grade_id');
+                } else {
+                    $res->where('grade_id', request()->input('event_gradeid'));
+                }
             }
         }else {
             request()->merge([
@@ -115,7 +119,7 @@ class EventController extends Controller
         try{
             $insertData = array(
                 'title'              =>$request->title,
-                'grade_id'           =>$request->grade_id,
+                'grade_id'           =>$request->grade_id !== '0' ? $request->grade_id : null,
                 'academic_year_id'   =>$request->academic_year_id,
                 'description'        =>$request->description,
                 'event_from_date'    =>$request->event_from_date,
@@ -138,7 +142,7 @@ class EventController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Event Created Fail !');
+            return redirect()->back()->with('danger','Event Created Fail !');
         }    
     }
 
@@ -205,7 +209,7 @@ class EventController extends Controller
         try{
             $eventData = array(
                 'title'              =>$request->title,
-                'grade_id'           =>$request->grade_id,
+                'grade_id'           =>$request->grade_id !== '0' ? $request->grade_id : null,
                 'academic_year_id'   =>$request->academic_year_id,
                 'description'        =>$request->description,
                 'event_from_date'    =>$request->event_from_date,
@@ -228,7 +232,7 @@ class EventController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Event Updared Fail !');
+            return redirect()->back()->with('danger','Event Updared Fail !');
         }  
     }
 
@@ -253,14 +257,14 @@ class EventController extends Controller
                     return redirect(url('admin/event/list'))->with('success','Event Deleted Successfully!');
                 }
             }else{
-                return redirect()->back()->with('error','There is no result with this event.');
+                return redirect()->back()->with('danger','There is no result with this event.');
             }
            
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Event Deleted Failed!');
+            return redirect()->back()->with('danger','Event Deleted Failed!');
         }
     }
 }

@@ -1,6 +1,8 @@
 @extends('layouts.dashboard')
 
 @section('content')
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="{{ asset('js/exammarks.js') }}"></script>
 <div class="pagetitle">
     <h1>Exam Marks</h1>
     <nav>
@@ -35,18 +37,19 @@
             @csrf
             <br />
             {{method_field('POST')}}
+            <input type="hidden" id="token" value="<?php echo csrf_token(); ?>" />
             <div class="row g-4">
                 <div class="col-md-1"></div>
                 <div class="col-md-10">                    
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label for="student_id"><b>Student ID<span style="color:brown">*</span></b></label>
+                            <label for=""><b>Class</b></label>
                             <div class="col-sm-10">
-                                <select class="form-select" id="student_id" name="student_id" >
-                                    <option  value="99">--Select Student--</option>
-                                    @foreach($student_list as $a)
-                                        <option  value="{{$a->student_id}}"
-                                        @if ($result[0]->student_id == $a->student_id)
+                                <select class="form-select" id="class_id" name="class_id" >
+                                    <option  value="99">--Select Class--</option>
+                                    @foreach($classes as $a)
+                                        <option  value="{{$a->id}}"
+                                        @if ($result[0]->class_id == $a->id)
                                             selected
                                         @endif
                                         >{{$a->name}}</option>
@@ -55,13 +58,13 @@
                             </div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for=""><b>Exam Terms</b></label>
+                            <label for="student_id"><b>Student ID<span style="color:brown">*</span></b></label>
                             <div class="col-sm-10">
-                                <select class="form-select" id="exam_terms_id" name="exam_terms_id" >
-                                    <option  value="99">--Select Exam Terms--</option>
-                                    @foreach($examterms as $a)
-                                        <option  value="{{$a->id}}"
-                                        @if ($result[0]->exam_terms_id == $a->id)
+                                <select class="form-select" id="student_id" name="student_id" >
+                                    <option  value="99">--Select Student--</option>
+                                    @foreach($student_list as $a)
+                                        <option  value="{{$a->student_id}}"
+                                        @if ($result[0]->student_id == $a->student_id)
                                             selected
                                         @endif
                                         >{{$a->name}}</option>
@@ -78,13 +81,13 @@
                 <div class="col-md-10">                    
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label for=""><b>Class</b></label>
+                            <label for=""><b>Exam Terms</b></label>
                             <div class="col-sm-10">
-                                <select class="form-select" id="class_id" name="class_id" >
-                                    <option  value="99">--Select Class--</option>
-                                    @foreach($classes as $a)
+                                <select class="form-select" id="exam_terms_id" name="exam_terms_id" >
+                                    <option  value="99">--Select Exam Terms--</option>
+                                    @foreach($examterms as $a)
                                         <option  value="{{$a->id}}"
-                                        @if ($result[0]->class_id == $a->id)
+                                        @if ($result[0]->exam_terms_id == $a->id)
                                             selected
                                         @endif
                                         >{{$a->name}}</option>

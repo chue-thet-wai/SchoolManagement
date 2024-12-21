@@ -179,7 +179,7 @@ class TeacherInfoController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error', 'Teacher Information Created Fail !');
+            return redirect()->back()->with('danger', 'Teacher Information Created Fail !');
         }
     }
 
@@ -334,7 +334,7 @@ class TeacherInfoController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error', 'Teacher Information Updared Fail !');
+            return redirect()->back()->with('danger', 'Teacher Information Updared Fail !');
         }
     }
 
@@ -351,30 +351,43 @@ class TeacherInfoController extends Controller
             $checkData = TeacherInfo::where('user_id', $id)->first();
 
             if (!empty($checkData)) {
+                try {
+                    // Attempt to delete the record
+                    $res = TeacherInfo::where('user_id', $id)->forceDelete();
+                    if ($res) {
+                        //To delet user
+                        $userdel = User::where('user_id', $id)->forceDelete();
 
-                $res = TeacherInfo::where('user_id', $id)->delete();
-                if ($res) {
-                    //To delet user
-                    $userdel = User::where('user_id', $id)->delete();
+                        //To delete image
+                        $image = $checkData['profile_image'];
+                        @unlink(public_path('/assets/teacher_images/' . $image));
 
-                    //To delete image
-                    $image = $checkData['profile_image'];
-                    @unlink(public_path('/assets/teacher_images/' . $image));
+                        //To delete qualification file
+                        $file = $checkData['qualification_desc'];
+                        @unlink(public_path('/assets/teacher_qualifications/' . $file));
 
-                    //To delete qualification file
-                    $file = $checkData['qualification_desc'];
-                    @unlink(public_path('/assets/teacher_qualifications/' . $file));
+                        DB::commit();
+                        //To return list
+                        return redirect(url('admin/teacher_info/list'))->with('success', 'Teacher Information Deleted Successfully!');
+                    }
+                    
+                } catch (\Illuminate\Database\QueryException $e) {
+                    // Check if the exception is due to a foreign key constraint violation
+                    if ($e->errorInfo[1] === 1451) {
+                        return redirect()->back()->with('danger','Cannot delete this record because it is being used in other.');
+                    }
+                    return redirect()->back()->with('danger','An error occurred while deleting the record.');
                 }
+
+                
             } else {
-                return redirect()->back()->with('error', 'There is no result with this teacher information.');
+                return redirect()->back()->with('danger', 'There is no result with this teacher information.');
             }
-            DB::commit();
-            //To return list
-            return redirect(url('admin/teacher_info/list'))->with('success', 'Teacher Information Deleted Successfully!');
+            
         } catch (\Exception $e) {
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error', 'Teacher Information Deleted Failed!');
+            return redirect()->back()->with('danger', 'Teacher Information Deleted Failed!');
         }
     }
 }

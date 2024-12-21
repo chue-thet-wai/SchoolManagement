@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('subject', function (Blueprint $table) {
             $table->id();
-            $table->integer('grade_id')->comment('id for grade table');
+            $table->foreignId('grade_id')->constrained('grade')->onDelete('restrict');
             $table->string('name');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

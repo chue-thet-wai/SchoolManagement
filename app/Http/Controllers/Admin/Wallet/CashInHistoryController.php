@@ -18,8 +18,9 @@ class CashInHistoryController extends Controller
      */
     public function CashInHistoryList(Request $request)
     {
-        $res = WalletHistory::leftjoin('student_info','student_info.student_id','=','wallet_history.student_id')
-                        ->select('wallet_history.*','student_info.name as name');
+        $res = WalletHistory::leftJoin('student_info','student_info.student_id','=','wallet_history.student_id')
+            ->select('wallet_history.*','student_info.name as name');
+
         if ($request['action'] == 'search') {
             if (request()->has('cashcounter_cardid') && request()->input('cashcounter_cardid') != '') {
                 $res->where('wallet_history.card_id', request()->input('cashcounter_cardid'));
@@ -27,15 +28,26 @@ class CashInHistoryController extends Controller
             if (request()->has('cashcounter_studentid') && request()->input('cashcounter_studentid') != '') {
                 $res->where('wallet_history.student_id', request()->input('cashcounter_studentid'));
             }
-        }else {
+        } else {
             request()->merge([
                 'cashcounter_cardid'      => null,
                 'cashcounter_studentid'   => null,
             ]);
-        }       
-        $res = $res->paginate(20);
+        }
 
-        $returnArray = $res->toArray();       
+        // Subquery to get the maximum id for each combination of card_id and status
+        $subquery = WalletHistory::selectRaw('MAX(id) as max_id')
+            ->groupBy('card_id', 'status');
+
+        // Join the subquery with the original table
+        $res->joinSub($subquery, 'max_ids', function($join) {
+            $join->on('wallet_history.id', '=', 'max_ids.max_id');
+        });
+
+        $res=$res->orderBy('wallet_history.id', 'desc')
+            ->paginate(20);
+
+        $returnArray = $res->toArray();   
         
         $returnWalletData =[];
         if (!empty($returnArray['data'])) {

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('food_order_items', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_id');
-            $table->string('menu_id');
+            $table->foreignId('menu_id')->constrained('menu')->onDelete('restrict');
             $table->string('price');
             $table->string('quantity');
             $table->string('description')->nullable();

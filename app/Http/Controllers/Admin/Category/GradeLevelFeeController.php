@@ -236,7 +236,7 @@ class GradeLevelFeeController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Grade Level Fee Updared Fail !');
+            return redirect()->back()->with('danger','Grade Level Fee Updared Fail !');
         }  
     }
 
@@ -251,16 +251,24 @@ class GradeLevelFeeController extends Controller
         $checkData = GradeLevelFee::where('id',$id)->get()->toArray();
 
         if (!empty($checkData)) {
-            
-            $res = GradeLevelFee::where('id',$id)->delete();
-            if($res){
-                $listres = GradeLevelFee::paginate(10);
+            try {
+                // Attempt to delete the record
+                $res = GradeLevelFee::where('id',$id)->forceDelete();
+               
+                if($res){
 
-                return redirect(url('admin/grade_level_fee/list'))
-                            ->with('success','Grade Level Fee Deleted Successfully!');
+                    return redirect(url('admin/grade_level_fee/list'))->with('success','Grade Level Fee Deleted Successfully!');
+                }
+            } catch (\Illuminate\Database\QueryException $e) {
+                // Check if the exception is due to a foreign key constraint violation
+                if ($e->errorInfo[1] === 1451) {
+                    return redirect()->back()->with('danger','Cannot delete this record because it is being used in other.');
+                }
+                return redirect()->back()->with('danger','An error occurred while deleting the record.');
             }
+            
         }else{
-            return redirect()->back()->with('error','There is no result with this grade level fee.');
+            return redirect()->back()->with('danger','There is no result with this grade level fee.');
         }
     }
 

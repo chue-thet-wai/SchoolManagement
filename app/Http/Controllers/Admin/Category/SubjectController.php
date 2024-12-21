@@ -178,7 +178,7 @@ class SubjectController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error', 'Subject Updared Fail !');
+            return redirect()->back()->with('danger', 'Subject Updared Fail !');
         }
     }
 
@@ -192,15 +192,24 @@ class SubjectController extends Controller
     {
         $checkData = Subject::where('id', $id)->get()->toArray();
         if (!empty($checkData)) {
+            try {
+                // Attempt to delete the record
+                $res = Subject::where('id',$id)->forceDelete();
+               
+                if($res){
 
-            $res = Subject::where('id', $id)->delete();
-            if ($res) {
-                $listres = Subject::paginate(10);
-                return redirect(url('admin/subject/list'))
-                    ->with('success', 'Subject Deleted Successfully!');
+                    return redirect(url('admin/subject/list'))->with('success','Subject Deleted Successfully!');
+                }
+            } catch (\Illuminate\Database\QueryException $e) {
+                // Check if the exception is due to a foreign key constraint violation
+                if ($e->errorInfo[1] === 1451) {
+                    return redirect()->back()->with('danger','Cannot delete this record because it is being used in other.');
+                }
+                return redirect()->back()->with('danger','An error occurred while deleting the record.');
             }
+           
         } else {
-            return redirect()->back()->with('error', 'There is no result with this subject.');
+            return redirect()->back()->with('danger', 'There is no result with this subject.');
         }
     }
 }

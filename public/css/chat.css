@@ -1,0 +1,58 @@
+#chat-messages {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    max-height: 400px; /* Set a maximum height for the chat messages container */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+#chat-messages::-webkit-scrollbar {
+    width: 0px; /* Width of the scrollbar */
+}
+
+#chat-messages::-webkit-scrollbar-thumb {
+    background-color: #888; /* Color of the scrollbar thumb */
+    border-radius: 5px; /* Radius of the scrollbar thumb */
+}
+
+#chat-messages::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Color of the scrollbar track */
+}
+
+#chat-messages li {
+    margin-bottom: 10px;
+    clear: both;
+    overflow: auto;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.sent {
+    float: right;
+}
+
+.received{
+    float: left;
+}
+
+.sent .message{
+    background-color: #F0F0F0;
+}
+
+.received .message{
+    background-color: #DCF8C6;
+}
+
+.message {
+    padding: 5px 10px;
+    width: 300px; /* Set the desired fixed width */
+    max-width: 100%; /* Ensure the message does not overflow its container */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    word-wrap: break-word; /* Wrap long words */
+    white-space: pre-wrap; /* Preserve white spaces and line breaks */
+}
+
+.meta, .date {
+    font-size: 12px;
+    color: #999;
+}

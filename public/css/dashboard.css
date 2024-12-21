@@ -679,6 +679,10 @@
     margin-bottom: 5px;
   }
   
+  .nav-content .active {
+      background-color: #0F4D19;
+      color: #ffffff;
+  }
   .sidebar-nav .nav-heading {
     font-size: 11px;
     text-transform: uppercase;
@@ -878,6 +882,10 @@
   
   .event-container .cards::-webkit-scrollbar-track {
     background: var(--thumb);
+  }
+
+  .active-link {
+    color: #00c314 !important;
   }
   
   @media (min-width: 500px) {

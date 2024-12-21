@@ -56,8 +56,8 @@
                                     <select class="form-select" id="teacher_id" name="teacher_id">
                                         <option value="99">select Teacher</option>
                                         @foreach ($teacher_list as $a)
-                                            <option value="{{ $a->id }}"
-                                                @if ($result[0]->teacher_id == $a->id) selected @endif>{{ $a->name }}
+                                            <option value="{{ $a->user_id }}"
+                                                @if ($result[0]->teacher_id == $a->user_id) selected @endif>{{ $a->name }}
                                             </option>
                                         @endforeach
                                     </select>

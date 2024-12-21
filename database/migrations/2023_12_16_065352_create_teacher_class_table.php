@@ -15,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('teacher_class', function (Blueprint $table) {
             $table->id();
-            $table->string('teacher_id')->commant('id for teacher_info table');
-            $table->string('class_id')->commant('id for class_setup table');
+            $table->string('teacher_id')->comment('user id from teacher_info table');
+            $table->foreign('teacher_id')->references('user_id')->on('teacher_info')->onDelete('restrict');
+            $table->foreignId('class_id')->constrained('class_setup')->onDelete('restrict');
             $table->string('remark')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

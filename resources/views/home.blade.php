@@ -10,8 +10,9 @@
     #payment-result
     {
         width: 250px; 
-        overflow-y: auto
         margin-bottom:10px;
+        max-height: 400px; 
+        overflow-y: auto;
     }
     .custom-table{
         height:250px;
@@ -19,7 +20,53 @@
     .custom-table tr {
         height:40px;
     }
+    ::webkit-scrollbar {
+        width: 3px;
+    }
+
+    ::webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 6px;
+    }
+
+    ::webkit-scrollbar-track {
+        background-color: #f1f1f1;
+    }
 </style>
+<script>
+    window.onload = function() {
+        getPaymentData();
+    };
+    function getPaymentData(){
+        var paymentDate = $("#monthSelect").val();
+        $.ajax({
+            type:'POST',
+            url:'/dashboard_payment',
+            data:{
+                _token :'<?php echo csrf_token() ?>',
+                payment_date  : paymentDate
+            },
+           
+           success:function(data){
+                // Select the table body
+                var tbody = $('#payment-result-tbody');
+                if (data.msg == 'found') {
+                    tbody.empty();
+                    $.each(data.payment_data, function(key, value) {
+                        var newRow = $('<tr>' +
+                                        '<td class="first-column"><div class="colval-border">' + value['name'] + '</div></td>' +
+                                        '<td class="last-column"><div class="colval-border">' + value['amount'] + '</div></td>' +
+                                    '</tr>');
+
+                        tbody.append(newRow);
+                    });
+                } else {
+                    tbody.empty();
+                }             
+            }
+        });
+    }
+</script>
 
 <div class="container">
     <div class="row justify-content-center">
@@ -34,17 +81,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($student_count as $student)
+                            @foreach ($student_count as $key=>$value)
                             <tr>
-                                <td class="first-column"><div class="colval-border">{{$class_grade[$student['class_id']]}}</div></td>
-                                <td class="last-column"><div class="colval-border">{{$student['count']}}</div></td>
+                                <td class="first-column"><div class="colval-border">{{$grade_list[$key]}}</div></td>
+                                <td class="last-column"><div class="colval-border">{{$value}}</div></td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
                 <div class="col-md-6" id="exam-result">
-                <table class="table custom-table">
+                    <table class="table custom-table">
                         <thead>
                             <tr>
                                 <th class="first-column" scope="col">Grade</th>
@@ -53,11 +100,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($exam_count as $exam)
+                            @foreach ($exam_count as $key => $value)
                             <tr>
-                                <td class="first-column"><div class="colval-border">{{$class_grade[$exam['class_id']]}}</div></td>
-                                <td class="middle-column"><div class="colval-border">{{$exam['pass']}}</div></td>
-                                <td class="last-column"><div class="colval-border">{{$exam['fail']}}</div></td>
+                                <td class="first-column"><div class="colval-border">{{$grade_list[$key]}}</div></td>
+                                <td class="middle-column"><div class="colval-border">{{$value['pass']}}</div></td>
+                                <td class="last-column"><div class="colval-border">{{$value['fail']}}</div></td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -89,36 +136,34 @@
                             <tr>
                                 <th class="first-column" scope="col">Payment</th>
                                 <th class="last-column" scope="col">
-                                    <select class="form-control" id="monthSelect" name="month">
-                                        <option value="00">Month</option>
-                                        <option value="01">January</option>
-                                        <option value="02">February</option>
-                                        <option value="03">March</option>
-                                        <option value="04">April</option>
-                                        <option value="05">May</option>
-                                        <option value="06">June</option>
-                                        <option value="07">July</option>
-                                        <option value="08">August</option>
-                                        <option value="09">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">November</option>
-                                        <option value="12">December</option>
+                                    <!--<input type="date" class="form-control" id="payment_date" onchange="getPaymentData()">-->
+                                    <select class="form-control" id="monthSelect" name="month" onchange="getPaymentData()">
+                                        @for ($i = 1; $i <= 12; $i++)
+                                            @php
+                                                $currentYear = date('Y');
+                                                $monthName = date("M", mktime(0, 0, 0, $i, 1)); // Use "M" for short month names
+                                                $monthValue = date("Y-m", mktime(0, 0, 0, $i, 1));
+                                            @endphp
+                                            <option value="{{ $monthValue }}" {{ date('Y-m') == $monthValue ? 'selected' : '' }}>
+                                                {{ $monthName }}
+                                            </option>
+                                        @endfor
                                     </select>
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="payment-result-tbody">
                             <tr>
                                 <td class="first-column"><div class="colval-border">School Fee</div></td>
-                                <td class="last-column"><div class="colval-border">10</div></td>
+                                <td class="last-column"><div class="colval-border">0</div></td>
                             </tr>
                             <tr>
                                 <td class="first-column"><div class="colval-border">Book Fee</div></td>
-                                <td class="last-column"><div class="colval-border">20</div></td>
+                                <td class="last-column"><div class="colval-border">0</div></td>
                             </tr>
                             <tr>
                                 <td class="first-column"><div class="colval-border">Registration Fee</div></td>
-                                <td class="last-column"><div class="colval-border">30</div></td>
+                                <td class="last-column"><div class="colval-border">0</div></td>
                             </tr>
                         </tbody>
                     </table>
@@ -138,17 +183,26 @@
                             </div>
                             <div class="calendar_weekdays"></div>
                             <div class="calendar_content"></div>
-                        </div>   
+                        </div>    
                     </div> 
                 </div>                    
             </div>
             <div class="row ms-2">
                 <div class="event-list">
                     @if(!empty($event_list) && $event_list->count())
-                        @php $i=1;@endphp
+                        @php 
+                            $i=1; 
+                            $colorArray=array('#9FCDFF','#93E4D1','#E1DFB1','#CFAC8C',
+                            '#DC75E5','#90D797','#A4A3EB','#CAE895'.
+                            '#479EFF','#FB8D8D');
+                         @endphp
                         @foreach($event_list as $res)
+                            @php 
+                                $randomColorKey = array_rand($colorArray);
+                                $randomColor = $colorArray[$randomColorKey];
+                            @endphp
                             <div>
-                                <div class="event-date">{{date('d M,Y',strtotime($res->event_from_date))}}</div>
+                                <div class="event-date" style="background-color: {{$randomColor}}">{{date('d M,Y',strtotime($res->event_from_date)).'~'.date('d M,Y',strtotime($res->event_to_date))}}</div>
                                 <div class="event-description">                                                
                                     <p>{{$res->description}}</p>
                                 </div>

@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('teacher_info', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id');
+            $table->string('user_id')->comment('user id from users table');
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('restrict');
             //$table->integer('grade_id')->default(0)->comment('id for grade table and 0 is no grade');
             $table->string('name');
             $table->string('name_mm');

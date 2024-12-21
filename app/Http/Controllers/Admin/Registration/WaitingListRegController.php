@@ -137,7 +137,7 @@ class WaitingListRegController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Waiting List Registration Created Fail !');
+            return redirect()->back()->with('danger','Waiting List Registration Created Fail !');
         }       
              
     }
@@ -216,7 +216,7 @@ class WaitingListRegController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Waiting List Registration Updared Fail !');
+            return redirect()->back()->with('danger','Waiting List Registration Updared Fail !');
         }          
     }
 
@@ -236,7 +236,7 @@ class WaitingListRegController extends Controller
                 
                 $res = WaitingRegistration::where('id',$id)->delete();
             }else{
-                return redirect()->back()->with('error','There is no result with this waiting list registraion.');
+                return redirect()->back()->with('danger','There is no result with this waiting list registraion.');
             }
             DB::commit();
             //To return list
@@ -245,7 +245,7 @@ class WaitingListRegController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Waiting List Registration Deleted Failed!');
+            return redirect()->back()->with('danger','Waiting List Registration Deleted Failed!');
         }
     }
 }

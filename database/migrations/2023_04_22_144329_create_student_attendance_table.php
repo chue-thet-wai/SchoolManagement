@@ -15,8 +15,10 @@ return new class extends Migration
     {
         Schema::create('student_attendance', function (Blueprint $table) {
             $table->id();
-            $table->string('student_id');
-            $table->string('registration_no');
+            $table->string('student_id')->comment('student id from student_info table');
+            $table->foreign('student_id')->references('student_id')->on('student_info')->onDelete('restrict');
+            $table->string('registration_no')->comment('registration id from student_registration table');
+            $table->foreign('registration_no')->references('registration_no')->on('student_registration')->onDelete('restrict');
             $table->timestamp('attendance_date');
             $table->tinyInteger('attendance_status')->default(1)->comment('2:leave , 1 :present , 0:absent');
             $table->text('remark')->nullable();

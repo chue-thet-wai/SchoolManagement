@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="pagetitle">
-    <h1>Book Register</h1>
+    <h1>Book Name Register</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
-            <li class="breadcrumb-item active">Create Book Register</li>
-            <li class="breadcrumb-item active">Book Register</li>
+            <li class="breadcrumb-item active">Create Book Name Register</li>
+            <li class="breadcrumb-item active">Book Name Register</li>
         </ol>
     </nav>
     @include('layouts.error')
@@ -20,15 +20,15 @@
         <div class="row g-4">
             <div class="col-md-1"></div>
             <div class="col-md-9 content-title">
-                <h4><b>Create Book Register</b></h4>
+                <h4><b>Create Book Name Register</b></h4>
             </div>
             <div class="col-md-2">
-                <a class="btn btn-sm btn-primary" href="{{url('admin/book_register/list')}}" id="form-header-btn"><i class="bi bi-skip-backward-fill"></i> Back</a>
+                <a class="btn btn-sm btn-primary" href="{{url('admin/book_name_register/list')}}" id="form-header-btn"><i class="bi bi-skip-backward-fill"></i> Back</a>
             </div>
         </div>
 
         <br />
-        <form method="POST" action="{{url('admin/book_register/save')}}" enctype="multipart/form-data">
+        <form method="POST" action="{{url('admin/book_name_register/save')}}" enctype="multipart/form-data">
             @csrf
             <br />
             <div class="row g-4">

@@ -38,7 +38,7 @@
                     $("#student_data_msg").html('Student data found!.');
                     $("#student_id").html(data.student_id);
                     $("#student_name").html(data.student_name);
-                    $("#card_amount").html(data.card_amont);
+                    $("#card_amount").html(data.card_amount);
                     $('#student_info_block').show();
                 } else {
                     $("#student_data_msg").html('Student data not found!.');

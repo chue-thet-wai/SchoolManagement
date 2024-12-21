@@ -1,6 +1,8 @@
 @extends('layouts.dashboard')
 
 @section('content')
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="{{ asset('js/exammarks.js') }}"></script>
 <div class="pagetitle">
     <h1>Exam Marks</h1>
     <nav>
@@ -31,36 +33,7 @@
         <form method="POST" action="{{url('admin/exam_marks/save')}}" enctype="multipart/form-data">
             @csrf
             <br />
-            <div class="row g-4">
-                <div class="col-md-1"></div>
-                <div class="col-md-10">                    
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label for="student_id"><b>Student ID<span style="color:brown">*</span></b></label>
-                            <div class="col-sm-10">
-                                <select class="form-select" id="student_id" name="student_id" >
-                                    <option  value="99">--Select Student--</option>
-                                    @foreach($student_list as $a)
-                                        <option  value="{{$a->student_id}}">{{$a->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-5">
-                            <label for=""><b>Exam Terms</b></label>
-                            <div class="col-sm-10">
-                                <select class="form-select" id="exam_terms_id" name="exam_terms_id" >
-                                    <option  value="99">--Select Exam Terms--</option>
-                                    @foreach($examterms as $a)
-                                        <option  value="{{$a->id}}">{{$a->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                <div class="col-md-1"></div>
-            </div>
-            <br />
+            <input type="hidden" id="token" value="<?php echo csrf_token(); ?>" />
             <div class="row g-4">
                 <div class="col-md-1"></div>
                 <div class="col-md-10">                    
@@ -77,6 +50,36 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="form-group col-md-6">
+                            <label for="student_id"><b>Student ID<span style="color:brown">*</span></b></label>
+                            <div class="col-sm-10">
+                                <select class="form-select" id="student_id" name="student_id" >
+                                    <option  value="99">--Select Student--</option>
+                                    @foreach($student_list as $a)
+                                        <option  value="{{$a->student_id}}">{{$a->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                <div class="col-md-1"></div>
+            </div>
+            <br />
+            <div class="row g-4">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">                    
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for=""><b>Exam Terms</b></label>
+                            <div class="col-sm-10">
+                                <select class="form-select" id="exam_terms_id" name="exam_terms_id" >
+                                    <option  value="99">--Select Exam Terms--</option>
+                                    @foreach($examterms as $a)
+                                        <option  value="{{$a->id}}">{{$a->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>                    
                         <div class="form-group col-md-6">
                             <label for=""><b>Subject</b></label>
                             <div class="col-sm-10">

@@ -109,32 +109,20 @@ class PermissionSeeder extends Seeder
             ),
             array(
                 'main_menu' =>"Create Information",
-                "sub_menu"  =>"Driver Information",
-                "menu_route"=>"admin/driver_info/list",
-                "type"      =>"url"
-            ),
-            array(
-                'main_menu' =>"Create Information",
                 "sub_menu"  =>"Schedule",
                 "menu_route"=>"admin/schedule/list",
                 "type"      =>"url"
             ),
-            array(
+            /*array(
                 'main_menu' =>"Create Information",
                 "sub_menu"  =>"Activity",
                 "menu_route"=>"admin/activity/list",
                 "type"      =>"url"
-            ),
+            ),*/
             array(
                 'main_menu' =>"Create Information",
-                "sub_menu"  =>"Event",
-                "menu_route"=>"admin/event/list",
-                "type"      =>"url"
-            ),
-            array(
-                'main_menu' =>"Create Information",
-                "sub_menu"  =>"Homework",
-                "menu_route"=>"admin/homework/list",
+                "sub_menu"  =>"Guardian Information",
+                "menu_route"=>"admin/guardian_info/list",
                 "type"      =>"url"
             ),
             array(
@@ -156,33 +144,81 @@ class PermissionSeeder extends Seeder
                 "type"      =>"url"
             ),
             array(
-                'main_menu' =>"Registration",
-                "sub_menu"  =>"Payment Registration",
-                "menu_route"=>"admin/payment/list",
-                "type"      =>"url"
-            ),
-            array(
-                'main_menu' =>"Registration",
-                "sub_menu"  =>"School Bus Track",
-                "menu_route"=>"admin/school_bus_track/list",
-                "type"      =>"url"
-            ),
-            array(
-                'main_menu' =>"Registration",
+                'main_menu' =>"Operation",
                 "sub_menu"  =>"Teacher Attendance",
                 "menu_route"=>"teacher_attendance.index",
                 "type"      =>"route"
             ),
             array(
-                'main_menu' =>"Registration",
+                'main_menu' =>"Operation",
                 "sub_menu"  =>"Student Attendance",
                 "menu_route"=>"student_attendance.index",
                 "type"      =>"route"
             ),
             array(
+                'main_menu' =>"Operation",
+                "sub_menu"  =>"Event",
+                "menu_route"=>"admin/event/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Operation",
+                "sub_menu"  =>"Homework",
+                "menu_route"=>"admin/homework/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Operation",
+                "sub_menu"  =>"Message",
+                "menu_route"=>"admin/message/list",
+                "type"      =>"url"
+            ),
+            /*array(
+                'main_menu' =>"Operation",
+                "sub_menu"  =>"Homework Status",
+                "menu_route"=>"admin/homework_status/list",
+                "type"      =>"url"
+            ),*/
+            array(
+                'main_menu' =>"Operation",
+                "sub_menu"  =>"Daily Activity",
+                "menu_route"=>"admin/daily_activity/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Operation",
+                "sub_menu"  =>"Student Request",
+                "menu_route"=>"admin/student_request/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Operation",
+                "sub_menu"  =>"News",
+                "menu_route"=>"admin/news/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Payment",
+                "sub_menu"  =>"Invoice Creation",
+                "menu_route"=>"admin/invoice/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Payment",
+                "sub_menu"  =>"Pocket Money Request",
+                "menu_route"=>"admin/pocket_money_request",
+                "type"      =>"url"
+            ),
+            array(
                 'main_menu' =>"Exam",
-                "sub_menu"  =>"Exam Terms",
+                "sub_menu"  =>"Exam List",
                 "menu_route"=>"admin/exam_terms/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Exam",
+                "sub_menu"  =>"Exam Rules",
+                "menu_route"=>"admin/exam_rules/list",
                 "type"      =>"url"
             ),
             array(
@@ -193,8 +229,8 @@ class PermissionSeeder extends Seeder
             ),
             array(
                 'main_menu' =>"Exam",
-                "sub_menu"  =>"Exam Rules",
-                "menu_route"=>"admin/exam_rules/list",
+                "sub_menu"  =>"Certificate",
+                "menu_route"=>"admin/certificate/list",
                 "type"      =>"url"
             ),
             array(
@@ -229,8 +265,8 @@ class PermissionSeeder extends Seeder
             ),
             array(
                 'main_menu' =>"Library",
-                "sub_menu"  =>"Book Register",
-                "menu_route"=>"admin/book_register/list",
+                "sub_menu"  =>"Book Name Register",
+                "menu_route"=>"admin/book_name_register/list",
                 "type"      =>"url"
             ),
             array(
@@ -243,6 +279,48 @@ class PermissionSeeder extends Seeder
                 'main_menu' =>"Expense",
                 "sub_menu"  =>"Expense",
                 "menu_route"=>"admin/expense/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Driver",
+                "sub_menu"  =>"Driver Information",
+                "menu_route"=>"admin/driver_info/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Driver",
+                "sub_menu"  =>"Ferry Student",
+                "menu_route"=>"admin/ferry_student/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Driver",
+                "sub_menu"  =>"School Bus Track",
+                "menu_route"=>"admin/school_bus_track/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Driver",
+                "sub_menu"  =>"Driver Routes",
+                "menu_route"=>"admin/driver_routes/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Driver",
+                "sub_menu"  =>"Ferry Payment",
+                "menu_route"=>"admin/ferry_payment",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Chat",
+                "sub_menu"  =>"Chat",
+                "menu_route"=>"admin/chat/list",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"School Registration",
+                "sub_menu"  =>"School Registration",
+                "menu_route"=>"admin/school_registration/list",
                 "type"      =>"url"
             ),
             array(
@@ -285,6 +363,24 @@ class PermissionSeeder extends Seeder
                 'main_menu' =>"Reporting",
                 "sub_menu"  =>"Expense Report",
                 "menu_route"=>"admin/reporting/expense_report",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Reporting",
+                "sub_menu"  =>"Pocket Money Report",
+                "menu_route"=>"admin/reporting/pocket_money_report",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Reporting",
+                "sub_menu"  =>"Driver Attendance Report",
+                "menu_route"=>"admin/reporting/driver_attendance_report",
+                "type"      =>"url"
+            ),
+            array(
+                'main_menu' =>"Reporting",
+                "sub_menu"  =>"Card Data Report",
+                "menu_route"=>"admin/reporting/card_data_report",
                 "type"      =>"url"
             ),
             

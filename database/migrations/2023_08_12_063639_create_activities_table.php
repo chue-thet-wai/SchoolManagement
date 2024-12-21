@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->integer('class_id')->comment('id for class_setup table');
+            $table->foreignId('class_id')->nullable()->default(null)->constrained('class_setup')->onDelete('restrict');
             $table->text('description')->nullable();
             $table->timestamp('date')->nullable();
             $table->text('remark')->nullable();

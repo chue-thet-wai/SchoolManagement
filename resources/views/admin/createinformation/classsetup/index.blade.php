@@ -35,6 +35,21 @@
 						<input type="text" name="classsetup_name" class="form-control" value="{{ request()->input('classsetup_name') }}">
 					</div>
 				</div>
+                <div class="form-group col-md-3">
+					<label for="class_room"><b>Branch</b></label>
+					<div class="col-sm-10">
+                        <select class="form-select" id="classsetup_branch" name="classsetup_branch">
+                            <option value=''>--Select--</option>
+                            @foreach($branch_list as $key => $value)
+                            <option value="{{$key}}" 
+                            @if (request()->input('classsetup_branch') == $key)
+                                selected
+                            @endif
+                            >{{$value}}</option>
+                            @endforeach
+                        </select>
+					</div>
+				</div>
 				<div class="form-group col-md-3">
 					<label for="class_room"><b>Room</b></label>
 					<div class="col-sm-10">

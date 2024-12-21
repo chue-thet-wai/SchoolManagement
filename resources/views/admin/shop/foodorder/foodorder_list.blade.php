@@ -59,7 +59,7 @@
                         <th>Card ID</th>
                         <th>Totoal Amount</th>
                         <th>Created at</th>
-                        <th>Action</th>
+                        <!--<th>Action</th>-->
                     </tr>
                 </thead>
                 <tbody>
@@ -72,7 +72,7 @@
                             <td>{{ $res->card_id }}</td>
                             <td>{{ $res->total_amount }}</td>
                             <td>{{ $res->created_at }}</td>
-                            <td class="center">
+                            <!--<td class="center">
                                 <a href="{{ url('admin/food_order/edit/'.$res->id) }}">
                                     <button type="submit" value="edit" class="btn m-1 p-0 border-0">
                                         <span id="boot-icon" class="bi bi-pencil-square" style="font-size: 20px; color:rgb(58 69 207);"></span>
@@ -85,7 +85,7 @@
                                         <span id="boot-icon" class="bi bi-trash" style="font-size: 20px; color: rgb(165, 42, 42);"></span>
                                     </button>
                                 </form>
-                            </td>
+                            </td>-->
                         </tr>
                         @endforeach
                     @else

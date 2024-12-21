@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('grade_level_fee', function (Blueprint $table) {
             $table->id();
-            $table->integer('academic_year_id')->comment('id from academic_year table');
-            $table->integer('grade_id')->comment('id for grade table');
-            $table->integer('branch_id')->comment('id for branch table');
+            $table->foreignId('academic_year_id')->constrained('academic_year')->onDelete('restrict');
+            $table->foreignId('grade_id')->constrained('grade')->onDelete('restrict');
+            $table->foreignId('branch_id')->constrained('branch')->onDelete('restrict');
             $table->float('grade_level_amount')->default(0.0);
             $table->integer('fee_type')->default(0)->comment('0:Monthly,1:OneTime');
             $table->string('created_by')->nullable();

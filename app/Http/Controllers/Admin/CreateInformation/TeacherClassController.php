@@ -137,7 +137,7 @@ class TeacherClassController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error', 'Teacher Class Created Fail !');
+            return redirect()->back()->with('danger', 'Teacher Class Created Fail !');
         }
     }
 
@@ -229,7 +229,7 @@ class TeacherClassController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error', 'Teacher Class Updared Fail !');
+            return redirect()->back()->with('danger', 'Teacher Class Updared Fail !');
         }
     }
 
@@ -248,7 +248,7 @@ class TeacherClassController extends Controller
             if (!empty($checkData)) {
                 $res = TeacherClass::where('id', $id)->delete();                
             } else {
-                return redirect()->back()->with('error', 'There is no result with this teacher information.');
+                return redirect()->back()->with('danger', 'There is no result with this teacher information.');
             }
             DB::commit();
             //To return list
@@ -256,7 +256,7 @@ class TeacherClassController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error', 'Teacher Class Deleted Failed!');
+            return redirect()->back()->with('danger', 'Teacher Class Deleted Failed!');
         }
     }
 

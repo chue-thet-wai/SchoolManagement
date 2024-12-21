@@ -3,10 +3,18 @@
 namespace App\Http\Controllers\Admin\Shop;
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\RegistrationRepositoryInterface;
+use App\Interfaces\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\FoodOrder;
+use App\Models\Invoice;
 use App\Models\Menu;
+use App\Models\Payment;
+use App\Models\StudentInfo;
+use App\Models\Wallet;
+use App\Models\WalletHistory;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -14,6 +22,17 @@ use Illuminate\Support\Facades\Log;
 class FoodOrderController extends Controller
 {
 
+    private RegistrationRepositoryInterface $regRepository;
+    private UserRepositoryInterface $userRepository;
+    private $notificationService;
+
+    public function __construct(UserRepositoryInterface $userRepository,RegistrationRepositoryInterface $regRepository, 
+    NotificationService $notificationService)
+    {
+        $this->userRepository = $userRepository;
+        $this->regRepository      = $regRepository;
+        $this->notificationService = $notificationService;
+    }
      /**
      * Display a listing of the resource.
      *
@@ -72,7 +91,12 @@ class FoodOrderController extends Controller
         DB::beginTransaction();
         try{
             //generate invoice id
-            $invoice_id = '12321';
+            $invoice_id = $this->regRepository->generatePaymentInvoiceID();
+            $studentId = StudentInfo::where('card_id', $request->card_id)->value('student_id');
+            if (!$studentId) {
+                return redirect()->back()->with('danger', 'Student Data not found!');
+            }
+
             $toal_amount =0 ;
             for ($i=0;$i<count($checkMenu);$i++) {
                 $menu_id = $checkMenu[$i];
@@ -104,6 +128,44 @@ class FoodOrderController extends Controller
                     $toal_amount += $qty * $price;
                 }
             }
+            //check payment            
+            $checkCurrent = Wallet::where('card_id',$request->card_id)->first();
+            if (!$checkCurrent) {
+                return redirect()->back()->with('danger', 'Plese fill the card amount firstly.');
+            }
+            $totalAmount = 0;
+            $totalAmount =  $checkCurrent->total_amount - $toal_amount;
+            if ($totalAmount < 0) {
+                return redirect()->back()->with('danger', 'Insufficutent Card Amount for Payment!');
+            } else {
+                $deletCurrent = Wallet::where('id',$checkCurrent->id)->delete();
+                $walletinsertData = array(
+                    'card_id'           =>$request->card_id,
+                    'student_id'        =>$studentId,
+                    'amount'            =>$toal_amount,
+                    'total_amount'      =>$totalAmount,
+                    'created_by'        =>$login_id,
+                    'updated_by'        =>$login_id,
+                    'created_at'        =>$nowDate,
+                    'updated_at'        =>$nowDate
+                );
+                $wallet_id=Wallet::insertGetId($walletinsertData);
+                if ($wallet_id) {
+                    $wallethistoryinsertData = array(
+                        'card_id'           =>$request->card_id,
+                        'student_id'        =>$studentId,
+                        'status'            =>'2', //Out status
+                        'status_id'         =>$invoice_id,
+                        'amount'            =>$toal_amount,
+                        'created_by'        =>$login_id,
+                        'updated_by'        =>$login_id,
+                        'created_at'        =>$nowDate,
+                        'updated_at'        =>$nowDate
+                    );
+                    $wallethistoryresult=WalletHistory::insert($wallethistoryinsertData);
+                }
+            }
+
             $insertOrder = array(
                 'invoice_id'        => $invoice_id,
                 'card_id'           => $request->card_id,
@@ -115,13 +177,73 @@ class FoodOrderController extends Controller
             );
             $res=DB::table('food_order')->insert($insertOrder);
 
-            DB::commit();
-            return redirect(url('admin/food_order/list'))->with('success','Food Order Created Successfully!');
+            //create invoice
+            $invoiceData = array(
+                'invoice_id'        => $invoice_id,
+                'student_id'        => $studentId,
+                'payment_type'      => 4, // food order payment
+                'pay_from_period'   => null,
+                'pay_to_period'     => null,
+                'grade_level_fee'   => '0',
+                'total_amount'      => $toal_amount,
+                'discount_percent'  => '0',
+                'net_total'         => $toal_amount,
+                'paid_status'       => '1',
+                'created_by'        => $login_id,
+                'updated_by'        => $login_id,
+                'created_at'        => $nowDate,
+                'updated_at'        => $nowDate
+            );
+
+            $invoiceResult = Invoice::insert($invoiceData);
+            //paid
+            $paidData = array(
+                'invoice_id'        => $invoice_id,
+                'student_id'        => $studentId,
+                'paid_date'         => $nowDate,
+                'paid_type'         => 3,
+                'remark'            => 'food order',
+                'created_by'        => $login_id,
+                'updated_by'        => $login_id,
+                'created_at'        => $nowDate,
+                'updated_at'        => $nowDate
+            );
+            $paymentResult = Payment::insert($paidData);
+
+            if ($invoiceResult && $paymentResult) {
+
+                DB::commit();
+
+                //Send Message
+                $updatedInvoice = Invoice::where('invoice_id',$invoice_id)->first();
+                $data = [];
+                $data['student_id'] = $studentId;
+                $data['title']      = 'Food Order';
+                $data['description']= 'Payment Successful for your food order with Amount -'.$updatedInvoice->net_total;
+                $data['remark']   ='';
+                $msg = $this->regRepository->sendMessage($data);
+
+                $guardianId = StudentInfo::where('student_id', $studentId)->value('guardian_id');
+
+                //send noti
+                $data['receiver_id'] = $guardianId;
+                $data['title'] = "Food Order";
+                $data['body']= 'Payment Successful for your food order with Amount -'.$updatedInvoice->net_total;
+                $data['source'] = "Payment";
+                $data['source_id'] = $invoice_id;
+
+                $noti = $this->notificationService->sendNotification($data); 
+
+                return redirect(url('admin/food_order/list'))->with('success','Food Order Created Successfully!');
+            } else {
+                DB::rollback();
+                return redirect()->back()->with('danger','Food Order Created Fail !');
+            }
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Food Order Created Fail !');
+            return redirect()->back()->with('danger','Food Order Created Fail !');
         }    
     }
 
@@ -234,7 +356,7 @@ class FoodOrderController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Food Order Updared Fail !');
+            return redirect()->back()->with('danger','Food Order Updared Fail !');
         }  
     }
 
@@ -258,7 +380,7 @@ class FoodOrderController extends Controller
                     $res = DB::table('food_order_items')->where('invoice_id',$checkData['invoice_id'])->delete();
                 }
             }else{
-                return redirect()->back()->with('error','There is no result with this food order.');
+                return redirect()->back()->with('danger','There is no result with this food order.');
             }
             DB::commit();
             //To return list
@@ -267,7 +389,7 @@ class FoodOrderController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Food Order Deleted Failed!');
+            return redirect()->back()->with('danger','Food Order Deleted Failed!');
         }
         
     }

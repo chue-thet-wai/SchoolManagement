@@ -49,7 +49,7 @@
             $role = Auth::user()->role;
 
             $roleList = App\Http\Controllers\Admin\UserController::getDepartment();
-            $roleName = 'Super Admin';
+            $roleName = 'Main Admin';
             foreach ($roleList as $roleData) {
               if ($role == $roleData['id']) {
                 $roleName = $roleData['name'];

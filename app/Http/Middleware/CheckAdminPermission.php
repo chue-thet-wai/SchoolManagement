@@ -48,7 +48,7 @@ class CheckAdminPermission
             if (!empty($chkRolePermission)) {
                 return $next($request);
             } else {
-                return redirect('/')->with('error','You have not admin access');
+                return redirect('/')->with('danger','You have not admin access');
             }
         } else if (Auth::user() && empty($permission)) {
             return $next($request);

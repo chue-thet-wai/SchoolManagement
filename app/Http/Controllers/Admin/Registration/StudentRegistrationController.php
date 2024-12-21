@@ -14,6 +14,7 @@ use App\Models\WaitingRegistration;
 use App\Models\StudentRegistration;
 use App\Models\TeacherInfo;
 use App\Interfaces\CategoryRepositoryInterface;
+use App\Models\User;
 
 class StudentRegistrationController extends Controller
 {
@@ -101,7 +102,7 @@ class StudentRegistrationController extends Controller
                 'mother_phone'      => 'required',
                 'registration_date' => 'required',
                 'new_class'         => 'required',
-                'card_id'           => 'required'
+                //'card_id'           => 'required'
             ]); 
             $studentID = $this->regRepository->generateStudentID();
 
@@ -135,6 +136,7 @@ class StudentRegistrationController extends Controller
                         'name'              =>$request->guardian_name,
                         'phone'             =>$request->guardian_phone,
                         'address'           =>$request->guardian_address,
+                        'password'          =>bcrypt('12345'),
                         'created_by'        =>$login_id,
                         'updated_by'        =>$login_id,
                         'created_at'        =>$nowDate,
@@ -214,7 +216,7 @@ class StudentRegistrationController extends Controller
             }catch(\Exception $e){
                 DB::rollback();
                 Log::info($e->getMessage());
-                return redirect()->back()->with('error','Student Registration Created Fail !');
+                return redirect()->back()->with('danger','Student Registration Created Fail !');
             }  
         } else {
             $request->validate([
@@ -249,163 +251,9 @@ class StudentRegistrationController extends Controller
             }catch(\Exception $e){
                 DB::rollback();
                 Log::info($e->getMessage());
-                return redirect()->back()->with('error','Student Registration Created Fail !');
+                return redirect()->back()->with('danger','Student Registration Created Fail !');
             }  
         }       
-        
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $res = TeacherInfo::leftjoin('users', 'users.user_id', '=', 'teacher_info.user_id')
-                ->where('teacher_info.user_id',$id)
-                ->select('teacher_info.*')
-                ->get();
-
-        $grade_list    = $this->categoryRepository->getGrade();
-        return view('admin.createinformation.teacherinfo.update',['grade_list'=>$grade_list,'result'=>$res]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $login_id = Auth::user()->user_id;
-        $nowDate  = date('Y-m-d H:i:s', time());
-
-        $request->validate([
-            'name'            =>'required|min:3',
-            'email'           =>'required|min:3',
-            'teacher_profile' =>'mimes:jpeg,jpg,png | max:1000',
-        ]); 
-        if ($request->grade_id == '99') {
-            return redirect()->back()->with('danger','Please select grade !');
-        }  
-        $chkEmail = $this->userRepository->checkEmail($request->email,$id); 
-        if ($chkEmail == false) {
-            return redirect()->back()->with('danger','Email already exist !');
-        }
-
-        if($request->hasFile('teacher_profile')){
-
-            $previous_img=$request->previous_image;
-            @unlink(public_path('/assets/teacher_images/'. $previous_img));
-
-            $image=$request->file('teacher_profile');
-            $extension = $image->extension();
-            $image_name = $id. "_" . time() . "." . $extension;
-        }else{
-            $image_name="";
-        } 
-       
-        $userData = array(
-            'user_id'     =>$id,
-            'name'        =>$request->name,
-            'email'       =>$request->email,
-            'role'        =>3,
-            'updated_by'  =>$login_id,
-            'updated_at'     =>$nowDate
-        );
-        if ($request->password == '') {
-            $userData ['password'] = bcrypt($request->password);
-        }
-        
-        $userRes=User::where('user_id',$id)->update($userData);
-        if ($userRes) {
-            $infoData = array(
-                'user_id'           =>$id,
-                'grade_id'          =>$request->grade_id,
-                'name'              =>$request->name,
-                'login_name'        =>$request->login_name,
-                'startworking_date' =>$request->startworking_date,
-                'email'             =>$request->email,
-                'contact_number'    =>$request->contact_no,
-                'address'           =>$request->address,
-                'remark'            =>$request->remark,
-                'resign_status'     =>$request->status,
-                'created_by'        =>$login_id,
-                'updated_by'        =>$login_id,
-                'updated_at'        =>$nowDate
-            );
-            if ($request->status == 0) {
-                $infoData['resign_date'] = $nowDate;
-            }
-            if ($image_name != "") {
-                $infoData['profile_image'] = $image_name;
-            }
-    
-            $result=TeacherInfo::where('user_id',$id)->update($infoData);
-                      
-            if($result){
-                if ($image_name != "") {
-                    $image->move(public_path('assets/teacher_images'),$image_name);  
-                }                 
-                return redirect(route('teacher_info.index'))->with('success','Teacher Information Updated Successfully!');
-            }else{
-                return redirect()->back()->with('danger','Teacher Information Updated Fail !');
-            }
-        }else{
-            return redirect()->back()->with('danger','Teacher Information Created Fail !');
-        }      
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        DB::beginTransaction();
-        try{
-            $checkData = TeacherInfo::where('user_id',$id)->first();
-
-            if (!empty($checkData)) {
-                
-                $res = TeacherInfo::where('user_id',$id)->delete();
-                if($res){
-                    //To delet user
-                    $userdel = User::where('user_id',$id)->delete();
-
-                    //To delete image
-                    $image=$checkData['profile_image'];
-                    @unlink(public_path('/assets/teacher_images/'. $image));
-                }
-            }else{
-                return redirect()->back()->with('error','There is no result with this teacher information.');
-            }
-            DB::commit();
-            //To return list
-            return redirect(route('teacher_info.index'))->with('success','Teacher Information Deleted Successfully!');
-
-        }catch(\Exception $e){
-            DB::rollback();
-            Log::info($e->getMessage());
-            return redirect()->back()->with('error','Teacher Information Deleted Failed!');
-        }
         
     }
 

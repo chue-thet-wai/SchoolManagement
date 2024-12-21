@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use App\Interfaces\CategoryRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\StaffInfo;
+use Illuminate\Support\Facades\Storage;
 
 class StaffInfoController extends Controller
 {
@@ -85,25 +86,24 @@ class StaffInfoController extends Controller
             'contact_no'      => 'numeric|nullable'
         ]);
 
-        // if ($request->department_id == '99') {
-        //     return redirect()->back()->with('danger', 'Please select department !');
-        // }
-        // $chkEmail = $this->userRepository->checkEmail($request->email);
-        // if ($chkEmail == false) {
-        //     return redirect()->back()->with('danger', 'Email already exist !');
-        // }
-
         $userID = $this->userRepository->generateUserID();
+        $image_name = '';
 
         if ($request->hasFile('user_profile')) {
-            $image = $request->file('user_profile');
-            $extension = $image->extension();
-            $image_name = $userID . "_" . time() . "." . $extension;
-        } else {
-            $image_name = "";
+            try {
+                $image = $request->file('user_profile');
+                $image_name = $userID . "_" . time() . "." . $image->extension();
+                
+                // Upload the image to S3 with public visibility
+                $path = Storage::disk('s3')->putFileAs('my-files', $image, $image_name, 'public');
+                Log::info('Image uploaded to S3 with public access: ' . $path);
+            } catch (\Exception $e) {
+                Log::error('Error uploading image to S3: ' . $e->getMessage());
+                return redirect()->back()->with('danger', 'Failed to upload image.');
+            }
         }
 
-        $userData = array(
+        $userData = [
             'user_id'     => $userID,
             'name'        => $request->name,
             'email'       => $request->email,
@@ -111,13 +111,13 @@ class StaffInfoController extends Controller
             'role'        => $request->department_id,
             'created_by'  => $login_id,
             'updated_by'  => $login_id,
-            'created_at'     => $nowDate,
-            'updated_at'     => $nowDate
-        );
+            'created_at'  => $nowDate,
+            'updated_at'  => $nowDate
+        ];
 
         $userRes = User::insert($userData);
         if ($userRes) {
-            $insertData = array(
+            $insertData = [
                 'user_id'           => $userID,
                 'department_id'     => $request->department_id,
                 'name'              => $request->name,
@@ -131,9 +131,9 @@ class StaffInfoController extends Controller
                 'profile_image'     => $image_name,
                 'created_by'        => $login_id,
                 'updated_by'        => $login_id,
-                'created_at'      => $nowDate,
-                'updated_at'     => $nowDate
-            );
+                'created_at'        => $nowDate,
+                'updated_at'        => $nowDate
+            ];
             if ($request->status == 0) {
                 $insertData['resign_date'] = $nowDate;
             }
@@ -141,15 +141,15 @@ class StaffInfoController extends Controller
             $result = StaffInfo::insert($insertData);
 
             if ($result) {
-                $image->move(public_path('assets/user_images'), $image_name);
                 return redirect(url('admin/user/list'))->with('success', 'User Information Created Successfully!');
             } else {
-                return redirect()->back()->with('danger', 'User Information Created Fail !');
+                return redirect()->back()->with('danger', 'User Information Creation Failed!');
             }
         } else {
-            return redirect()->back()->with('danger', 'User Information Created Fail !');
+            return redirect()->back()->with('danger', 'User Information Creation Failed!');
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -285,22 +285,33 @@ class StaffInfoController extends Controller
                 $res = StaffInfo::where('user_id', $id)->delete();
                 if ($res) {
                     //To delet user
-                    $userdel = User::where('user_id', $id)->delete();
+                    try{                        
+                        $userdel = User::where('user_id', $id)->forceDelete();
+                        //To delete image
+                        $image = $checkData['profile_image'];
+                        @unlink(public_path('/assets/user_images/' . $image));
 
-                    //To delete image
-                    $image = $checkData['profile_image'];
-                    @unlink(public_path('/assets/user_images/' . $image));
+                        DB::commit();
+                        //To return list
+                        return redirect(url('admin/user/list'))->with('success', 'User Information Deleted Successfully!');
+
+                    } catch (\Illuminate\Database\QueryException $e) {
+                        // Check if the exception is due to a foreign key constraint violation
+                        if ($e->errorInfo[1] === 1451) {
+                            return redirect()->back()->with('danger','Cannot delete this record because it is being used in other.');
+                        }
+                        return redirect()->back()->with('danger','An error occurred while deleting the record.');
+                    }
                 }
             } else {
-                return redirect()->back()->with('error', 'There is no result with this user information.');
+                DB::rollback();
+                return redirect()->back()->with('danger', 'There is no result with this user information.');
             }
-            DB::commit();
-            //To return list
-            return redirect(url('admin/user/list'))->with('success', 'User Information Deleted Successfully!');
+           
         } catch (\Exception $e) {
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error', 'User Information Deleted Failed!');
+            return redirect()->back()->with('danger', 'User Information Deleted Failed!');
         }
     }
 }

@@ -115,7 +115,7 @@ class CashCounterController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Cash Insert Created Fail !');
+            return redirect()->back()->with('danger','Cash Insert Created Fail !');
         }    
     }
 
@@ -189,7 +189,7 @@ class CashCounterController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Cash Counter Updared Fail !');
+            return redirect()->back()->with('danger','Cash Counter Updared Fail !');
         }  
     }
 }

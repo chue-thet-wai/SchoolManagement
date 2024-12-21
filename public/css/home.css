@@ -126,3 +126,21 @@ button.switch-month:hover {
     text-align: center;
 }
 /* dashboard table */
+
+.custom-table {
+    height: auto;
+    background: #0F4D19;
+}
+.custom-table th {
+    color: white;
+}
+.custom-table th div{
+    color: black;
+}
+.custom-table th{
+  vertical-align: middle;
+}
+
+.calendar, .calendar_weekdays, .calendar_content {
+    max-width: none;
+}

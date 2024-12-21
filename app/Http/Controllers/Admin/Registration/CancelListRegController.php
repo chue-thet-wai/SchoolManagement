@@ -120,7 +120,7 @@ class CancelListRegController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Cancel Registration Created Fail !');
+            return redirect()->back()->with('danger','Cancel Registration Created Fail !');
         }       
              
     }
@@ -207,7 +207,7 @@ class CancelListRegController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Cancel Registration Updared Fail !');
+            return redirect()->back()->with('danger','Cancel Registration Updared Fail !');
         }          
     }
 
@@ -227,7 +227,7 @@ class CancelListRegController extends Controller
                 
                 $res = CancelRegistration::where('id',$id)->delete();
             }else{
-                return redirect()->back()->with('error','There is no result with this cancel registraion.');
+                return redirect()->back()->with('danger','There is no result with this cancel registraion.');
             }
             DB::commit();
             //To return list
@@ -236,7 +236,7 @@ class CancelListRegController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Cancel Registration Deleted Failed!');
+            return redirect()->back()->with('danger','Cancel Registration Deleted Failed!');
         }
     }
 }

@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('exam_terms', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('grade_id')->comment('id for grade table');
-            $table->integer('academic_year_id')->comment('id from academic_year table');
+            $table->foreignId('grade_id')->constrained('grade')->onDelete('restrict');
+            $table->foreignId('academic_year_id')->constrained('academic_year')->onDelete('restrict');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->softDeletes();

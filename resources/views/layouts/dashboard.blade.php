@@ -22,8 +22,35 @@
     <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 </head>
+
+<script>
+  $(document).ready(function() {
+    var currentUrl = window.location.href;
+
+    // Iterate through each link in the navigation
+    $('#sidebar-nav a').each(function() {
+        // Check if the href attribute matches the current URL
+        if ($(this).attr('href') === currentUrl) {
+            // Add the active-link class to the matching link
+            $(this).addClass('active-link');
+
+            // Collapse the parent item if it has children
+            var parentItem = $(this).closest('.nav-item');
+            if (parentItem.find('.collapse').length > 0) {
+                parentItem.find('.collapse').collapse('show');
+            }
+        }
+    });
+
+    // Collapse sidebar-nav on child link click
+    $('#sidebar-nav .nav-content a').click(function() {
+        $('#sidebar-nav .collapse').collapse('hide');
+    });
+});
+</script>
 
 <body>
     <header id="header" class="header fixed-top d-flex align-items-center">
@@ -49,7 +76,7 @@
             $role = Auth::user()->role;
 
             $roleList = App\Http\Controllers\Admin\UserController::getDepartment();
-            $roleName = 'Super Admin';
+            $roleName = 'Main Admin';
             foreach ($roleList as $roleData) {
               if ($role == $roleData['id']) {
                 $roleName = $roleData['name'];
@@ -114,14 +141,19 @@
                 "Category"           => "bi bi-journal-text",
                 "Create Information" => "bi bi-layout-text-window-reverse",
                 "Registration"       => "bi bi-card-list",
+                "Operation"          => "bi bi-credit-card-2-front",
+                "Payment"            => "bi bi-coin",
                 "Exam"               => "bi bi-pencil-square",
                 "Wallet"             => "bi bi-wallet-fill",
                 "Shop"               => "bi bi-shop",
                 "Library"            => "bi bi-journals",
                 "Expense"            => "bi bi-cash-coin",
+                "Chat"               => "bi bi-chat-dots-fill",
+                "Driver"             => "bi bi-car-front-fill",
+                "School Registration"=> "bi bi-house-add-fill",
                 "Reporting"          => "bi bi-view-list",
               ];
-            $menu_child_notexist = array('Expense');
+            $menu_child_notexist = array('Expense','Chat','School Registration');
 
             foreach ($dashboard as $main_menu => $sub_menu) {
               $targetNavName = '#'.str_replace(' ', '', $main_menu).'-nav';

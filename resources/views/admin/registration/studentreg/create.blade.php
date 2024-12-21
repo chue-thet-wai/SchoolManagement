@@ -66,7 +66,17 @@
                     $("#student_reg_fathername").html(data.father_name);
                     $("#student_reg_mothername").html(data.mother_name);
                     $('#old_class').val(data.old_class_id);
-                    $("#new_class option[value='" + data.old_class_id + "']").hide();
+
+                    //$("#new_class option[value='" + data.old_class_id + "']").hide();
+                    var newclass_data= data.new_class_data;
+
+                    $("#new_class").empty();
+                    newclass_data.forEach(function(element) {
+                        var optionVal = element.id;                        
+                        $("#new_class").append("<option value='"+optionVal+"'>"+element.name+"</option>");
+                        
+                    });
+
                     $('#student_reg_info').show();
                 } else {
                     var oldClsId = $('#old_class').val();
@@ -77,6 +87,7 @@
                     $("#student_reg_mothername").html('');
                     $('#old_class').val('');
                     $('#student_reg_info').hide();
+                    $("#new_class").empty();
                 }             
             }
         });
@@ -116,11 +127,11 @@
         </div>
 
         <br />
-        <form id="studentRegForm" method="POST" action="{{route('student_reg.store')}}" enctype="multipart/form-data">
+        <form id="studentRegForm" method="POST" action="{{route('student_reg.store')}}" enctype="multipart/form-data" onsubmit="saveFormData()">
             @csrf
             <br />
-            <input type="hidden" name="registration_type" class="form-control" value="{{$register_type}}" required>
-            <input type="hidden" name="waiting_id" class="form-control" value="{{$waiting_id}}" required>
+            <input type="hidden" name="registration_type" class="form-control" value="{{ $register_type == '' ? old('register_type') : $register_type }}" required>
+            <input type="hidden" name="waiting_id" class="form-control" value="{{ $waiting_id == '' ? old('waiting_id') : $waiting_id }}" required>
             @if ($register_type == 1)
             <div class="row g-4">
                 <div class="col-md-1"></div>
@@ -141,13 +152,13 @@
                             <div class="form-group col-md-5">
                                 <label for="name"><b>Name<span style="color:brown">*</span></b></label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="name" value="{{$waiting_name}}" class="form-control" required>
+                                    <input type="text" name="name" value="{{ $waiting_name == '' ? old('name') : $waiting_name }}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="form-group col-md-5">
                                 <label for="name_mm"><b>Name(Myanmar)<span style="color:brown">*</span></b></label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="name_mm" class="form-control" required>
+                                    <input type="text" name="name_mm" value="{{ old('name_mm') }}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-1"></div>
@@ -160,13 +171,13 @@
                             <div class="form-group col-md-5">
                                 <label for="religion"><b>Religion<span style="color:brown">*</span></b></label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="religion" class="form-control">
+                                    <input type="text" name="religion" value="{{old('religion')}}" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group col-md-5">
                                 <label for="nationality"><b>Nationality<span style="color:brown">*</span></b></label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="nationality" class="form-control" required>
+                                    <input type="text" name="nationality" value="{{old('nationality')}}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-1"></div>
@@ -181,7 +192,9 @@
                                 <div class="col-sm-10">
                                     <select class="form-select" id="gender" name="gender">
                                         @foreach($gender as $key => $value)
-                                        <option value="{{$key}}">{{$value}}</option>
+                                            <option value="{{ $key }}" {{ $key == old('gender') ? 'selected' : '' }}>
+                                                {{ $value }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -191,7 +204,7 @@
                                 <div class="col-sm-10">
                                     <select class="form-select" id="township" name="township">
                                         @foreach($township as $key => $value)
-                                        <option value="{{$key}}">{{$value}}</option>
+                                        <option value="{{$key}}" {{ $key == old('township') ? 'selected' : '' }}>{{$value}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -206,13 +219,13 @@
                             <div class="form-group col-md-5">
                                 <label for="date_of_birth"><b>Date of Birth<span style="color:brown">*</span></b></label>
                                 <div class="col-sm-10">
-                                    <input type="date" name="date_of_birth" class="form-control" required>
+                                    <input type="date" name="date_of_birth" class="form-control" value="{{old('date_of_birth')}}" required>
                                 </div>
                             </div>
                             <div class="form-group col-md-5">
                                 <label for="biography"><b>Add Biography</b></label>
                                 <div class="col-sm-10">
-                                    <input type="file" class="form-control" id="biography" name='biography' />
+                                    <input type="file" class="form-control" id="biography" name="biography" value="{{ old('biography') }}" />
                                 </div>
                             </div>
                             <div class="col-md-1"></div>
@@ -230,7 +243,7 @@
                                         <div class="cancel-image" id="cancel-image" onclick="cancelPreview()" style="display:none;">&#10006;</div>
                                     </div>
                                     <label for="file-upload">Upload Image</label>
-                                    <input type="file" id="file-upload" name='student_profile' accept="image/*" onchange="previewImage(event);" />
+                                    <input type="file" id="file-upload" name="student_profile" value="{{ old('student_profile') }}" accept="image/*" onchange="previewImage(event);" />
                                 </div>
                             </div>
                             <div class="col-md-6"></div>
@@ -250,7 +263,7 @@
                                             <label for="old_school_name"><b>Old School Name</b></label>
                                         </div>
                                         <div class='col-sm-8'>
-                                            <input type="text" name="old_school_name" class="form-control">
+                                            <input type="text" name="old_school_name" value="{{ old('old_school_name') }}" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -261,7 +274,7 @@
                                             <label for="old_grade"><b>Old Grade</b></label>
                                         </div>
                                         <div class='col-sm-8'>
-                                            <input type="text" name="old_grade" class="form-control">
+                                            <input type="text" name="old_grade" value="{{ old('old_grade') }}" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -272,7 +285,7 @@
                                             <label for="old_academic_year"><b>Old Academic Year</b></label>
                                         </div>
                                         <div class='col-sm-8'>
-                                            <input type="text" name="old_academic_year" class="form-control">
+                                            <input type="text" name="old_academic_year" value="{{ old('old_academic_year') }}" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -293,13 +306,13 @@
                             <div class="form-group col-md-5">
                                 <label for="father_name"><b>Father Name<span style="color:brown">*</span></b></label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="father_name" class="form-control" required>
+                                    <input type="text" name="father_name" value="{{old('father_name')}}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="form-group col-md-5">
                                 <label for="father_name_mm"><b>Father Name(Myanmar)<span style="color:brown">*</span></b></label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="father_name_mm" class="form-control" required>
+                                    <input type="text" name="father_name_mm" value="{{old('father_name_mm')}}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-1"></div>
@@ -312,13 +325,13 @@
                             <div class="form-group col-md-5">
                                 <label for="mother_name"><b>Mother Name<span style="color:brown">*</span></b></label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="mother_name" class="form-control" required>
+                                    <input type="text" name="mother_name" value="{{old('mother_name')}}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="form-group col-md-5">
                                 <label for="mother_name_mm"><b>Mother Name(Myanmar)<span style="color:brown">*</span></b></label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="mother_name_mm" class="form-control" required>
+                                    <input type="text" name="mother_name_mm" value="{{old('mother_name_mm')}}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-1"></div>
@@ -331,13 +344,13 @@
                             <div class="form-group col-md-5">
                                 <label for="father_phone"><b>Father Phone<span style="color:brown">*</span></b></label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="father_phone" class="form-control" required>
+                                    <input type="text" name="father_phone" value="{{old('father_phone')}}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="form-group col-md-5">
                                 <label for="mother_phone"><b>Mother Phone<span style="color:brown">*</span></b></label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="mother_phone" class="form-control" required>
+                                    <input type="text" name="mother_phone" value="{{old('mother_phone')}}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-1"></div>
@@ -350,7 +363,7 @@
                             <div class="form-group col-md-10">
                                 <label for="address_1"><b>Address 1</b></label>
                                 <div class="col-sm-12">
-                                    <textarea name="address_1" class="form-control"></textarea>
+                                    <textarea name="address_1" class="form-control">{{old('address_1')}}</textarea>
                                 </div>
                             </div>
                             <div class="col-md-1"></div>
@@ -363,7 +376,7 @@
                             <div class="form-group col-md-10">
                                 <label for="address_2"><b>Address 2</b></label>
                                 <div class="col-sm-12">
-                                    <textarea name="address_2" class="form-control"></textarea>
+                                    <textarea name="address_2" class="form-control">{{old('address_2')}}</textarea>
                                 </div>
                             </div>
                             <div class="col-md-1"></div>
@@ -383,7 +396,7 @@
                                             <label for="guardian_phone"><b>Phone</b><span style="color:brown">*</span></label>
                                         </div>
                                         <div class='col-sm-6'>
-                                            <input type="text" id="guardian_phone" name="guardian_phone" class="form-control" required>
+                                            <input type="text" id="guardian_phone" name="guardian_phone" value="{{old('guardian_phone')}}" class="form-control" required>
                                         </div>
                                         <div class='col-sm-2'>
                                             <button type="button" name="guardian_search" id="guardian_search" class="btn btn-sm btn-primary" onclick="getGuardianData()">Search</button>
@@ -392,7 +405,7 @@
                                 </div>
                                 <div class="form-group ">
                                     <div class="row col-md-10">
-                                        <input type="hidden" id="guardian_id" name="guardian_id" class="form-control"> 
+                                        <input type="hidden" id="guardian_id" name="guardian_id" value="{{old('guardian_id')}}" class="form-control"> 
                                         <span id="guardian_msg"></span>
                                     </div>
                                 </div>
@@ -403,7 +416,7 @@
                                             <label for="guardian_name"><b>Name</b><span style="color:brown">*</span></label>
                                         </div>
                                         <div class='col-sm-8'>
-                                            <input type="text" id="guardian_name" name="guardian_name" class="form-control" required>
+                                            <input type="text" id="guardian_name" name="guardian_name" value="{{old('guardian_name')}}" class="form-control" required>
                                         </div>
                                     </div>
                                 </div>
@@ -414,7 +427,7 @@
                                             <label for="guardian_address"><b>Address</b><span style="color:brown">*</span></label>
                                         </div>
                                         <div class='col-sm-8'>
-                                            <textarea id="guardian_address" name="guardian_address" class="form-control"></textarea>
+                                            <textarea id="guardian_address" name="guardian_address" value="{{old('guardian_address')}}" class="form-control"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -441,7 +454,7 @@
                                         <select class="form-select" id="new_class" name="new_class" onchange="onchangeNewClass(this.value);" required>
                                             <option value="99">select class</option>
                                             @foreach($class as $c)
-                                            <option value="{{$c->id}}">{{$c->name}}</option>
+                                            <option value="{{$c->id}}" {{ $c->id == old('new_class') ? 'selected' : '' }}>{{$c->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -460,7 +473,7 @@
                                         <label for="student_reg_academicyr"><b>Academic Year</b></label>
                                     </div>
                                     <div class='col-sm-8'>
-                                        <input type="text" id="student_reg_academicyr" name="student_reg_academicyr" class="form-control" disabled>
+                                        <input type="text" id="student_reg_academicyr" name="student_reg_academicyr" value="{{old('student_reg_academicyr')}}" class="form-control" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -476,7 +489,7 @@
                                         <label for="registration_date"><b>Registration Date</b><span style="color:brown">*</span></label>
                                     </div>
                                     <div class='col-sm-8'>
-                                        <input type="date" id="registration_date" name="registration_date" class="form-control" required>
+                                        <input type="date" id="registration_date" name="registration_date" value="{{old('registration_date')}}" class="form-control" required>
                                     </div>
                                 </div>
                             </div>
@@ -491,7 +504,7 @@
                                         <label for="card_id"><b>Card ID</b></label>
                                     </div>
                                     <div class='col-sm-8'>
-                                        <input type="text" id="card_id" name="card_id" class="form-control">
+                                        <input type="text" id="card_id" name="card_id" value="{{old('card_id')}}" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -510,7 +523,7 @@
                                         :
                                     </div>
                                     <div class='col-sm-2'>
-                                        <span id='student_limit'></span>
+                                        <span id='student_limit' name="student_limit">{{old('student_limit')}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -528,7 +541,7 @@
                                         :
                                     </div>
                                     <div class='col-sm-2'>
-                                        <span id='current_student_limit'></span>
+                                        <span id='current_student_limit' name="current_student_limit">{{old('current_student_limit')}}</span>
                                     </div>
                                 </div>
                             </div>

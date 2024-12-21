@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="pagetitle">
-	<h1>Exam Terms</h1>
+	<h1>Exam List</h1>
 	<nav>
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
 			<li class="breadcrumb-item active">Exam</li>
-			<li class="breadcrumb-item active">Exam Terms</li>
+			<li class="breadcrumb-item active">Exam List</li>
 		</ol>
 	</nav>
 	@include('layouts.error')
@@ -111,6 +111,13 @@
                                     {{ method_field('DELETE') }}
                                     <button type="submit" value="delete" class="btn m-1 p-0 border-0">
                                         <span id="boot-icon" class="bi bi-trash" style="font-size: 20px; color: rgb(165, 42, 42);"></span>
+                                    </button>
+                                </form>
+                                <form method="post" action="{{ url('admin/exam_terms_detail/list') }}" style="display: inline;">
+                                    @csrf
+                                    <input type="hidden" name="exam_terms_id" value="{{$res->id}}" />
+                                    <button type="submit" value="detail" class="btn m-1 p-0 border-0">
+                                        <span id="boot-icon" class="bi bi-pen-fill" style="font-size: 20px; color: rgb(165, 42, 42);"></span>
                                     </button>
                                 </form>
                             </td>

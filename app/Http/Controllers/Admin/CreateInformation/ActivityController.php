@@ -44,7 +44,6 @@ class ActivityController extends Controller
         $res = $res->paginate(20);
              
         $class_list = $this->createInfoRepository->getClassSetup();
-        $classes[0]="All";
         foreach($class_list as $a) {
             $classes[$a->id] = $a->name;
         }        
@@ -97,7 +96,7 @@ class ActivityController extends Controller
         DB::beginTransaction();
         try{
             $insertData = array(
-                'class_id'           =>$request->class_id,
+                'class_id'           =>$request->class_id !== '0' ? $request->class_id : null,
                 'date'               =>$request->activity_date,
                 'description'        =>$request->description,
                 'remark'             =>$request->remark,
@@ -118,7 +117,7 @@ class ActivityController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Activity Created Fail !');
+            return redirect()->back()->with('danger','Activity Created Fail !');
         }    
     }
 
@@ -178,7 +177,7 @@ class ActivityController extends Controller
         DB::beginTransaction();
         try{
             $activityData = array(
-                'class_id'           =>$request->class_id,
+                'class_id'           =>$request->class_id !== '0' ? $request->class_id : null,
                 'date'               =>$request->activity_date,
                 'description'        =>$request->description,
                 'remark'             =>$request->remark,
@@ -199,7 +198,7 @@ class ActivityController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Activity Updared Fail !');
+            return redirect()->back()->with('danger','Activity Updared Fail !');
         }  
     }
 
@@ -224,14 +223,14 @@ class ActivityController extends Controller
                     return redirect(url('admin/activity/list'))->with('success','Activity Deleted Successfully!');
                 }
             }else{
-                return redirect()->back()->with('error','There is no result with this activity.');
+                return redirect()->back()->with('danger','There is no result with this activity.');
             }
            
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Activity Deleted Failed!');
+            return redirect()->back()->with('danger','Activity Deleted Failed!');
         }
     }
 }

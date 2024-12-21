@@ -40,14 +40,14 @@ class StudentInfoController extends Controller
         }       
         $res = $res->paginate(20);
         $gender        = $this->userRepository->getGender();
-        return view('admin.createinformation.studentinfo.studentlist',['list_result' => $res,'gender' => $gender]);
+        return view('admin.createinformation.studentInfo.studentlist',['list_result' => $res,'gender' => $gender]);
     }
 
     public function studentInfoEdit($id) {
         $res = StudentInfo::where('student_id',$id)->get();
         $gender        = $this->userRepository->getGender();
         $township      = $this->userRepository->getTownship();
-        return view('admin.createinformation.studentinfo.studentupdate',['result'=>$res,'gender' => $gender,'township'=>$township]);
+        return view('admin.createinformation.studentInfo.studentupdate',['result'=>$res,'gender' => $gender,'township'=>$township]);
     }
 
     public function studentInfoUpdate(Request $request,$id) {
@@ -56,7 +56,21 @@ class StudentInfoController extends Controller
 
         $request->validate([
             'name'            =>'required|min:3',
+            'card_id'         => 'required',
+            'student_profile' => 'mimes:jpeg,jpg,png|max:1000',
         ]); 
+
+        if ($request->hasFile('student_profile')) {
+
+            $previous_img = $request->previous_image;
+            @unlink(public_path('/assets/student_images/' . $previous_img));
+
+            $image = $request->file('student_profile');
+            $extension = $image->extension();
+            $image_name = $id . "_" . time() . "." . $extension;
+        } else {
+            $image_name = "";
+        }
 
         DB::beginTransaction();
         try{
@@ -80,9 +94,17 @@ class StudentInfoController extends Controller
                 'updated_by'        =>$login_id,
                 'updated_at'        =>$nowDate
             );
+
+            if ($image_name != "") {
+                $infoData['student_profile'] = $image_name;
+            }
+
             $result=StudentInfo::where('student_id',$id)->update($infoData);
                       
             if($result){
+                if ($image_name != "") {
+                    $image->move(public_path('assets/student_images'), $image_name);
+                }
                 DB::commit();               
                 return redirect(url('admin/student_info/list'))->with('success','Student Information Updated Successfully!');
             }else{
@@ -92,7 +114,7 @@ class StudentInfoController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Student Information Updared Fail !');
+            return redirect()->back()->with('danger','Student Information Updared Fail !');
         }          
     }
 

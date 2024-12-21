@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('wallet_history', function (Blueprint $table) {
             $table->id();
             $table->integer('card_id')->comment('card id in studnet_info table');
-            $table->integer('student_id')->comment('id for student_info table');
+            $table->string('student_id')->comment('student id from student_info table');
+            $table->foreign('student_id')->references('student_id')->on('student_info')->onDelete('restrict');
             $table->integer('status')->comment('1:In,2:Out');
             $table->integer('status_id')->comment('IN-wallet id , Out-Invoice id');
             $table->string('amount');

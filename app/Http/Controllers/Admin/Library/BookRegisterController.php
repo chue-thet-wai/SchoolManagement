@@ -95,15 +95,15 @@ class BookRegisterController extends Controller
                         
             if($result){      
                 DB::commit();
-                return redirect(url('admin/book_register/list'))->with('success','Book Register Created Successfully!');
+                return redirect(url('admin/book_name_register/list'))->with('success','Book Name Register Created Successfully!');
             }else{
-                return redirect()->back()->with('danger','Book Register Created Fail !');
+                return redirect()->back()->with('danger','Book Name Register Created Fail !');
             }
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Book Register Created Fail !');
+            return redirect()->back()->with('danger','Book Name Register Created Fail !');
         }    
     }
 
@@ -158,15 +158,15 @@ class BookRegisterController extends Controller
                       
             if($result){
                 DB::commit();               
-                return redirect(url('admin/book_register/list'))->with('success','Book Register Updated Successfully!');
+                return redirect(url('admin/book_name_register/list'))->with('success','Book Name Register Updated Successfully!');
             }else{
-                return redirect()->back()->with('danger','Book Register Updated Fail !');
+                return redirect()->back()->with('danger','Book Name Register Updated Fail !');
             }
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Book Register Updared Fail !');
+            return redirect()->back()->with('danger','Book Name Register Updared Fail !');
         }  
     }
 
@@ -188,17 +188,17 @@ class BookRegisterController extends Controller
                 if($res){
                     DB::commit();
                     //To return list
-                    return redirect(url('admin/book_register/list'))->with('success','Book Register Deleted Successfully!');
+                    return redirect(url('admin/book_name_register/list'))->with('success','Book Name Register Deleted Successfully!');
                 }
             }else{
-                return redirect()->back()->with('error','There is no result with this book register.');
+                return redirect()->back()->with('danger','There is no result with this book name register.');
             }
            
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Book Register Deleted Failed!');
+            return redirect()->back()->with('danger','Book Name Register Deleted Failed!');
         }
     }
 

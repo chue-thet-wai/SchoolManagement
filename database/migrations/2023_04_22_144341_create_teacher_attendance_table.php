@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('teacher_attendance', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id');
+            $table->string('user_id')->comment('user id from users table');
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('restrict');
             $table->timestamp('attendance_date');
             $table->tinyInteger('attendance_status')->default(1)->comment('2: leave , 1 :present , 0:absent');
             $table->text('remark')->nullable();

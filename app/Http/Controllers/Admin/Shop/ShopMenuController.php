@@ -59,7 +59,7 @@ class ShopMenuController extends Controller
         $request->validate([
             'price'     =>'required|integer',
             'name'      =>'required',
-            'menu_image'=>'required | mimes:jpeg,jpg,png | max:1000',
+            'menu_image'=>'mimes:jpeg,jpg,png|max:1000',
         ]); 
 
         if($request->hasFile('menu_image')){
@@ -98,7 +98,7 @@ class ShopMenuController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Menu Created Fail !');
+            return redirect()->back()->with('danger','Menu Created Fail !');
         }    
     }
 
@@ -130,7 +130,7 @@ class ShopMenuController extends Controller
         $request->validate([
             'price'     =>'required|integer',
             'name'      =>'required',
-            'menu_image'=>'mimes:jpeg,jpg,png | max:1000',
+            'menu_image'=>'mimes:jpeg,jpg,png|max:1000',
         ]); 
 
         if($request->hasFile('menu_image')){
@@ -174,7 +174,7 @@ class ShopMenuController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Menu Updared Fail !');
+            return redirect()->back()->with('danger','Menu Updared Fail !');
         }  
     }
 
@@ -191,24 +191,33 @@ class ShopMenuController extends Controller
             $checkData = Menu::where('id',$id)->first();
 
             if (!empty($checkData)) {
-                
-                $res = Menu::where('id',$id)->delete();
-                if($res){
-                    //To delete image
-                    $image=$checkData['menu_image'];
-                    @unlink(public_path('/assets/menu/'. $image));
+                try {
+                    // Attempt to delete the record
+                    $res = Menu::where('id',$id)->forceDelete();
+                   
+                    if($res){
+                        //To delete image
+                        $image=$checkData['menu_image'];
+                        @unlink(public_path('/assets/menu/'. $image));
+
+                        DB::commit();
+                        //To return list
+                        return redirect(route('menu.index'))->with('success','Menu Deleted Successfully!');
+                    }
+                } catch (\Illuminate\Database\QueryException $e) {
+                    // Check if the exception is due to a foreign key constraint violation
+                    if ($e->errorInfo[1] === 1451) {
+                        return redirect()->back()->with('danger','Cannot delete this record because it is being used in other.');
+                    }
+                    return redirect()->back()->with('danger','An error occurred while deleting the record.');
                 }
             }else{
-                return redirect()->back()->with('error','There is no result with this menu.');
+                return redirect()->back()->with('danger','There is no result with this menu.');
             }
-            DB::commit();
-            //To return list
-            return redirect(route('menu.index'))->with('success','Menu Deleted Successfully!');
-
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Menu Deleted Failed!');
+            return redirect()->back()->with('danger','Menu Deleted Failed!');
         }
         
     }

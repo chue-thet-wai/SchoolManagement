@@ -96,7 +96,7 @@ class ExpenseController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Expense Created Fail !');
+            return redirect()->back()->with('danger','Expense Created Fail !');
         }    
     }
 
@@ -154,7 +154,7 @@ class ExpenseController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Expense Updared Fail !');
+            return redirect()->back()->with('danger','Expense Updared Fail !');
         }  
     }
 
@@ -179,14 +179,14 @@ class ExpenseController extends Controller
                     return redirect(url('admin/expense/list'))->with('success','Expense Deleted Successfully!');
                 }
             }else{
-                return redirect()->back()->with('error','There is no result with this expense.');
+                return redirect()->back()->with('danger','There is no result with this expense.');
             }
            
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Expense Deleted Failed!');
+            return redirect()->back()->with('danger','Expense Deleted Failed!');
         }
     }
 }

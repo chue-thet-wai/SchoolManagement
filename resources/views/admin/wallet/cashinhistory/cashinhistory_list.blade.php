@@ -15,14 +15,10 @@
 
 <section class="card">
     <div class="card-body">
-        <br />
-       
+        <br />       
         <div class="row g-4">
             <div class="col-md-10 content-title">
                 <h4><b>Cash In History</b></h4>
-            </div>
-            <div class="col-md-2">
-                <a class="btn btn-sm btn-primary" href="{{url('admin/cash_counter/create')}}" id="form-header-btn"><span class="bi bi-plus"></span> Create</a>
             </div>
         </div>
         <br />
@@ -70,7 +66,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if(!empty($list_result))
+                    @if(!empty($list_result) && $list_result->count() > 0)
                         @php $i=1;@endphp
                         @foreach($list_result as $res)
                             @php 

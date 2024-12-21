@@ -139,7 +139,7 @@ class GradeController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Grade Updared Fail !');
+            return redirect()->back()->with('danger','Grade Updated Fail !');
         }  
     }
 
@@ -154,13 +154,23 @@ class GradeController extends Controller
         $checkData = Grade::where('id',$id)->get()->toArray();
 
         if (!empty($checkData)) {
-            
-            $res = Grade::where('id',$id)->delete();
-            if($res){
-                return redirect(url('admin/grade/list'))->with('success','Grade Deleted Successfully!');
+            try {
+                // Attempt to delete the record
+                $res = Grade::where('id',$id)->forceDelete();
+               
+                if($res){
+
+                    return redirect(url('admin/grade/list'))->with('success','Grade Deleted Successfully!');
+                }
+            } catch (\Illuminate\Database\QueryException $e) {
+                // Check if the exception is due to a foreign key constraint violation
+                if ($e->errorInfo[1] === 1451) {
+                    return redirect()->back()->with('danger','Cannot delete this record because it is being used in other.');
+                }
+                return redirect()->back()->with('danger','An error occurred while deleting the record.');
             }
         }else{
-            return redirect()->back()->with('error','There is no result with this grade.');
+            return redirect()->back()->with('danger','There is no result with this grade.');
         }
     }
 }

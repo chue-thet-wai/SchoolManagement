@@ -110,7 +110,7 @@ class BookRentController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Book Rent Created Fail !');
+            return redirect()->back()->with('danger','Book Rent Created Fail !');
         }    
     }
 
@@ -177,7 +177,7 @@ class BookRentController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Book Rent Updared Fail !');
+            return redirect()->back()->with('danger','Book Rent Updared Fail !');
         }  
     }
 
@@ -202,14 +202,14 @@ class BookRentController extends Controller
                     return redirect(url('admin/book_rent/list'))->with('success','Book Rent Deleted Successfully!');
                 }
             }else{
-                return redirect()->back()->with('error','There is no result with this book rent.');
+                return redirect()->back()->with('danger','There is no result with this book rent.');
             }
            
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Book Rent Deleted Failed!');
+            return redirect()->back()->with('danger','Book Rent Deleted Failed!');
         }
     }
 

@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('book_rent', function (Blueprint $table) {
             $table->id();
             $table->string('book_title');
-            $table->integer('student_id')->comment('id for student_info table');
+            $table->string('student_id')->comment('student id from student_info table');
+            $table->foreign('student_id')->references('student_id')->on('student_info')->onDelete('restrict');
             $table->timestamp('rent_date')->nullable();
             $table->timestamp('return_date')->nullable();
             $table->timestamp('actual_return_date')->nullable();

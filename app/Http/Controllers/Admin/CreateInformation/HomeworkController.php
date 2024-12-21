@@ -34,8 +34,14 @@ class HomeworkController extends Controller
             if (request()->has('homework_title') && request()->input('homework_title') != '') {
                 $res->where('title', request()->input('homework_title'));
             }
+            
             if (request()->has('homework_classid') && request()->input('homework_classid') != '' && request()->input('homework_classid') != '99') {
-                $res->where('class_id', request()->input('homework_classid'));
+                if (request()->input('homework_classid') == '0') {
+                    $res->whereNull('class_id');
+                } else {
+                    $res->where('class_id', request()->input('homework_classid'));
+                }
+               
             }
             if (request()->has('homework_subject') && request()->input('homework_subject') != '' && request()->input('homework_subject') != '99') {
                 $res->where('subject_id', request()->input('homework_subject'));
@@ -52,12 +58,13 @@ class HomeworkController extends Controller
         $res = $res->paginate(20);
              
         $class_list = $this->createInfoRepository->getClassSetup();
-        $classes[0]="All";
+        //$classes[0]="All";
         foreach($class_list as $a) {
             $classes[$a->id] = $a->name;
         }  
         
         $subject_list = $this->categoryRepository->getSubject();
+        $subject=[];
         foreach($subject_list as $a) {
             $subject[$a->id] = $a->name;
         }  
@@ -132,7 +139,7 @@ class HomeworkController extends Controller
         if($request->hasFile('homework_file')){
             $homeworkfile=$request->file('homework_file');
             $extension = $homeworkfile->extension();
-            $homeworkfile_name = (intval($latestId) + 1). "_" . time() . "." . $extension;
+            $homeworkfile_name = (intval($latestId === null ? 0 : $latestId) + 1). "_" . time() . "." . $extension;
         }else{
             $homeworkfile_name="";
         }    
@@ -141,7 +148,7 @@ class HomeworkController extends Controller
         try{
             $insertData = array(
                 'title'              =>$request->title,
-                'class_id'           =>$request->class_id,
+                'class_id'           =>$request->class_id !== '0' ? $request->class_id : null,
                 'academic_year_id'   =>$request->academic_year_id,
                 'subject_id'         =>$request->subject_id,
                 'homework_file'      =>$homeworkfile_name,
@@ -168,7 +175,7 @@ class HomeworkController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Homework Created Fail !');
+            return redirect()->back()->with('danger','Homework Created Fail !');
         }    
     }
 
@@ -254,7 +261,7 @@ class HomeworkController extends Controller
         try{
             $updateData = array(
                 'title'              =>$request->title,
-                'class_id'           =>$request->class_id,
+                'class_id'           =>$request->class_id !== '0' ? $request->class_id : null,
                 'academic_year_id'   =>$request->academic_year_id,
                 'subject_id'         =>$request->subject_id,
                 'due_date'           =>$request->due_date,
@@ -282,7 +289,7 @@ class HomeworkController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Homework Updared Fail !');
+            return redirect()->back()->with('danger','Homework Updared Fail !');
         }  
     }
 
@@ -299,26 +306,37 @@ class HomeworkController extends Controller
             $checkData = Homework::where('id',$id)->first();
 
             if (!empty($checkData)) {
-                
-                $res = Homework::where('id',$id)->delete();
-                if($res){
-                    $file=$checkData['homework_file'];
-                    if($file != ''){
-                        @unlink(public_path('/assets/homework_files/'. $file));
-                    } 
-                    DB::commit();
-                    //To return list
-                    return redirect(url('admin/homework/list'))->with('success','Homework Deleted Successfully!');
+                try {
+                    // Attempt to delete the record
+                    $res = Homework::where('id',$id)->forceDelete();
+                   
+                    if($res){
+                        DB::commit();
+
+                        $file=$checkData['homework_file'];
+                        if($file != ''){
+                            @unlink(public_path('/assets/homework_files/'. $file));
+                        } 
+                        //To return list
+                        return redirect(url('admin/homework/list'))->with('success','Homework Deleted Successfully!');
+                    }
+                } catch (\Illuminate\Database\QueryException $e) {
+                    // Check if the exception is due to a foreign key constraint violation
+                    if ($e->errorInfo[1] === 1451) {
+                        return redirect()->back()->with('danger','Cannot delete this record because it is being used in other.');
+                    }
+                    return redirect()->back()->with('danger','An error occurred while deleting the record.');
                 }
+                
             }else{
-                return redirect()->back()->with('error','There is no result with this Homework.');
+                return redirect()->back()->with('danger','There is no result with this Homework.');
             }
            
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Homework Deleted Failed!');
+            return redirect()->back()->with('danger','Homework Deleted Failed!');
         }
     }
 }

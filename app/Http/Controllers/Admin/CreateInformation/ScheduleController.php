@@ -58,7 +58,7 @@ class ScheduleController extends Controller
         $teacher_list    = $this->createInfoRepository->getTeacherList();
         $teachers = [];
         foreach ($teacher_list as $a) {
-            $teachers[$a->id] = $a->name;
+            $teachers[$a->user_id] = $a->name;
         }
         $subject_list    = $this->categoryRepository->getSubject();
         // return $subject_list;
@@ -155,7 +155,7 @@ class ScheduleController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error', 'Schedule Created Fail !');
+            return redirect()->back()->with('danger', 'Schedule Created Fail !');
         }
     }
 
@@ -251,7 +251,7 @@ class ScheduleController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error', 'Schedule Updared Fail !');
+            return redirect()->back()->with('danger', 'Schedule Updared Fail !');
         }
     }
 
@@ -276,12 +276,12 @@ class ScheduleController extends Controller
                     return redirect(url('admin/schedule/list'))->with('success', 'Schedule Deleted Successfully!');
                 }
             } else {
-                return redirect()->back()->with('error', 'There is no result with this schedule.');
+                return redirect()->back()->with('danger', 'There is no result with this schedule.');
             }
         } catch (\Exception $e) {
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error', 'Schedule Deleted Failed!');
+            return redirect()->back()->with('danger', 'Schedule Deleted Failed!');
         }
     }
 }

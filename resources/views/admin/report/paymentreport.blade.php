@@ -85,7 +85,7 @@
 					<tr>
 						<th>No</th>
 						<th>Invoice ID</th>
-						<th>Registration No</th>	
+						<th>Student ID</th>	
 						<th>Name</th>					
 						<th>Pay Date</th>
 						<th>Payment Type</th>
@@ -101,18 +101,14 @@
 						<tr>
 							<td>@php echo $i;$i++; @endphp</td>
 							<td>{{$res->invoice_id}}</td>
-							<td>{{$res->registration_no}}</td>	
+							<td>{{$res->student_id}}</td>	
 							<td>{{$res->name}}</td>					
 							@if ($res->paid_date != null) 
 								<td>{{date('Y-m-d',strtotime($res->paid_date))}}</td>
 							@else 
 								<td></td>
 							@endif
-							@if ($res->payment_type == 0) 
-								<td>{{$payment_types[2]}}</td>
-							@else
-								<td>{{$payment_types[$res->payment_type]}}</td>
-							@endif
+							<td>{{$payment_types[$res->payment_type]}}</td>
 							<td>{{$res->total_amount}}</td>
 							<td>{{$res->discount_percent}}</td>
 							<td>{{$res->net_total}}</td>

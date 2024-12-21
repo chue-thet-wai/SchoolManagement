@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
             //add superadmin role
             $roleres=DB::table('role')->get()->toArray();
             if (empty($roleres)) {
-                $roleNames = array('1'=>"Super Admin",'2'=>'Branch Admin','3'=>'Teacher','4'=>'Driver');
+                $roleNames = array('1'=>"Main Admin",'2'=>'Branch Admin','3'=>'Teacher','4'=>'Driver');
                 foreach ($roleNames as $key=>$value) {
                     $addRole = array(
                         'id'          =>$key,

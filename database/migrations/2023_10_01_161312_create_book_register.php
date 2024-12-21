@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('book_register', function (Blueprint $table) {
             $table->id();
-            $table->integer('category_id')->comment('id in book_category table');
+            $table->foreignId('category_id')->constrained('book_category')->onDelete('restrict');
             $table->string('title');
             $table->string('author');
             $table->string('description')->nullable();

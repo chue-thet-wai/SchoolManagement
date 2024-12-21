@@ -141,7 +141,7 @@ class ExamTermsController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Exam Terms Created Fail !');
+            return redirect()->back()->with('danger','Exam Terms Created Fail !');
         }    
     }
 
@@ -214,7 +214,7 @@ class ExamTermsController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Exam Terms Updared Fail !');
+            return redirect()->back()->with('danger','Exam Terms Updared Fail !');
         }  
     }
 
@@ -231,22 +231,32 @@ class ExamTermsController extends Controller
             $checkData = ExamTerms::where('id',$id)->first();
 
             if (!empty($checkData)) {
-                
-                $res = ExamTerms::where('id',$id)->delete();
-                if($res){
-                    DB::commit();
-                    //To return list
-                    return redirect(url('admin/exam_terms/list'))->with('success','Exam Terms Deleted Successfully!');
+                try {
+                    // Attempt to delete the record
+                    $res = ExamTerms::where('id',$id)->forceDelete();
+                   
+                    if($res){
+                        DB::commit();
+                        //To return list
+                        return redirect(url('admin/exam_terms/list'))->with('success','Exam Terms Deleted Successfully!');
+                    }
+                } catch (\Illuminate\Database\QueryException $e) {
+                    // Check if the exception is due to a foreign key constraint violation
+                    if ($e->errorInfo[1] === 1451) {
+                        return redirect()->back()->with('danger','Cannot delete this record because it is being used in other.');
+                    }
+                    return redirect()->back()->with('danger','An error occurred while deleting the record.');
                 }
+                
             }else{
-                return redirect()->back()->with('error','There is no result with this exam terms.');
+                return redirect()->back()->with('danger','There is no result with this exam terms.');
             }
            
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Exam Terms Deleted Failed!');
+            return redirect()->back()->with('danger','Exam Terms Deleted Failed!');
         }
     }
 }

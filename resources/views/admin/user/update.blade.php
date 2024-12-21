@@ -83,7 +83,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-5">
-                        <label for=""><b>Role</b></label>
+                        <label for=""><b>Department</b></label>
                         <div class="col-sm-10">
                             <select class="form-select" id="department_id" name="department_id">
                                 <option value="99">select department</option>
@@ -156,7 +156,7 @@
                         <div class="image-preview-container">
                             <div class="preview">
                                 <img id="preview-selected-image"
-                                    src="{{ asset('assets/user_images/' . $result[0]->profile_image) }}"
+                                    src="{{Storage::disk('s3')->url('my-files/' . $result[0]->profile_image)}}"
                                     style='display: block;' />
                             </div>
                             <label for="file-upload">Upload Image</label>

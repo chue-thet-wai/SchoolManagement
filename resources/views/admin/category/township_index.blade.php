@@ -16,7 +16,7 @@
 <section class="card">
 
 	<div class="card-body">
-		<h5 class='content-title'><b>Upload Township</b></h5>
+		<!--<h5 class='content-title'><b>Upload Township</b></h5>
 		<br />
         <form action="{{ url('admin/township/import') }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -32,7 +32,8 @@
 			</div>
         </form>
 		<br />
-		<br />
+		<br />-->
+		<h5 class='content-title'><b>Township List</b></h5>
 		<div class="row g-4 m-2" style="display: flex;overflow-x: auto;">
 			<table cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered">
 				<thead>

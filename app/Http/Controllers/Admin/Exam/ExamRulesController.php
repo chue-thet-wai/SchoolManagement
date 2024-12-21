@@ -90,7 +90,7 @@ class ExamRulesController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Exam Rules Created Fail !');
+            return redirect()->back()->with('danger','Exam Rules Created Fail !');
         }    
     }
 
@@ -147,7 +147,7 @@ class ExamRulesController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Exam Rules Updared Fail !');
+            return redirect()->back()->with('danger','Exam Rules Updared Fail !');
         }  
     }
 
@@ -172,14 +172,14 @@ class ExamRulesController extends Controller
                     return redirect(url('admin/exam_rules/list'))->with('success','Exam Rules Deleted Successfully!');
                 }
             }else{
-                return redirect()->back()->with('error','There is no result with this exam rules.');
+                return redirect()->back()->with('danger','There is no result with this exam rules.');
             }
            
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Exam Rules Deleted Failed!');
+            return redirect()->back()->with('danger','Exam Rules Deleted Failed!');
         }
     }
 }

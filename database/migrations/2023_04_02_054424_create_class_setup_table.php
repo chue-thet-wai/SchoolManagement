@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -16,10 +17,11 @@ return new class extends Migration
         Schema::create('class_setup', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('room_id')->comment('id from room table');
-            $table->integer('grade_id')->comment('id for grade table');
-            $table->integer('section_id')->comment('id for section table');
-            $table->integer('academic_year_id')->comment('id from academic_year table');
+            $table->foreignId('branch_id')->constrained('branch')->onDelete('restrict');
+            $table->foreignId('room_id')->constrained('room')->onDelete('restrict');
+            $table->foreignId('grade_id')->constrained('grade')->onDelete('restrict');
+            $table->foreignId('section_id')->constrained('section')->onDelete('restrict');
+            $table->foreignId('academic_year_id')->constrained('academic_year')->onDelete('restrict');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->softDeletes();

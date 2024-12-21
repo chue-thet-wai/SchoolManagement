@@ -11,4 +11,6 @@ class WaitingRegistration extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'waiting_registration';
+
+    protected $guarded = [];
 }

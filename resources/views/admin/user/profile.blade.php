@@ -26,7 +26,7 @@
                                     } else if ($role== 3){
                                     $roleName = 'Teacher';
                                     }  else {
-                                    $roleName = 'Super Admin';
+                                    $roleName = 'Main Admin';
                                     }    
                                 @endphp
                                 <b>Role : </b>{{$roleName}}

@@ -105,7 +105,7 @@ class RoleandPermissionController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Role and Permission Insert Fail !');
+            return redirect()->back()->with('danger','Role and Permission Insert Fail !');
         }    
     }
 
@@ -226,7 +226,7 @@ class RoleandPermissionController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Role and Permission Updated Fail !');
+            return redirect()->back()->with('danger','Role and Permission Updated Fail !');
         }  
     }
 
@@ -255,14 +255,14 @@ class RoleandPermissionController extends Controller
                     return redirect(route('role_permission.index'))->with('success','Role and Permission Deleted Successfully!');
                 }
             }else{
-                return redirect()->back()->with('error','There is no result with this role and permission.');
+                return redirect()->back()->with('danger','There is no result with this role and permission.');
             }
            
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Role and Permission Deleted Failed!');
+            return redirect()->back()->with('danger','Role and Permission Deleted Failed!');
         }
     }
 

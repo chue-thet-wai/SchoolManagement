@@ -5,7 +5,7 @@ $(document).ready(function() {
         var token    = $("#token").val();
         $.ajax({
         type:'POST',
-        url:'/admin/payment/paymentreg_search',
+        url:'/admin/invoice/paymentreg_search',
         data:{
                 _token : token,
                 student_id  : studentNo
@@ -32,6 +32,9 @@ $(document).ready(function() {
                     $('#pay_to_period').attr('max', data.academic_year_end);
                     $('#academic_start').val(data.academic_year_start);
                     $('#academic_end').val(data.academic_year_end);
+
+                    updateAdditionalFeeCheckboxes(data.additional_fee);
+
                 } else {
                     $("#registration_msg").html('Student data not found!.');
                     $("#grade_level").val('');
@@ -45,6 +48,8 @@ $(document).ready(function() {
                     $('#pay_to_period').removeAttr('max');
                     $('#academic_start').val('');
                     $('#academic_end').val('');
+
+                    removeAdditionalFeeCheckboxes();
                 }  
                 changeTotalAmount();           
             }
@@ -57,7 +62,7 @@ $(document).ready(function() {
 
         $.ajax({
         type:'POST',
-        url:'/admin/payment/get_class_data',
+        url:'/admin/invoice/get_class_data',
         data:{
                 _token : token,
                 branch_id  : branchID
@@ -77,7 +82,7 @@ $(document).ready(function() {
                                 formatDate(new Date(element.academic_year_end))+ "/" +
                                 element.grade_level;
                         
-                        $("#class_id").append("<option value="+optionVal+">"+element.class_name+"</option>");
+                        $("#class_id").append("<option value='"+optionVal+"'>"+element.class_name+"</option>");
                         
                     });
                     $("#grade_level").val('');
@@ -85,7 +90,7 @@ $(document).ready(function() {
                 } else {
                     $("#class_id").empty();
                     $("#grade_level").val('');
-                    $("#grade_level_fee").val('');             
+                    $("#grade_level_fee").val('');           
                 }  
                 changeTotalAmount();           
             }
@@ -160,7 +165,7 @@ $(document).ready(function() {
     $("#pay_to_period").change(function() {
         changeTotalAmount();    
     });
-    $('.addfee_Checkbox').click(function() {
+    $(document).on('click', '.addfee_Checkbox', function() {
         changeTotalAmount();
     });
     $("#discount_percent").change(function() {
@@ -219,6 +224,7 @@ $(document).ready(function() {
         var arr = $('.addfee_Checkbox:checked').map(function(){
             return this.value;
         }).get();
+    
         if (arr.length != 0) {
             for (let i = 0; i < arr.length; i++) {
                 var fee = arr[i];
@@ -243,6 +249,34 @@ $(document).ready(function() {
         var month = ('0' + (date.getMonth() + 1)).slice(-2);
         var day = ('0' + date.getDate()).slice(-2);
         return year + '-' + month + '-' + day;
+    }
+
+    // Function to remove all additional fee checkboxes
+    function removeAdditionalFeeCheckboxes() {
+        $(".addfee_Checkbox").remove();
+        $(".additional_fee_label").remove();
+        $("br.additional_fee_br").remove();
+    }
+
+    // Function to update additional fee checkboxes based on data
+    function updateAdditionalFeeCheckboxes(additionalFeeData) {
+        removeAdditionalFeeCheckboxes(); // Remove existing checkboxes
+        
+        // Add new checkboxes based on additionalFeeData
+        var container = $("#additional_fee_card");
+        additionalFeeData.forEach(function(fee) {
+            var checkbox = $("<input>")
+                .attr("type", "checkbox")
+                .attr("name", "additionalFee[]")
+                .addClass("addfee_Checkbox")
+                .val(fee.id + "|" + fee.additional_amount);
+            var label = $("<label>")
+                .addClass("additional_fee_label")
+                .text(fee.name + " - " + fee.grade_name + " (" + fee.additional_amount + ")");
+            var br = $("<br>").addClass("additional_fee_br");
+
+            container.append(checkbox, label, br);
+        });
     }
 
 });

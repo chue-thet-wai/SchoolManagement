@@ -82,6 +82,16 @@ class AdditionalFeeController extends Controller
         $request->validate([
             'name'      => 'required|min:3',
         ]);
+        $errmsg =array();
+        if ($request->grade_id == '99') {
+            array_push($errmsg,'Grade');
+        } 
+       
+        if (!empty($errmsg)) {
+            $errmsg = implode(',',$errmsg);
+            return redirect()->back()->with('danger','Please select '.$errmsg.'!');
+        }
+
         $insertData = [];
 
         if ($request->grade_id == 0) {
@@ -166,6 +176,15 @@ class AdditionalFeeController extends Controller
         $request->validate([
             'name'            => 'required|min:3'
         ]);
+        $errmsg =array();
+        if ($request->grade_id == '99') {
+            array_push($errmsg,'Grade');
+        } 
+       
+        if (!empty($errmsg)) {
+            $errmsg = implode(',',$errmsg);
+            return redirect()->back()->with('danger','Please select '.$errmsg.'!');
+        }
 
         DB::beginTransaction();
         try {
@@ -189,7 +208,7 @@ class AdditionalFeeController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error', 'Additional Fee Updared Fail !');
+            return redirect()->back()->with('danger', 'Additional Fee Updared Fail !');
         }
     }
 
@@ -211,7 +230,7 @@ class AdditionalFeeController extends Controller
                     ->with('success', 'Additional Fee Deleted Successfully!');
             }
         } else {
-            return redirect()->back()->with('error', 'There is no result with this Additional Fee.');
+            return redirect()->back()->with('danger', 'There is no result with this Additional Fee.');
         }
     }
 }

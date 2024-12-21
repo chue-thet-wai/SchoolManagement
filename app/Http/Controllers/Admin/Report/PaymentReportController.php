@@ -19,12 +19,16 @@ class PaymentReportController extends Controller
 
     public function paymentReport(Request $request) {
         $paymentType = array(
-            '2'  => 'Monthly',
-            '1'  => 'Yearly'
-        );  
+            '0'  => 'Monthly',
+            '1'  => 'Yearly',
+            '2'  => 'One Time',
+            '3'  => 'Ferry Payment',
+            '4'  => 'Food Order Payment'
+        );
         $res = Payment::leftjoin('invoice','invoice.invoice_id','payment.invoice_id')
-                ->leftjoin('student_registration','student_registration.student_id','payment.student_id')
-                ->leftJoin('student_info','student_info.student_id','=','student_registration.student_id');
+                //->leftjoin('student_registration','student_registration.student_id','payment.student_id')
+                ->leftJoin('student_info','student_info.student_id','=','payment.student_id')
+                ->whereNotIn('invoice.payment_type', ['3', '4']);//not ferry and food order
         if ($request['action'] == 'search') {
             if (request()->has('payment_studentid') && request()->input('payment_studentid') != '') {
                 $res->where('payment.student_id', request()->input('payment_studentid'));

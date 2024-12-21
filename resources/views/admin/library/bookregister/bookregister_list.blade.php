@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="pagetitle">
-	<h1>Book Register</h1>
+	<h1>Book Name Register</h1>
 	<nav>
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
-			<li class="breadcrumb-item active">Book Register</li>
-			<li class="breadcrumb-item active">Book Register</li>
+			<li class="breadcrumb-item active">Book Name Register</li>
+			<li class="breadcrumb-item active">Book Name Register</li>
 		</ol>
 	</nav>
 	@include('layouts.error')
@@ -18,14 +18,14 @@
         <br />       
         <div class="row g-4">
             <div class="col-md-10 content-title">
-                <h4><b>Book Register List</b></h4>
+                <h4><b>Book Name Register List</b></h4>
             </div>
             <div class="col-md-2">
-                <a class="btn btn-sm btn-primary" href="{{url('admin/book_register/create')}}" id="form-header-btn"><span class="bi bi-plus"></span> Create</a>
+                <a class="btn btn-sm btn-primary" href="{{url('admin/book_name_register/create')}}" id="form-header-btn"><span class="bi bi-plus"></span> Create</a>
             </div>
         </div>
         <br />
-        <form class="row g-4" method="POST" href="{{ url('admin/book_register/list') }}" enctype="multipart/form-data">
+        <form class="row g-4" method="POST" href="{{ url('admin/book_name_register/list') }}" enctype="multipart/form-data">
 			@csrf
 			<div class='row g-4'>
 				<div class="form-group col-md-3">
@@ -73,12 +73,12 @@
                             <td>{{ $res->quantity }}</td>
                             <td>{{ $res->remark }}</td>
                             <td class="center">
-                                <a href="{{ url('admin/book_register/edit/'.$res->id) }}">
+                                <a href="{{ url('admin/book_name_register/edit/'.$res->id) }}">
                                     <button type="submit" value="edit" class="btn m-1 p-0 border-0">
                                         <span id="boot-icon" class="bi bi-pencil-square" style="font-size: 20px; color:rgb(58 69 207);"></span>
                                     </button>                            
                                 </a>
-                                <form method="post" action="{{ url('admin/book_register/delete/'.$res->id) }}" style="display: inline;">
+                                <form method="post" action="{{ url('admin/book_name_register/delete/'.$res->id) }}" style="display: inline;">
                                     @csrf
                                     {{ method_field('DELETE') }}
                                     <button type="submit" value="delete" class="btn m-1 p-0 border-0">

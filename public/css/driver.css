@@ -1,0 +1,284 @@
+div.page::-webkit-scrollbar {     
+    width: 0 !important;
+}
+
+body {
+  text-align:center;
+  padding:0;
+  margin:0;
+  background: #307c4c;
+  color:#f0f0f0;
+}
+
+main {
+  position:relative;
+  box-shadow: 0 16pt 24pt rgba(121, 119, 119, 0.25);
+  width:100%;
+  background-color: #ffffff;
+  overflow: hidden;
+  width: 30%;
+  margin:0 auto 0 auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover, a:active {
+  text-decoration: none;
+}
+
+/* Mobile devices */
+@media only screen and (max-width: 320px) {
+  main {
+    width: 100%;
+  }
+  .attendance-container #btn-checkin,
+  .attendance-container #btn-checkout{
+    font-size: 0.6em;
+  }
+  .save-btn{
+    width:20%;
+    margin:auto;
+  }
+  #student_routes .custom-table th{
+    font-size: 0.6rem;
+  }
+  .custom-table > :not(caption) > * > * {
+    padding: 0.3rem 0.3rem !important;
+  }
+  #student_routes .custom-table td{
+    font-size: 0.6rem;
+  }
+}
+
+@media only screen and (min-width: 321px) and (max-width: 600px) {
+  main {
+    width: 100%;
+  }
+  .attendance-container #btn-checkin,
+  .attendance-container #btn-checkout{
+    font-size: 0.7em;
+  }
+  .save-btn{
+    width:25%;
+    margin:auto;
+  }
+  #student_routes .custom-table th{
+    font-size: 0.7rem;
+  }
+  .custom-table > :not(caption) > * > * {
+    padding: 0.3rem 0.3rem !important;
+  }
+
+  #student_routes .custom-table td {
+    font-size: 0.7rem;
+  }
+}
+
+/* Tablets */
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+  main {
+    width: 100%; /* Adjust the width as needed */
+  }
+  .save-btn{
+    width:25%;
+    margin:auto;
+  }
+}
+
+/* Larger screens, like desktops */
+@media only screen and (min-width: 1025px) {
+  main {
+    width: 40%;
+  }
+  #app>header{
+    width: 40%; 
+    margin:auto;
+  }
+ 
+}
+
+#app {
+  position: relative;
+  height: 100vh; /* Use viewport height to cover the whole screen */
+  overflow: hidden;
+}
+
+#app>header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  line-height: 42px;
+  background-color: #307c4c;
+  padding: 4pt 8pt 16pt 8pt;
+  color: #aacab7;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000; /* Ensure header is on top of other elements */
+}
+
+#app>div.page {
+  position: absolute;
+  top: 50px; /* Adjust based on the header height */
+  bottom: 50px; /* Adjust based on the footer height */
+  left: 0;
+  right: 0;
+  overflow: auto;
+  padding: 8pt;
+  line-height: 1.5;
+  z-index: 1; /* Ensure content is below header and above footer */
+}
+
+#app>header div.system-bar {
+  line-height:10pt;
+  font-size:6pt;
+  width:100%;
+  font-family:'Helvetica Neue';
+  font-weight:500;
+  padding:8pt 5pt 5pt;
+  height: 80%;
+  margin:auto;
+
+}
+.logout img{
+  height: 30px;
+  margin-top:-9px;
+}
+.driver-login-form {
+  width: 90%;
+  margin: auto;
+  margin-top: 10%;
+  border-radius: 25px;
+  background-color: #91baa0;
+  padding: 5%;
+}
+
+.left {
+  float:left;
+  text-align:left;
+  font-size: 1rem;
+}
+.center {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+.right {
+  float:right;
+  text-align:right;
+  font-size: 1.2rem;
+}
+.back-button{
+  text-decoration: none;
+  font-weight: 700;
+  color:#aacab7;
+}
+.back-button img{
+  height: 30px;
+  margin-top:-9px;
+}
+.setting-container,
+.profile-container{
+  color:#307c4c;
+}
+.profile-card{
+  height: 100px;
+}
+.profile-card a{
+  text-decoration: none;
+  font-weight: 700;
+  color:#307c4c;
+}
+.profile-card .card{
+  height: 100%;
+  text-align: center;
+  font-size: 1rem;
+}
+.profile-card .center-content{
+  margin:auto;
+}
+.save-btn {
+  background: #307c4c !important;
+  border: 1px solid #307c4c;
+  color: #aacab7 !important;
+}
+#today_routes>h5,
+#student_routes>h5,
+.schedule_date{
+  font-size: 1.2rem;
+  font-weight: 800;
+  color:#307c4c;
+}
+#today_routes .custom-table,
+#student_routes .custom-table{
+  background-color: #d9d9d9;
+  text-align: center;
+}
+#today_routes .custom-table thead,
+#student_routes .custom-table thead{
+  border-bottom: 2px solid #a0a2a5;
+  vertical-align: middle;
+}
+#today_routes .custom-table tbody>tr,
+#student_routes .custom-table tbody>tr{
+  border-bottom: 1px solid #a0a2a5;
+}
+#today_routes .custom-table td,
+#student_routes .custom-table td{
+  font-size: 0.8rem;
+}
+#today_routes #route_drive{
+  text-decoration: none;
+  border:1px solid #307c4c;
+  padding:5% 10% 5% 10%;
+  border-radius: 5px;
+  color:#212529;
+}
+.attendance-container #btn-checkin,
+.attendance-container #btn-checkout{
+  background-color: #307c4c;
+  color:#aacab7;
+}
+.attendance-container #history-list .card {
+  background-color: #e9ecef;
+  font-weight: 400;
+}
+.attendance-container #line-break{
+  height: 2px;
+  background-color: #e9ecef;
+}
+#history-list {
+  height: 300px; 
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.route-container #route-status{
+  border-radius: 5px;
+  border: 1px solid #307c4c;
+  background-color:#d9d9d9;
+}
+
+#driver_profile_image {
+  height:120px;
+  width:120px;
+  border:2px solid #307c4c;
+  padding:3%;
+}
+#login-image img{
+  width: 50%;
+}
+
+.long-text {
+  white-space: pre-wrap; /* Ensures that long words are broken */
+  word-wrap: break-word; /* Wraps long words */
+}
+
+
+
+

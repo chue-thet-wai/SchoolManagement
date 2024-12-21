@@ -1,0 +1,61 @@
+.fc-event.present .fc-title::before {
+    /*content: '\25CF'; /* Use a filled circle for present */
+    content: '\25A0';
+    color: green;
+    margin-right: 5px;
+    font-size: 10px;
+}
+.fc-event.leave .fc-title::before {
+    content: '\25A0'; 
+    color: red;
+    margin-right: 5px;
+    font-size: 10px;
+}
+.fc-event-container .fc-event {
+    background-color: transparent;
+    border: none;
+}
+#calendar {
+    margin-top: 20px; /* Add some margin at the top */
+}
+.fc-toolbar{
+    border:1px solid #307c4c;
+    text-align: center;
+    color:#307c4c;
+    margin:0% 5% 5% 5%;
+    padding:2%;
+    border-radius: 5px;
+}
+.fc-center>h2{
+    font-size: 1.5rem;
+}
+.fc-toolbar .fc-left .fc-prev-button,
+.fc-toolbar .fc-right .fc-next-button {
+    border-radius: 25px;
+    font-weight: bold;
+    border-radius: 25px;
+    padding: 10%;
+}
+/*.fc td, .fc th {
+    border-style: none !important;
+}
+.fc-head-container .fc-day-header>span{
+    padding: 2% 20%;
+    width: 70%;
+    border: 1px solid #307c4c;
+    border-radius: 5px;
+}
+.fc-day-top .fc-day-number {
+    float: left;
+    width: 70%;
+    padding: 2% 20%;
+    border: 1px solid #307c4c;
+    border-radius: 5px;
+}*/
+
+.fc-widget-content .fc-day-grid .fc-row {
+    min-height: 2em !important;
+}
+.fc-event { 
+    height: 2px !important; 
+}

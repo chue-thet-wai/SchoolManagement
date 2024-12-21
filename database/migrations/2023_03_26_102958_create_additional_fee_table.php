@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('additional_fee', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('grade_id')->default(0)->comment('id for grade table and 0 is no grade');
+            $table->foreignId('grade_id')->default(0)->constrained('grade')->onDelete('restrict')->comment('id for grade table and 0 is no grade');
             $table->float('additional_amount')->default(0.0);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

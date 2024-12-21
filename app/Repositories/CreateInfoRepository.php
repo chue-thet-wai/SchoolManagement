@@ -23,6 +23,18 @@ class CreateInfoRepository implements CreateInfoRepositoryInterface
 
     }
 
+    public function generateTrackNumber() 
+    {
+        $maxTrackNo = DB::table('school_bus_track')->select('track_no')->orderBy('track_no', 'desc')->first();
+        if (!empty($maxTrackNo)) {
+            $lastNum  = substr($maxTrackNo->track_no,2);
+            $currentTrackNo = 'T-'.($lastNum+1);
+            return $currentTrackNo;
+        }
+        return 'T-10001';
+
+    }
+
     public function getClassSetup(){
         return ClassSetup::all();
     }

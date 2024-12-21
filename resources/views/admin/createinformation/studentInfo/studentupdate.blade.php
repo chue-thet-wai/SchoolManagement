@@ -119,7 +119,7 @@
                 <div class="form-group col-md-5">
                     <label for="card_id"><b>Card ID<span style="color:brown">*</span></b></label>
                     <div class="col-sm-10">
-                        <input type="text" name="card_id" value="{{$result[0]->card_id}}" class="form-control" required disabled>
+                        <input type="text" name="card_id" value="{{$result[0]->card_id}}" class="form-control" required readonly>
                     </div>
                 </div>
             </div>
@@ -178,6 +178,25 @@
                         <input type="text" name="mother_phone" value="{{$result[0]->mother_phone}}" class="form-control" required>
                     </div>
                 </div>
+                <div class="col-md-1"></div>
+            </div>
+
+            <br />
+
+            <div class="row g-4">
+                <div class="col-md-1">
+                    <input type="hidden" id="previous_image" name="previous_image" value="{{$result[0]->student_profile}}">
+                </div>
+                <div class="form-group col-md-10">
+                    <label for="profile"><b>Upload Profile</b></label>
+                    <div class="image-preview-container">
+                        <div class="preview">
+                            <img id="preview-selected-image" src="{{asset('assets/student_images/'.$result[0]->student_profile)}}" style='display: block;'/>
+                        </div>
+                        <label for="file-upload">Upload Image</label>
+                        <input type="file" id="file-upload" name='student_profile' accept="image/*" onchange="previewImage(event);" />
+                    </div>
+                </div>               
                 <div class="col-md-1"></div>
             </div>
 

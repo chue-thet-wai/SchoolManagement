@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Interfaces\CreateInfoRepositoryInterface;
 use App\Models\ClassSetup;
+use App\Models\Room;
 use App\Interfaces\CategoryRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,11 +16,35 @@ class ClassSetupController extends Controller
 {
     private CreateInfoRepositoryInterface $createInfoRepository;
     private CategoryRepositoryInterface $categoryRepository;
+    private $academicList;
+    private $branchList;
+    private $sectionList;
 
     public function __construct(CreateInfoRepositoryInterface $createInfoRepository,CategoryRepositoryInterface $categoryRepository) 
     {
         $this->createInfoRepository = $createInfoRepository;
         $this->categoryRepository = $categoryRepository;
+
+        $branch_list_data   = $this->categoryRepository->getBranch();
+        $branch_list=[];
+        foreach($branch_list_data as $b) {
+            $branch_list[$b->id] = $b->name;
+        } 
+        $this->branchList = $branch_list;
+
+        $academic_list = $this->categoryRepository->getAcademicYear();
+        $academic=[];
+        foreach($academic_list as $a) {
+            $academic[$a->id] = $a->name;
+        }
+        $this->academicList = $academic;
+
+        $section_list    = $this->categoryRepository->getSection();
+        $section=[];
+        foreach($section_list as $a) {
+            $section[$a->id] = $a->name;
+        }
+        $this->sectionList = $section;
     }
 
      /**
@@ -40,16 +65,26 @@ class ClassSetupController extends Controller
             if (request()->has('classsetup_academic') && request()->input('classsetup_academic') != '') {
                 $res->where('academic_year_id', request()->input('classsetup_academic'));
             }
+            if (request()->has('classsetup_branch') && request()->input('classsetup_branch') != '') {
+                $res->where('banch_id', request()->input('classsetup_branch'));
+            }
         }else {
             request()->merge([
                 'classsetup_name' => null,
                 'classsetup_room' => null,
                 'classsetup_academic' => null,
+                'classsetup_branch' => null,
             ]);
         }       
     
         $res = $res->paginate(20);
-             
+        
+        $branch_list_data   = $this->categoryRepository->getBranch();
+        $branch_list=[];
+        foreach($branch_list_data as $b) {
+            $branch_list[$b->id] = $b->name;
+        } 
+
         $academic_list = $this->categoryRepository->getAcademicYear();
         $academic=[];
         foreach($academic_list as $a) {
@@ -72,10 +107,11 @@ class ClassSetupController extends Controller
         }
 
         return view('admin.createinformation.classsetup.index',[
-            'room_list'=>$room,
-            'academic_list'=>$academic,
-            'grade_list'   =>$grade,
-            'section_list' =>$section,
+            'branch_list'  => $branch_list,
+            'room_list'    => $room,
+            'academic_list'=> $academic,
+            'grade_list'   => $grade,
+            'section_list' => $section,
             'list_result'  => $res]);
     }
 
@@ -89,11 +125,13 @@ class ClassSetupController extends Controller
     {
         $academic_list = $this->categoryRepository->getAcademicYear();
         $grade_list    = $this->categoryRepository->getGrade();
-        $section_list    = $this->categoryRepository->getSection();
-        $room_list    = $this->categoryRepository->getRoom();
+        $section_list  = $this->categoryRepository->getSection();
+        $room_list     = $this->categoryRepository->getRoom();
+        $branch_list   = $this->categoryRepository->getBranch();
 
         return view('admin.createinformation.classsetup.create',[
-            'room_list'   =>$room_list,
+            'branch_list'  =>$branch_list,
+            'room_list'    =>$room_list,
             'academic_list'=>$academic_list,
             'grade_list'   =>$grade_list,
             'section_list' =>$section_list,
@@ -112,13 +150,16 @@ class ClassSetupController extends Controller
         $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
-            'name'            =>'required|min:3',
+            'branch_id'            =>'required',
         ]); 
        
         $errmsg =array();
+        if ($request->branch_id == '99') {
+            array_push($errmsg,'Branch');
+        } 
         if ($request->room_id == '99') {
             array_push($errmsg,'Room');
-         } 
+        } 
         if ($request->grade_id == '99') {
             array_push($errmsg,'Grade');
         }  
@@ -135,8 +176,11 @@ class ClassSetupController extends Controller
                 
         DB::beginTransaction();
         try{
+            $name = $this->academicList[$request->academic_year_id].'('.$this->branchList[$request->branch_id]
+                    .')'.':'.$this->sectionList[$request->section_id];
             $insertData = array(
-                'name'              =>$request->name,
+                'name'              =>$name,
+                'branch_id'         =>$request->branch_id,
                 'room_id'           =>$request->room_id,
                 'grade_id'          =>$request->grade_id,
                 'section_id'        =>$request->section_id,
@@ -158,7 +202,7 @@ class ClassSetupController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Class Setup Created Fail !');
+            return redirect()->back()->with('danger','Class Setup Created Fail !');
         }    
     }
 
@@ -183,15 +227,17 @@ class ClassSetupController extends Controller
     {
         $academic_list = $this->categoryRepository->getAcademicYear();
         $grade_list    = $this->categoryRepository->getGrade();
-        $section_list    = $this->categoryRepository->getSection();
-        $room_list    = $this->categoryRepository->getRoom();
+        $section_list  = $this->categoryRepository->getSection();
+        $room_list     = $this->categoryRepository->getRoom();
+        $branch_list   = $this->categoryRepository->getBranch();
 
         $res = ClassSetup::where('id',$id)->get();
         return view('admin.createinformation.classsetup.update',[
-            'room_list'   =>$room_list,
-            'academic_list'=>$academic_list,
-            'grade_list'   =>$grade_list,
-            'section_list' =>$section_list,
+            'branch_list'  => $branch_list,
+            'room_list'    => $room_list,
+            'academic_list'=> $academic_list,
+            'grade_list'   => $grade_list,
+            'section_list' => $section_list,
             'result'=>$res]);
     }
 
@@ -208,13 +254,36 @@ class ClassSetupController extends Controller
         $nowDate  = date('Y-m-d H:i:s', time());
 
         $request->validate([
-            'name'            =>'required|min:3'
+            'branch_id'            =>'required',
         ]); 
+        $errmsg =array();
+        if ($request->branch_id == '99') {
+            array_push($errmsg,'Branch');
+        } 
+        if ($request->room_id == '99') {
+            array_push($errmsg,'Room');
+        } 
+        if ($request->grade_id == '99') {
+            array_push($errmsg,'Grade');
+        }  
+        if ($request->section_id == '99') {
+            array_push($errmsg,'Section');
+        }
+        if ($request->academic_year_id == '99') {
+            array_push($errmsg,'Academic Year');
+         } 
+        if (!empty($errmsg)) {
+            $errmsg = implode(',',$errmsg);
+            return redirect()->back()->with('danger','Please select '.$errmsg.'!');
+        }
 
         DB::beginTransaction();
         try{
+            $name = $this->academicList[$request->academic_year_id].'('.$this->branchList[$request->branch_id]
+                    .')'.':'.$this->sectionList[$request->section_id];
             $classData = array(
-                'name'              =>$request->name,
+                'name'              =>$name,
+                'branch_id'         =>$request->branch_id,
                 'room_id'           =>$request->room_id,
                 'grade_id'          =>$request->grade_id,
                 'section_id'        =>$request->section_id,
@@ -236,7 +305,7 @@ class ClassSetupController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Class Setup Updared Fail !');
+            return redirect()->back()->with('danger','Class Setup Updared Fail !');
         }  
     }
 
@@ -253,22 +322,49 @@ class ClassSetupController extends Controller
             $checkData = ClassSetup::where('id',$id)->first();
 
             if (!empty($checkData)) {
-                
-                $res = ClassSetup::where('id',$id)->delete();
-                if($res){
-                    DB::commit();
-                    //To return list
-                    return redirect(url('admin/class_setup/list'))->with('success','Class Deleted Successfully!');
+                try {
+                    // Attempt to delete the record
+                    $res = ClassSetup::where('id',$id)->forceDelete();
+                   
+                    if($res){
+                        DB::commit();
+
+                        return redirect(url('admin/class_setup/list'))->with('success','Class Deleted Successfully!');
+                    }
+                } catch (\Illuminate\Database\QueryException $e) {
+                    // Check if the exception is due to a foreign key constraint violation
+                    if ($e->errorInfo[1] === 1451) {
+                        return redirect()->back()->with('danger','Cannot delete this record because it is being used in other.');
+                    }
+                    return redirect()->back()->with('danger','An error occurred while deleting the record.');
                 }
+                
             }else{
-                return redirect()->back()->with('error','There is no result with this class.');
+                return redirect()->back()->with('danger','There is no result with this class.');
             }
            
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Class Deleted Failed!');
+            return redirect()->back()->with('danger','Class Deleted Failed!');
+        }
+    }
+
+    //Get class with branch
+    public function getRoomwithBranch(Request $request)
+    {
+        $room_res = Room::where('branch_id',$request->branch_id)->get();
+
+        if (!empty($room_res)) {
+            return response()->json(array(
+                'msg'            => 'found',
+                'room_data'     => $room_res,
+            ), 200);
+        } else {
+            return response()->json(array(
+                'msg'             => 'notfound',
+            ), 200);
         }
     }
 }

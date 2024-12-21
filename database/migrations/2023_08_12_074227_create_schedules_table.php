@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->integer('class_id')->comment('id for class_setup table');
-            $table->integer('teacher_id')->comment('id for teacher_info table');
-            $table->integer('subject_id')->comment('id for subject table');
+            $table->foreignId('class_id')->constrained('class_setup')->onDelete('restrict');
+            $table->string('teacher_id')->comment('user id from teacher_info table');
+            $table->foreign('teacher_id')->references('user_id')->on('teacher_info')->onDelete('restrict');
+            $table->foreignId('subject_id')->constrained('subject')->onDelete('restrict');
             $table->string('weekdays')->nullable();
             $table->string('start_time')->nullable();
             $table->string('end_time')->nullable();

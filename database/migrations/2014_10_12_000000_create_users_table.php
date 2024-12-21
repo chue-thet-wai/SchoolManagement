@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->integer('role')->default(1)->comment('1:super admin,2:branch admin,3:teacher,4:driver');
+            $table->integer('role')->default(1)->comment('1:main admin,2:branch admin,3:teacher,4:driver');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->softDeletes();

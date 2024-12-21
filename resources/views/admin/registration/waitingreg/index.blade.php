@@ -93,12 +93,6 @@
                                     <input type="hidden" name="waiting_id" value="{{ $res->id }}" />
                                     <input type="submit" value="Register" class="btn btn-sm btn-primary">
                                 </form>
-                                
-                                <form class="col-sm-1 d-inline" method="GET" action="{{ route('student_reg.create') }}">
-                                    @csrf
-                                    <input type="hidden" name="waiting_id" value="{{ $res->id }}" />
-                                    <input type="submit" value="Cancel" class="btn btn-sm btn-primary">
-                                </form>
                                 @endif
                             </td>
                             <td class="center">

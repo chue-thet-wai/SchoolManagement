@@ -29,6 +29,8 @@ class ExportStudentAttendance implements FromCollection, WithHeadings
             'Name',
             'Date',
             'Attendance',
+            'Status',
+            'Teacher Remark',
             'Remark'
         ];
     }

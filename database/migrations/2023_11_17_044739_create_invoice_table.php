@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('invoice', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_id');
-            $table->string('student_id');
-            $table->tinyInteger('payment_type')->default(0)->comment('0:monthly,1:yearly');
+            $table->string('student_id')->comment('student id from student_info table');
+            $table->foreign('student_id')->references('student_id')->on('student_info')->onDelete('restrict');
+            $table->tinyInteger('payment_type')->default(0)->comment('0:monthly,1:yearly,2:onetime,3:ferry');
             $table->timestamp('pay_from_period')->nullable();
             $table->timestamp('pay_to_period')->nullable();
             $table->float('grade_level_fee')->default(0.0);

@@ -87,7 +87,7 @@ class BookCategoryController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Book Category Created Fail !');
+            return redirect()->back()->with('danger','Book Category Created Fail !');
         }    
     }
 
@@ -141,7 +141,7 @@ class BookCategoryController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Book Category Updared Fail !');
+            return redirect()->back()->with('danger','Book Category Updared Fail !');
         }  
     }
 
@@ -158,22 +158,31 @@ class BookCategoryController extends Controller
             $checkData = BookCategory::where('id',$id)->first();
 
             if (!empty($checkData)) {
-                
-                $res = BookCategory::where('id',$id)->delete();
-                if($res){
-                    DB::commit();
-                    //To return list
-                    return redirect(url('admin/book_category/list'))->with('success','Book Category Deleted Successfully!');
+                try {
+                    // Attempt to delete the record
+                    $res = BookCategory::where('id',$id)->forceDelete();
+                   
+                    if($res){
+                        DB::commit();
+                        //To return list
+                        return redirect(url('admin/book_category/list'))->with('success','Book Category Deleted Successfully!');
+                    }
+                } catch (\Illuminate\Database\QueryException $e) {
+                    // Check if the exception is due to a foreign key constraint violation
+                    if ($e->errorInfo[1] === 1451) {
+                        return redirect()->back()->with('danger','Cannot delete this record because it is being used in other.');
+                    }
+                    return redirect()->back()->with('danger','An error occurred while deleting the record.');
                 }
             }else{
-                return redirect()->back()->with('error','There is no result with this book category.');
+                return redirect()->back()->with('danger','There is no result with this book category.');
             }
            
 
         }catch(\Exception $e){
             DB::rollback();
             Log::info($e->getMessage());
-            return redirect()->back()->with('error','Book Category Deleted Failed!');
+            return redirect()->back()->with('danger','Book Category Deleted Failed!');
         }
     }
 }

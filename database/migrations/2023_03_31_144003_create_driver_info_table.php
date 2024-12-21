@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->text('address')->nullable();
             $table->string('profile_image')->nullable();
-            $table->string('type_of_licence')->nullable();
+            $table->string('type_of_license')->nullable();
+            $table->string('license_number')->nullable();
             $table->string('year_of_experience')->nullable();
             $table->timestamp('start_date')->nullable();
             $table->timestamp('resign_date')->nullable();
@@ -29,6 +30,7 @@ return new class extends Migration
             $table->string('updated_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->index('driver_id');
         });
     }
 

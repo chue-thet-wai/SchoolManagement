@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="pagetitle">
-	<h1>Acadamic Year</h1>
+	<h1>Academic Year</h1>
 	<nav>
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>

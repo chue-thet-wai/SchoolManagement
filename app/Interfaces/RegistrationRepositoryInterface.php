@@ -9,4 +9,8 @@ interface RegistrationRepositoryInterface
     public function generateRegistrationNo();
     public function generatePaymentInvoiceID();
     public function getStudentInfo();
+    public function sendMessage($data);
+    public function getHomeworkStatus();
+    public function getDailyActivity();
+    public function getStudentRequestTypes();
 }

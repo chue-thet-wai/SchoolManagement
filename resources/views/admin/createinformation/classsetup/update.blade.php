@@ -1,6 +1,35 @@
 @extends('layouts.dashboard')
 
 @section('content')
+<script>
+    function changeBranch(){
+        var branchID = $("#branch_id").val();
+    
+        $.ajax({
+        type:'POST',
+        url:'/admin/class_setup/get_room',
+        data:{
+                _token :'<?php echo csrf_token() ?>',
+                branch_id  : branchID
+            },           
+            success:function(data){
+                if (data.msg == 'found') {
+                    var room_data= data.room_data;
+
+                    $("#room_id").empty();
+                    $("#room_id").append("<option value=''>--Select--</option>");
+                    room_data.forEach(function(element) {
+                        var optionVal = element.id;                        
+                        $("#room_id").append("<option value='"+optionVal+"'>"+element.name+"</option>");
+                        
+                    });
+                } else {
+                    $("#room_id").empty();           
+                }           
+            }
+        });
+    };
+</script>
 <div class="pagetitle">
     <h1>Update Class Setup</h1>
     <nav>
@@ -35,10 +64,19 @@
             <div class="row g-4">
                 <div class="col-md-1"></div>
                 <div class="col-md-5">
-                    <div class="form-group">
-                        <label for="name"><b>Name<span style="color:brown">*</span></b></label>
+                    <div class="form-group col-md-12">
+                        <label for=""><b>Branch</b></label>
                         <div class="col-sm-10">
-                            <input type="text" name="name" class="form-control" value="{{$result[0]->name}}" required>
+                        <select class="form-select" id="branch_id" name="branch_id" onchange="changeBranch()">
+                                <option  value="99">select branch</option>
+                                @foreach($branch_list as $b)
+                                    <option  value="{{$b->id}}"
+                                    @if ($result[0]->branch_id == $b->id)
+                                        selected
+                                    @endif
+                                    >{{$b->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>

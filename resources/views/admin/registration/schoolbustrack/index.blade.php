@@ -63,7 +63,7 @@
                         <th>Driver ID</th>
                         <th>Car Type</th>
                         <th>Car Number</th>
-                        <th>Arrive Student Number</th>
+                        <th>Available Seat</th>
                         <th>Action</th>
                     </tr>
                 </thead>

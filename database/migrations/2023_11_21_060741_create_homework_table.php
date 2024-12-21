@@ -15,14 +15,14 @@ return new class extends Migration
     {
         Schema::create('homework', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('class_id')->default('0');
-            $table->tinyInteger('academic_year_id');
-            $table->tinyInteger('subject_id');
+            $table->foreignId('class_id')->nullable()->default(null)->constrained('class_setup')->onDelete('restrict');
+            $table->foreignId('academic_year_id')->constrained('academic_year')->onDelete('restrict');
+            $table->foreignId('subject_id')->constrained('subject')->onDelete('restrict');
             $table->string('title');
             $table->string('homework_file')->nullable();
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->timestamp('due_date')->nullable();
-            $table->string('remark');
+            $table->string('remark')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->softDeletes();

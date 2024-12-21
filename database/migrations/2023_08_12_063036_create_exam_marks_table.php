@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('exam_marks', function (Blueprint $table) {
             $table->id();
-            $table->integer('class_id')->comment('id for class_setup table');
-            $table->integer('exam_terms_id')->comment('id from exam_terms table');
-            $table->integer('student_id')->comment('student id from student_info table');
-            $table->integer('subject_id')->comment('id from subject table');
+            $table->foreignId('class_id')->constrained('class_setup')->onDelete('restrict');
+            $table->foreignId('exam_terms_id')->constrained('exam_terms')->onDelete('restrict');
+            $table->string('student_id')->nullable()->comment('student id from student_info table');
+            $table->foreign('student_id')->references('student_id')->on('student_info')->onDelete('restrict');
+            $table->foreignId('subject_id')->constrained('subject')->onDelete('restrict');
             $table->integer('mark')->default(0);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
